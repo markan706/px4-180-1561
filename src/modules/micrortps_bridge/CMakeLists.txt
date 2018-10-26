@@ -42,7 +42,8 @@ endif()
 
 if (EXISTS "${PX4_SOURCE_DIR}/msg/tools/uorb_rtps_message_ids.yaml")
 
-  set(config_rtps_send_topics)
+  set(config_rtps_send_topics
+  	sensor_combined)  #bymark
 	execute_process(
 		COMMAND ${PYTHON_EXECUTABLE} ${PX4_SOURCE_DIR}/msg/tools/uorb_rtps_classifier.py -s
 		OUTPUT_VARIABLE config_rtps_send_topics
@@ -51,7 +52,8 @@ if (EXISTS "${PX4_SOURCE_DIR}/msg/tools/uorb_rtps_message_ids.yaml")
 	STRING(REGEX REPLACE ", " ";" config_rtps_send_topics "${config_rtps_send_topics}")
 	STRING(REGEX REPLACE "\n" "" config_rtps_send_topics "${config_rtps_send_topics}")
 
-	set(config_rtps_receive_topics)
+	set(config_rtps_receive_topics
+		sensor_baro) #bymark
 	execute_process(
 		COMMAND ${PYTHON_EXECUTABLE} ${PX4_SOURCE_DIR}/msg/tools/uorb_rtps_classifier.py -r
 		OUTPUT_VARIABLE config_rtps_receive_topics

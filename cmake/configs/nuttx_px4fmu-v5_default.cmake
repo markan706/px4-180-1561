@@ -1,5 +1,6 @@
 
-px4_nuttx_configure(HWCLASS m7 CONFIG nsh ROMFS y ROMFSROOT px4fmu_common IO px4io-v2)
+#px4_nuttx_configure(HWCLASS m7 CONFIG nsh ROMFS y ROMFSROOT px4fmu_common IO px4io-v2)
+px4_nuttx_configure(HWCLASS m7 CONFIG nsh ROMFS y ROMFSROOT px4fmu_common)
 
 # user-configurable UART ports
 set(board_serial_ports

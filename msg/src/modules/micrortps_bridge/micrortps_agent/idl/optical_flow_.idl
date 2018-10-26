@@ -1,0 +1,29 @@
+#ifndef __optical_flow__idl__
+#define __optical_flow__idl__
+
+
+
+struct optical_flow_
+{
+    unsigned long long timestamp;
+    float pixel_flow_x_integral;
+    float pixel_flow_y_integral;
+    float gyro_x_rate_integral;
+    float gyro_y_rate_integral;
+    float gyro_z_rate_integral;
+    float ground_distance_m;
+    unsigned long integration_timespan;
+    unsigned long time_since_last_sonar_update;
+    float max_flow_rate;
+    float min_ground_distance;
+    float max_ground_distance;
+    unsigned short frame_count_since_last_readout;
+    short gyro_temperature;
+    octet sensor_id;
+    octet quality;
+
+}; // struct optical_flow_
+
+#pragma keylist optical_flow_
+
+#endif  // __optical_flow__idl__

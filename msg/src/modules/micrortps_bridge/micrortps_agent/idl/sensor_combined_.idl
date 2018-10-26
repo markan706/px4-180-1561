@@ -1,0 +1,19 @@
+#ifndef __sensor_combined__idl__
+#define __sensor_combined__idl__
+
+
+
+struct sensor_combined_
+{
+    unsigned long long timestamp;
+    float gyro_rad[3];
+    unsigned long gyro_integral_dt;
+    long accelerometer_timestamp_relative;
+    float accelerometer_m_s2[3];
+    unsigned long accelerometer_integral_dt;
+
+}; // struct sensor_combined_
+
+#pragma keylist sensor_combined_
+
+#endif  // __sensor_combined__idl__

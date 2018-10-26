@@ -1,0 +1,19 @@
+#ifndef __obstacle_distance__idl__
+#define __obstacle_distance__idl__
+
+
+
+struct obstacle_distance_
+{
+    unsigned long long timestamp;
+    unsigned short distances[72];
+    unsigned short min_distance;
+    unsigned short max_distance;
+    octet sensor_type;
+    octet increment;
+
+}; // struct obstacle_distance_
+
+#pragma keylist obstacle_distance_
+
+#endif  // __obstacle_distance__idl__

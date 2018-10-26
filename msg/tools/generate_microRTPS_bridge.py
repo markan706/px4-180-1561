@@ -201,6 +201,7 @@ if len(sys.argv) <= 1:
 # Parse arguments
 args = parser.parse_args()
 msg_folder = get_absolute_path(args.msgdir)
+print("1msg_folder:"+msg_folder) #bymark
 package = args.package
 agent = args.agent
 client = args.client
@@ -264,6 +265,7 @@ if agent and os.path.isdir(os.path.join(agent_out_dir, "idl")):
 uorb_templates_dir = os.path.join(msg_folder, args.uorb_templates)
 urtps_templates_dir = os.path.join(msg_folder, args.urtps_templates)
 # parse yaml file into a map of ids
+print("2msg_folder:"+msg_folder) #bymark
 classifier = Classifier(os.path.join(msg_folder, args.yaml_file), msg_folder)
 # check if there are no ID's repeated
 check_rtps_id_uniqueness(classifier)
