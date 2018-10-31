@@ -20,6 +20,7 @@ fi
 if ver hwcmp PX4FMU_V5
 then
 	set LOGGER_BUF 64
+	#set LOGGER_BUF 128  #bymark
 fi
 
 ###############################################################################

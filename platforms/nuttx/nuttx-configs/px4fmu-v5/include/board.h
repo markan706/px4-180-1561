@@ -355,7 +355,7 @@
 /* UART RX DMA configurations */
 
 #define DMAMAP_USART1_RX DMAMAP_USART1_RX_2
-#define DMAMAP_USART6_RX DMAMAP_USART6_RX_2
+#define DMAMAP_USART6_RX DMAMAP_USART6_RX_1   // bymark 2 -> 1 , 2nd stream  -> 1st stream 
 
 /* CAN
  *

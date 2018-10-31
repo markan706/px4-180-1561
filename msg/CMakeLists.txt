@@ -37,6 +37,7 @@ set(msg_files
 	actuator_direct.msg
 	actuator_outputs.msg
 	adc_report.msg
+	adc_ultrasound.msg #bymark
 	airspeed.msg
 	battery_status.msg
 	camera_capture.msg

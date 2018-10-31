@@ -43,6 +43,7 @@ then
 	bst start
 
 	adc start
+	echo "@adc start"  #bymark
 fi
 
 if ver hwcmp AEROFC_V1

@@ -125,10 +125,10 @@
 #else
 #define CCER_C1_INIT  GTIM_CCER_CC1E
 #endif
-//												 				  NotUsed   PWMOut  PWMIn Capture OneShot Trigger
-io_timer_channel_allocation_t channel_allocations[IOTimerChanModeSize] = { UINT8_MAX,   0,  0,  0, 0, 0 };
+//								NotUsed   PWMOut  PWMIn Capture OneShot Trigger
+io_timer_channel_allocation_t channel_allocations[IOTimerChanModeSize] = { UINT16_MAX,   0,  0,  0, 0, 0 }; 	//bymark UINT8_MAX -> UNIT16_MAX
 
-typedef uint8_t io_timer_allocation_t; /* big enough to hold MAX_IO_TIMERS */
+typedef uint16_t io_timer_allocation_t; /* big enough to hold MAX_IO_TIMERS */ 	// bymark uint8_t -> uint16_t
 
 static io_timer_allocation_t once = 0;
 
@@ -735,6 +735,17 @@ int io_timer_channel_init(unsigned channel, io_timer_channel_mode_t mode,
 		rvalue &= ~clearbits;
 		rvalue |=  setbits;
 		rCCER(timer) = rvalue;
+
+		/* bymark */	
+		if (timer == 1) { // bymark
+			rCCER(timer) |= (1<<9);  //  setting CC3P to 1 -- CCER -- TIM4CH3
+		}
+		if (timer == 2) {
+			rCCER(timer) |= (1<<5); // setting CC2P to 1 -- CCER -- TIM12CH2
+		}
+		if (timer == 3) {
+			rCCER(timer) |= (1<<13); // setting CC4P to 1 -- CCER -- TIM2CH4 
+		}
 
 #if !defined(BOARD_HAS_CAPTURE)
 		UNUSED(dier_setbits);

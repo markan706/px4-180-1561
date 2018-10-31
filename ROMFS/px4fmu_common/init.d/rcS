@@ -321,6 +321,8 @@ else
 	if ! param compare SYS_AUTOSTART 0
 	then
 		sh /etc/init.d/rc.autostart
+
+		echo "runnig /etc/init.d/rc.autostart"  #bymark
 	fi
 
 	#
@@ -423,6 +425,9 @@ else
 	then
 		set USE_IO yes
 	fi
+
+	#bymark
+	set USE_IO no
 
 	if [ $USE_IO = yes -a $IO_PRESENT = no ]
 	then

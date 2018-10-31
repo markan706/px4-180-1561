@@ -150,4 +150,24 @@
  */
 #define SENSORIOCRESET		_SENSORIOC(4)
 
+/* bymark */
+
+/** return the internal queue depth */    //bymark
+#define SENSORIOCGQUEUEDEPTH	_SENSORIOC(3)
+
+/**
+ * Set the sensor orientation
+ */
+#define SENSORIOCSROTATION	_SENSORIOC(5)
+
+/**
+ * Get the sensor orientation
+ */
+#define SENSORIOCGROTATION	_SENSORIOC(6)
+
+/**
+ * Test the sensor calibration
+ */
+#define SENSORIOCCALTEST	_SENSORIOC(7)
+
 #endif /* _DRV_SENSOR_H */

@@ -169,6 +169,22 @@ __EXPORT const timer_io_channels_t timer_io_channels[MAX_TIMER_IO_CHANNELS] = {
 		.timer_channel = 2,
 		.ccr_offset = STM32_GTIM_CCR2_OFFSET, // TODO: need revision
 		.masks  = GTIM_SR_CC2IF | GTIM_SR_CC2OF // TODO: need revision
+	},
+	{	// bymark
+		.gpio_out = GPIO_TIM2_CH1OUT,  // TIM2 used to capture, now for PWM   .bymark
+		.gpio_in = GPIO_TIM2_CH1IN,
+		.timer_index = 3,   // corresponding to the index of  "io_timers"
+		.timer_channel = 1,  // corresponding to the channel-number of the Timer2
+		.ccr_offset = STM32_GTIM_CCR1_OFFSET,  // corresponding to the CCR-number of the Timer2's channel
+		.masks  = GTIM_SR_CC1IF | GTIM_SR_CC1OF //corresponding to the SR-number of the Timer2's channel
+	},
+	{	// bymark
+		.gpio_out = GPIO_TIM2_CH4OUT,
+		.gpio_in = GPIO_TIM2_CH4IN,
+		.timer_index = 3,
+		.timer_channel = 4,
+		.ccr_offset = STM32_GTIM_CCR4_OFFSET, 
+		.masks  = GTIM_SR_CC4IF | GTIM_SR_CC4OF 
 	}
 };
 

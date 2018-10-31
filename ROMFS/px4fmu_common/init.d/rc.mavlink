@@ -59,6 +59,7 @@ then
 	param set SER_TEL2_BAUD 38400
 	param set SYS_COMPANION 0
 fi
+# bymark
 if param compare SYS_COMPANION 57600
 then
 	param set MAV_1_CONFIG 102
@@ -67,6 +68,7 @@ then
 	param set SER_TEL2_BAUD 57600
 	param set SYS_COMPANION 0
 fi
+
 if param compare SYS_COMPANION 157600
 then
 	param set MAV_1_CONFIG 102
@@ -127,6 +129,7 @@ then
 	param set SER_TEL2_BAUD 460800
 	param set SYS_COMPANION 0
 fi
+#bymark
 if param compare SYS_COMPANION 921600
 then
 	param set MAV_1_CONFIG 102
@@ -135,6 +138,7 @@ then
 	param set SER_TEL2_BAUD 921600
 	param set SYS_COMPANION 0
 fi
+
 if param compare SYS_COMPANION 1921600
 then
 	param set MAV_1_CONFIG 102

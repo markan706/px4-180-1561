@@ -65,3 +65,9 @@ posix-configs/SITL/init/test/*_generated
 *.gcov
 .coverage
 .coverage.*
+
+
+*.sublime-project
+*.sublime-workspace
+
+src/drivers/distance_sensor/ma40h1s/back

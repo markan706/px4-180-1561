@@ -132,7 +132,8 @@ int up_pwm_servo_set_rate_group_update(unsigned group, unsigned rate)
 			return -ERANGE;
 		}
 
-		if (rate > 10000) {
+		// if (rate > 10000) {
+		if (group == 0 && rate > 10000) {  //bymark
 			return -ERANGE;
 		}
 	}
@@ -167,4 +168,9 @@ up_pwm_servo_arm(bool armed)
 {
 	io_timer_set_enable(armed, IOTimerChanMode_OneShot, IO_TIMER_ALL_MODES_CHANNELS);
 	io_timer_set_enable(armed, IOTimerChanMode_PWMOut, IO_TIMER_ALL_MODES_CHANNELS);
+
+	/* bymark */
+	if (armed) { //bymark
+		io_timer_set_enable(!armed, IOTimerChanMode_PWMOut, 0b11110000);  // disable PWM5 PWM6 PWM7 PWM8
+	}
 }

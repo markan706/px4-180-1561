@@ -51,6 +51,7 @@
 #include <uORB/topics/vehicle_status.h>
 #include <uORB/topics/vehicle_gps_position.h>
 #include <uORB/topics/vehicle_command_ack.h>
+#include <uORB/topics/adc_ultrasound.h> //bymark
 
 #include <drivers/drv_hrt.h>
 #include <px4_includes.h>
@@ -223,7 +224,7 @@ int Logger::task_spawn(int argc, char *argv[])
 	_task_id = px4_task_spawn_cmd("logger",
 				      SCHED_DEFAULT,
 				      SCHED_PRIORITY_LOG_CAPTURE,
-				      3600,
+				      3600,  // bymark   3600 -> 3600*2
 				      (px4_main_t)&run_trampoline,
 				      (char *const *)argv);
 
@@ -376,6 +377,8 @@ Logger *Logger::instantiate(int argc, char *argv[])
 	if (error_flag) {
 		return nullptr;
 	}
+
+	printf("[@logger.cpp][instantiate()]log_buffer_size = %d\n", log_buffer_size);//bymark
 
 	Logger *logger = new Logger(backend, log_buffer_size, log_interval, poll_topic, log_on_start,
 				    log_until_shutdown, log_name_timestamp, queue_size);
@@ -603,52 +606,52 @@ bool Logger::try_to_subscribe_topic(LoggerSubscription &sub, int multi_instance)
 void Logger::add_default_topics()
 {
 	// Note: try to avoid setting the interval where possible, as it increases RAM usage
-	add_topic("actuator_controls_0", 100);
-	add_topic("actuator_controls_1", 100);
-	add_topic("actuator_outputs", 100);
-	add_topic("airspeed", 200);
+	// add_topic("actuator_controls_0", 100);
+	// add_topic("actuator_controls_1", 100);
+	// add_topic("actuator_outputs", 100);
+	// add_topic("airspeed", 200); //bymark
 	add_topic("battery_status", 500);
-	add_topic("camera_capture");
-	add_topic("camera_trigger");
+	// add_topic("camera_capture");
+	// add_topic("camera_trigger");
 	add_topic("cpuload");
 	add_topic("distance_sensor", 100);
-	add_topic("ekf2_innovations", 200);
-	add_topic("ekf_gps_drift");
-	add_topic("esc_status", 250);
-	add_topic("estimator_status", 200);
-	add_topic("home_position");
-	add_topic("input_rc", 200);
-	add_topic("manual_control_setpoint", 200);
-	add_topic("mission");
-	add_topic("mission_result");
-	add_topic("optical_flow", 50);
-	add_topic("position_setpoint_triplet", 200);
-	add_topic("radio_status");
-	add_topic("rate_ctrl_status", 30);
-	add_topic("sensor_combined", 100);
-	add_topic("sensor_preflight", 200);
-	add_topic("system_power", 500);
-	add_topic("tecs_status", 200);
-	add_topic("telemetry_status");
-	add_topic("vehicle_air_data", 200);
-	add_topic("vehicle_attitude", 30);
-	add_topic("vehicle_attitude_setpoint", 100);
-	add_topic("vehicle_command");
-	add_topic("vehicle_global_position", 200);
-	add_topic("vehicle_gps_position");
-	add_topic("vehicle_land_detected");
-	add_topic("vehicle_local_position", 100);
-	add_topic("vehicle_local_position_setpoint", 100);
-	add_topic("vehicle_magnetometer", 200);
-	add_topic("vehicle_rates_setpoint", 30);
-	add_topic("vehicle_status", 200);
-	add_topic("vehicle_status_flags");
-	add_topic("vehicle_trajectory_waypoint", 200);
-	add_topic("vehicle_trajectory_waypoint_desired", 200);
-	add_topic("vehicle_vision_attitude");
-	add_topic("vehicle_vision_position");
-	add_topic("vtol_vehicle_status", 200);
-	add_topic("wind_estimate", 200);
+	// add_topic("ekf2_innovations", 200);
+	// add_topic("ekf_gps_drift");
+	// add_topic("esc_status", 250);
+	// add_topic("estimator_status", 200);
+	// add_topic("home_position");
+	// add_topic("input_rc", 200);
+	// add_topic("manual_control_setpoint", 200);
+	// add_topic("mission");
+	// add_topic("mission_result");
+	// add_topic("optical_flow", 50);
+	// add_topic("position_setpoint_triplet", 200);
+	// add_topic("radio_status");
+	// add_topic("rate_ctrl_status", 30);
+	// add_topic("sensor_combined", 100);
+	// add_topic("sensor_preflight", 200);
+	// add_topic("system_power", 500);
+	// add_topic("tecs_status", 200);
+	// add_topic("telemetry_status");
+	// add_topic("vehicle_air_data", 200);
+	// add_topic("vehicle_attitude", 30);
+	// add_topic("vehicle_attitude_setpoint", 100);
+	// add_topic("vehicle_command");
+	// add_topic("vehicle_global_position", 200);
+	// add_topic("vehicle_gps_position");
+	// add_topic("vehicle_land_detected");
+	// add_topic("vehicle_local_position", 100);
+	// add_topic("vehicle_local_position_setpoint", 100);
+	// add_topic("vehicle_magnetometer", 200);
+	// add_topic("vehicle_rates_setpoint", 30);
+	// add_topic("vehicle_status", 200);
+	// add_topic("vehicle_status_flags");
+	// add_topic("vehicle_trajectory_waypoint", 200);
+	// add_topic("vehicle_trajectory_waypoint_desired", 200);
+	// add_topic("vehicle_vision_attitude");
+	// add_topic("vehicle_vision_position");
+	// add_topic("vtol_vehicle_status", 200);
+	// add_topic("wind_estimate", 200);
 
 #ifdef CONFIG_ARCH_BOARD_SITL
 	add_topic("actuator_armed");
@@ -693,22 +696,24 @@ void Logger::add_debug_topics()
 void Logger::add_estimator_replay_topics()
 {
 	// for estimator replay (need to be at full rate)
-	add_topic("ekf2_timestamps");
-	add_topic("ekf_gps_position");
+	// add_topic("ekf2_timestamps");
+	// add_topic("ekf_gps_position");
 
 	// current EKF2 subscriptions
-	add_topic("airspeed");
-	add_topic("distance_sensor");
-	add_topic("optical_flow");
-	add_topic("sensor_combined");
-	add_topic("sensor_selection");
-	add_topic("vehicle_air_data");
-	add_topic("vehicle_gps_position");
-	add_topic("vehicle_land_detected");
-	add_topic("vehicle_magnetometer");
-	add_topic("vehicle_status");
-	add_topic("vehicle_vision_attitude");
-	add_topic("vehicle_vision_position");
+	// add_topic("airspeed");
+	// add_topic("distance_sensor");
+	// add_topic("optical_flow");
+	// add_topic("sensor_combined");
+	// add_topic("sensor_selection");
+	// add_topic("vehicle_air_data");
+	// add_topic("vehicle_gps_position");
+	// add_topic("vehicle_land_detected");
+	// add_topic("vehicle_magnetometer");
+	// add_topic("vehicle_status");
+	// add_topic("vehicle_vision_attitude");
+	// add_topic("vehicle_vision_position");
+
+	add_topic("adc_ultrasound");  // bymark
 }
 
 void Logger::add_thermal_calibration_topics()

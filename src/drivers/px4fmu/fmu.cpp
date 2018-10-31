@@ -552,6 +552,9 @@ PX4FMU::set_mode(Mode mode)
 	 * listening and mixing; the mode just selects which of the channels
 	 * are presented on the output pins.
 	 */
+
+	printf("[@fmu.cpp][set_mode()] mode = %u\n", mode); //bymark
+
 	switch (mode) {
 	case MODE_1PWM:
 		/* default output rates */
@@ -673,7 +676,7 @@ PX4FMU::set_mode(Mode mode)
 	case MODE_8PWM: // AeroCore PWMs as 8 PWM outs
 		PX4_DEBUG("MODE_8PWM");
 		/* default output rates */
-		_pwm_default_rate = 50;
+		_pwm_default_rate = 40000; //bymark 50Hz -> 40000Hz
 		_pwm_alt_rate = 50;
 		_pwm_alt_rate_channels = 0;
 		_pwm_mask = 0xff;
@@ -754,6 +757,7 @@ PX4FMU::set_pwm_rate(uint32_t rate_map, unsigned default_rate, unsigned alt_rate
 {
 	PX4_DEBUG("set_pwm_rate %x %u %u", rate_map, default_rate, alt_rate);
 
+	printf("[@fum.cpp][set_pwm_rate()]set_pwm_rate %x %u %u\n", rate_map, default_rate, alt_rate); // bymark
 	for (unsigned pass = 0; pass < 2; pass++) {
 
 		/* We should note that group is iterated over from 0 to _max_actuators.
@@ -786,6 +790,7 @@ PX4FMU::set_pwm_rate(uint32_t rate_map, unsigned default_rate, unsigned alt_rate
 				// preflight
 				if ((alt != 0) && (alt != mask)) {
 					PX4_WARN("rate group %u mask %x bad overlap %x", group, mask, alt);
+					printf("[@fum.cpp][set_pwm_rate()]rate group %u mask %x bad overlap %x\n", group, mask, alt); // bymark
 					// not a legal map, bail
 					return -EINVAL;
 				}
@@ -797,12 +802,13 @@ PX4FMU::set_pwm_rate(uint32_t rate_map, unsigned default_rate, unsigned alt_rate
 						PX4_WARN("rate group set alt failed");
 						return -EINVAL;
 					}
-
+					printf("[@fum.cpp][set_pwm_rate()] group is %u for alternate channels\n", group); // bymark
 				} else {
 					if (up_pwm_servo_set_rate_group_update(group, default_rate) != OK) {
 						PX4_WARN("rate group set default failed");
 						return -EINVAL;
 					}
+					printf("[@fum.cpp][set_pwm_rate()] group is %u for default channels\n", group); // bymark
 				}
 			}
 		}
@@ -1051,6 +1057,10 @@ void
 PX4FMU::update_pwm_out_state(bool on)
 {
 	if (on && !_pwm_initialized && _pwm_mask != 0) {
+		printf("[@fmu.cpp][update_pwm_out_state()]_pwm_mask = %d\n", _pwm_mask); // bymark
+		printf("[@fmu.cpp][update_pwm_out_state()]_pwm_alt_rate_channels = %d\n", _pwm_alt_rate_channels); //bymark
+		printf("[@fmu.cpp][update_pwm_out_state()]_pwm_default_rate = %u\n", _pwm_default_rate); //bymark
+		printf("[@fmu.cpp][update_pwm_out_state()]_pwm_alt_rate = %u\n", _pwm_alt_rate); //bymark
 		up_pwm_servo_init(_pwm_mask);
 		set_pwm_rate(_pwm_alt_rate_channels, _pwm_default_rate, _pwm_alt_rate);
 		_pwm_initialized = true;
@@ -1226,7 +1236,8 @@ PX4FMU::cycle()
 
 				/* output to the servos */
 				if (_pwm_initialized && !_test_mode) {
-					for (size_t i = 0; i < mixed_num_outputs; i++) {
+					//for (size_t i = 0; i < mixed_num_outputs; i++) {
+					for (size_t i = 0; i < 4; i++) {  //bymark
 						up_pwm_servo_set(i, pwm_limited[i]);
 					}
 				}
@@ -2972,6 +2983,7 @@ int PX4FMU::custom_command(int argc, char *argv[])
 	PortMode new_mode = PORT_MODE_UNSET;
 	const char *verb = argv[0];
 
+	printf("[@fmu.cpp][custom_command()]\n"); // bymark
 	/* does not operate on a FMU instance */
 	if (!strcmp(verb, "i2c")) {
 		if (argc > 2) {
@@ -3033,6 +3045,7 @@ int PX4FMU::custom_command(int argc, char *argv[])
 
 	} else if (!strcmp(verb, "mode_pwm")) {
 		new_mode = PORT_FULL_PWM;
+		printf("[@fmu.cpp][custom_command()]new mode is full pwm\n"); // bymark
 
 		// mode: defines which outputs to drive (others may be used by other tasks such as camera capture)
 #if defined(BOARD_HAS_PWM)
@@ -3045,6 +3058,7 @@ int PX4FMU::custom_command(int argc, char *argv[])
 
 	} else if (!strcmp(verb, "mode_pwm6")) {
 		new_mode = PORT_PWM6;
+		printf("[@fmu.cpp][custom_command()]new mode is mode_pwm6\n"); // bymark 
 
 	} else if (!strcmp(verb, "mode_pwm5")) {
 		new_mode = PORT_PWM5;
@@ -3057,6 +3071,7 @@ int PX4FMU::custom_command(int argc, char *argv[])
 
 	} else if (!strcmp(verb, "mode_pwm4")) {
 		new_mode = PORT_PWM4;
+		printf("[@fmu.cpp][custom_command()]new mode is pwm4\n"); // bymark
 
 #  if defined(BOARD_HAS_CAPTURE)
 

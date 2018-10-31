@@ -53,20 +53,20 @@
  * Definitions
  ****************************************************************************************************/
 
-/* PX4IO connection configuration */
+/* PX4IO connection configuration */   // bymark
 
-#define BOARD_USES_PX4IO_VERSION       2
-#define PX4IO_SERIAL_DEVICE            "/dev/ttyS6"
-#define PX4IO_SERIAL_TX_GPIO           GPIO_UART8_TX
-#define PX4IO_SERIAL_RX_GPIO           GPIO_UART8_RX
-#define PX4IO_SERIAL_BASE              STM32_UART8_BASE
-#define PX4IO_SERIAL_VECTOR            STM32_IRQ_UART8
-#define PX4IO_SERIAL_TX_DMAMAP         DMAMAP_UART8_TX
-#define PX4IO_SERIAL_RX_DMAMAP         DMAMAP_UART8_RX
-#define PX4IO_SERIAL_RCC_REG           STM32_RCC_APB1ENR
-#define PX4IO_SERIAL_RCC_EN            RCC_APB1ENR_UART8EN
-#define PX4IO_SERIAL_CLOCK             STM32_PCLK1_FREQUENCY
-#define PX4IO_SERIAL_BITRATE           1500000               /* 1.5Mbps -> max rate for IO */
+// #define BOARD_USES_PX4IO_VERSION       2
+// #define PX4IO_SERIAL_DEVICE            "/dev/ttyS6"
+// #define PX4IO_SERIAL_TX_GPIO           GPIO_UART8_TX
+// #define PX4IO_SERIAL_RX_GPIO           GPIO_UART8_RX
+// #define PX4IO_SERIAL_BASE              STM32_UART8_BASE
+// #define PX4IO_SERIAL_VECTOR            STM32_IRQ_UART8
+// #define PX4IO_SERIAL_TX_DMAMAP         DMAMAP_UART8_TX
+// #define PX4IO_SERIAL_RX_DMAMAP         DMAMAP_UART8_RX
+// #define PX4IO_SERIAL_RCC_REG           STM32_RCC_APB1ENR
+// #define PX4IO_SERIAL_RCC_EN            RCC_APB1ENR_UART8EN
+// #define PX4IO_SERIAL_CLOCK             STM32_PCLK1_FREQUENCY
+// #define PX4IO_SERIAL_BITRATE           1500000               /* 1.5Mbps -> max rate for IO */
 
 /* Configuration ************************************************************************************/
 
@@ -248,49 +248,54 @@
 
 #define ADC1_CH(n)                  (n)
 #define ADC1_GPIO(n)                GPIO_ADC1_IN##n
+#define ADC2_GPIO(n)                GPIO_ADC2_IN##n  // bymark
+#define ADC3_GPIO(n)                GPIO_ADC3_IN##n  // bymark
 
 /* Define GPIO pins used as ADC N.B. Channel numbers must match below */
-
+/*bymark ADC1 -> ADC2 */
 #define PX4_ADC_GPIO  \
 	/* PA0 */  ADC1_GPIO(0),  \
 	/* PA1 */  ADC1_GPIO(1),  \
-	/* PA2 */  ADC1_GPIO(2),  \
-	/* PA3 */  ADC1_GPIO(3),  \
+	/* PA2 */  ADC3_GPIO(2),  \
+	/* PA3 */  ADC3_GPIO(3),  \
 	/* PA4 */  ADC1_GPIO(4),  \
 	/* PB8 */  ADC1_GPIO(8),  \
 	/* PC0 */  ADC1_GPIO(10), \
 	/* PC1 */  ADC1_GPIO(11), \
 	/* PC2 */  ADC1_GPIO(12), \
 	/* PC3 */  ADC1_GPIO(13), \
-	/* PC4 */  ADC1_GPIO(14)
+	/* PC4 */  ADC2_GPIO(14)
 
 /* Define Channel numbers must match above GPIO pin IN(n)*/
 
 #define ADC_BATTERY1_VOLTAGE_CHANNEL        /* PA0 */  ADC1_CH(0)
 #define ADC_BATTERY1_CURRENT_CHANNEL        /* PA1 */  ADC1_CH(1)
-#define ADC_BATTERY2_VOLTAGE_CHANNEL        /* PA2 */  ADC1_CH(2)
-#define ADC_BATTERY2_CURRENT_CHANNEL        /* PA3 */  ADC1_CH(3)
+// #define ADC_BATTERY2_VOLTAGE_CHANNEL        /* PA2 */  ADC1_CH(2)  //bymark
+// #define ADC_BATTERY2_CURRENT_CHANNEL        /* PA3 */  ADC1_CH(3)
 #define ADC1_SPARE_2_CHANNEL                /* PA4 */  ADC1_CH(4)
 #define ADC_RSSI_IN_CHANNEL                 /* PB0 */  ADC1_CH(8)
 #define ADC_SCALED_V5_CHANNEL               /* PC0 */  ADC1_CH(10)
 #define ADC_SCALED_VDD_3V3_SENSORS_CHANNEL  /* PC1 */  ADC1_CH(11)
 #define ADC_HW_VER_SENSE_CHANNEL            /* PC2 */  ADC1_CH(12)
 #define ADC_HW_REV_SENSE_CHANNEL            /* PC3 */  ADC1_CH(13)
-#define ADC1_SPARE_1_CHANNEL                /* PC4 */  ADC1_CH(14)
+// #define ADC1_SPARE_1_CHANNEL                /* PC4 */  ADC1_CH(14)
 
 #if BOARD_HAS_NBAT_V == 2 && BOARD_HAS_NBAT_I == 2
 #define ADC_CHANNELS \
 	((1 << ADC_BATTERY1_VOLTAGE_CHANNEL)       | \
 	 (1 << ADC_BATTERY1_CURRENT_CHANNEL)       | \
-	 (1 << ADC_BATTERY2_VOLTAGE_CHANNEL)       | \
-	 (1 << ADC_BATTERY2_CURRENT_CHANNEL)       | \
 	 (1 << ADC1_SPARE_2_CHANNEL)               | \
 	 (1 << ADC_RSSI_IN_CHANNEL)                | \
 	 (1 << ADC_SCALED_V5_CHANNEL)              | \
 	 (1 << ADC_SCALED_VDD_3V3_SENSORS_CHANNEL) | \
 	 (1 << ADC_HW_VER_SENSE_CHANNEL)           | \
-	 (1 << ADC_HW_REV_SENSE_CHANNEL)           | \
-	 (1 << ADC1_SPARE_1_CHANNEL))
+	 (1 << ADC_HW_REV_SENSE_CHANNEL))
+
+//(1 << ADC1_SPARE_2_CHANNEL) 
+//(1 << ADC1_SPARE_1_CHANNEL))
+//(1 << ADC_BATTERY2_VOLTAGE_CHANNEL)
+//(1 << ADC_BATTERY2_CURRENT_CHANNEL)   	
+
 #elif BOARD_HAS_NBAT_V == 1 && BOARD_HAS_NBAT_I == 1
 #define ADC_CHANNELS \
 	((1 << ADC_BATTERY1_VOLTAGE_CHANNEL)       | \
@@ -300,8 +305,7 @@
 	 (1 << ADC_SCALED_V5_CHANNEL)              | \
 	 (1 << ADC_SCALED_VDD_3V3_SENSORS_CHANNEL) | \
 	 (1 << ADC_HW_VER_SENSE_CHANNEL)           | \
-	 (1 << ADC_HW_REV_SENSE_CHANNEL)           | \
-	 (1 << ADC1_SPARE_1_CHANNEL))
+	 (1 << ADC_HW_REV_SENSE_CHANNEL))
 #elif BOARD_HAS_NBAT_V == 1 && BOARD_HAS_NBAT_I == 0
 #define ADC_CHANNELS \
 	((1 << ADC_BATTERY1_VOLTAGE_CHANNEL)       | \
@@ -310,8 +314,7 @@
 	 (1 << ADC_SCALED_V5_CHANNEL)              | \
 	 (1 << ADC_SCALED_VDD_3V3_SENSORS_CHANNEL) | \
 	 (1 << ADC_HW_VER_SENSE_CHANNEL)           | \
-	 (1 << ADC_HW_REV_SENSE_CHANNEL)           | \
-	 (1 << ADC1_SPARE_1_CHANNEL))
+	 (1 << ADC_HW_REV_SENSE_CHANNEL))
 #endif
 
 /* Define Battery 1 Voltage Divider and A per V
@@ -359,11 +362,11 @@
  * FMU_CAP2 : PB3  : TIM2_CH2
  * FMU_CAP3 : PB11 : TIM2_CH4
  */
-#define GPIO_TIM2_CH1_IN     /* PA5   T22C1  FMU_CAP1 */ GPIO_TIM2_CH1IN_3
+// #define GPIO_TIM2_CH1_IN     /* PA5   T22C1  FMU_CAP1 */ GPIO_TIM2_CH1IN_3  //bymark
 #define GPIO_TIM2_CH2_IN     /* PB3   T22C2  FMU_CAP2 */ GPIO_TIM2_CH2IN_2
-#define GPIO_TIM2_CH4_IN     /* PB11  T22C4  FMU_CAP3 */ GPIO_TIM2_CH4IN_2
+// #define GPIO_TIM2_CH4_IN     /* PB11  T22C4  FMU_CAP3 */ GPIO_TIM2_CH4IN_2	//bymark
 
-#define DIRECT_PWM_CAPTURE_CHANNELS  3
+#define DIRECT_PWM_CAPTURE_CHANNELS  1	// bymark 3 -> 1
 
 /* TIM5_CH4 SPARE PIN */
 #define GPIO_TIM5_CH4IN    /* PI0   T5C4  TIM5_SPARE_4 */  GPIO_TIM5_CH4IN_2
@@ -385,6 +388,11 @@
  * FMU_CH8 : PH9  : TIM12_CH2
  *
  */
+
+#define GPIO_TIM2_CH1OUT     /* PB3   T22C2  FMU10 */ GPIO_TIM2_CH1OUT_3  	// bymark
+// #define GPIO_TIM2_CH2OUT     /* PB3   T22C2  FMU10 */ GPIO_TIM2_CH2OUT_2
+#define GPIO_TIM2_CH4OUT     /* PB11  T22C4  FMU9*/   GPIO_TIM2_CH4OUT_2	// bymark 
+
 #define GPIO_TIM12_CH2OUT     /* PH9   T12C2  FMU8 */ GPIO_TIM12_CH2OUT_2
 #define GPIO_TIM12_CH1OUT     /* PH6   T12C1  FMU7 */ GPIO_TIM12_CH1OUT_2
 #define GPIO_TIM4_CH3OUT      /* PD14  T4C3   FMU6 */ GPIO_TIM4_CH3OUT_2
@@ -395,6 +403,10 @@
 #define GPIO_TIM1_CH4OUT      /* PE14  T1C4   FMU1 */ GPIO_TIM1_CH4OUT_2
 
 #define DIRECT_PWM_OUTPUT_CHANNELS  8
+
+#define GPIO_TIM2_CH1IN     /* PB3   T22C2  FMU10 */ GPIO_TIM2_CH1IN_3		//bymark
+// #define GPIO_TIM2_CH2IN     /* PB3   T22C2  FMU10 */ GPIO_TIM2_CH2IN_2
+#define GPIO_TIM2_CH4IN     /* PB11  T22C4  FMU9*/   GPIO_TIM2_CH4IN_2		//bymark	
 
 #define GPIO_TIM12_CH2IN      /* PH9   T12C2  FMU8 */ GPIO_TIM12_CH2IN_2
 #define GPIO_TIM12_CH1IN      /* PH6   T12C1  FMU7 */ GPIO_TIM12_CH1IN_2
@@ -423,6 +435,8 @@
 #define UI_LED_TIM5_CH1OUT /* PH10  T5C1  RED   */ GPIO_TIM5_CH1OUT_2
 #define UI_LED_TIM5_CH2OUT /* PH11  T5C2  GREEN */ GPIO_TIM5_CH2OUT_2
 #define UI_LED_TIM5_CH3OUT /* PH12  T5C3  BLUE  */ GPIO_TIM5_CH3OUT_2
+
+#define NUM_OF_ULTRASOUND 3  // bymark		
 
 
 /* User GPIOs
@@ -529,17 +543,17 @@
 #define RC_SERIAL_PORT_IS_SWAPED           0 /* Board wired with RC's TX is on cpu RX */
 
 /* Input Capture Channels. */
-#define INPUT_CAP1_TIMER                  2
-#define INPUT_CAP1_CHANNEL     /* T4C1 */ 1
-#define GPIO_INPUT_CAP1        /*  PA5 */ GPIO_TIM2_CH1_IN
+// #define INPUT_CAP1_TIMER                  2
+// #define INPUT_CAP1_CHANNEL     /* T4C1 */ 1
+// #define GPIO_INPUT_CAP1        /*  PA5 */ GPIO_TIM2_CH1_IN
 
 #define INPUT_CAP2_TIMER                  2
 #define INPUT_CAP2_CHANNEL     /* T4C2 */ 2
 #define GPIO_INPUT_CAP2        /*  PB3 */ GPIO_TIM2_CH2_IN
 
-#define INPUT_CAP3_TIMER                  2
-#define INPUT_CAP3_CHANNEL     /* T4C4 */ 4
-#define GPIO_INPUT_CAP3        /* PB11 */ GPIO_TIM2_CH4_IN
+// #define INPUT_CAP3_TIMER                  2
+// #define INPUT_CAP3_CHANNEL     /* T4C4 */ 4
+// #define GPIO_INPUT_CAP3        /* PB11 */ GPIO_TIM2_CH4_IN
 
 /* PWM input driver. Use FMU AUX5 pins attached to timer4 channel 2 */
 #define PWMIN_TIMER                       4
