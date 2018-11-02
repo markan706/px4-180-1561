@@ -81,7 +81,7 @@
 #include <uORB/topics/vehicle_land_detected.h>
 #include <uORB/topics/vehicle_local_position_setpoint.h> 
 #include <uORB/topics/adc_ultrasound.h>
-#include <uORB/topics/rtps_send_distance_sensor.h>
+// #include <uORB/topics/rtps_send_distance_sensor.h> //publish this topic in sensors.cpp
 
 #include <modules/px4iofirmware/protocol.h>
 
@@ -235,7 +235,7 @@ private:
     float sonar_sample[NUM_OF_ULTRASOUND][10];
     
     orb_advert_t    _distance_sensor_pub[NUM_OF_ULTRASOUND];
-    orb_advert_t    _rtps_send_distance_pub;
+    // orb_advert_t    _rtps_send_distance_pub;
 
 #ifdef ADC_LOG
     int             _orb_adc_instance[NUM_OF_ULTRASOUND];
@@ -400,7 +400,7 @@ MA40H1S::MA40H1S():
     // _orb_class_instance(-1),
     _measure_ticks(0),
     _cycling_rate(0),
-    _rtps_send_distance_pub(nullptr),
+    // _rtps_send_distance_pub(nullptr),
     // new_value(false),
     // _distance_sensor_pub(nullptr),
     // _adc_value_pub(nullptr),
@@ -437,12 +437,13 @@ MA40H1S::MA40H1S():
 
 MA40H1S::~MA40H1S()
 {
+    /* close timer13*/
     if (_tim13 != NULL || _tim13 != nullptr) {
         if (OK != stm32_tim_deinit(_tim13)) {
             printf("[@ma40h1s_JZL.cpp][~MA40H1S()] Fail to close tim13\n");
         }
     }
-
+    /* unadvertise ''distance_sensor'' topic */
     for (uint8_t i=0; i<NUM_OF_ULTRASOUND; i++) {
         if (_distance_sensor_pub[i] != nullptr) {
             if (0 != orb_unadvertise(_distance_sensor_pub[i])) {
@@ -450,7 +451,7 @@ MA40H1S::~MA40H1S()
             }
         }
     }
-
+    /* stop and free DMA for ADC */
     if (_adc_dma != NULL) {
         stm32_dmastop(_adc_dma);
         stm32_dmafree(_adc_dma);
@@ -462,6 +463,7 @@ MA40H1S::~MA40H1S()
         stm32_dmafree(_adc_dma_1);
     }
 #endif
+
     stop();
 
     /* free any existing reports */
@@ -502,7 +504,7 @@ int MA40H1S::init()
     if (_class_instance == CLASS_DEVICE_PRIMARY) {
         /* get a publish handle on the range finder topic */
         struct distance_sensor_s ds_report = {};
-        struct rtps_send_distance_sensor_s rtps_report = {};
+        // struct rtps_send_distance_sensor_s rtps_report = {};
 #ifdef ADC_LOG
         struct adc_ultrasound_s ar_report = {}; //bymark recording ADC log
 #endif
@@ -532,10 +534,10 @@ int MA40H1S::init()
 #endif
         }
 
-        _rtps_send_distance_pub = orb_advertise(ORB_ID(rtps_send_distance_sensor), &rtps_report);
-        if (_rtps_send_distance_pub == nullptr) {
-            DEVICE_LOG("failed to create rtps_send_distance_sensor object. Did you start uOrb?");
-        }
+        // _rtps_send_distance_pub = orb_advertise(ORB_ID(rtps_send_distance_sensor), &rtps_report);
+        // if (_rtps_send_distance_pub == nullptr) {
+        //     DEVICE_LOG("failed to create rtps_send_distance_sensor object. Did you start uOrb?");
+        // }
 
         // _distance_sensor_pub = orb_advertise_multi(ORB_ID(distance_sensor), &ds_report,
         //                          &_orb_class_instance, ORB_PRIO_LOW);
@@ -1031,7 +1033,7 @@ int MA40H1S::collect()
     orb_copy(ORB_ID(vehicle_local_position_setpoint), vehicle_local_position_setpoint_sub, &lpsp);
     orb_unsubscribe(vehicle_local_position_setpoint_sub);
 
-    struct rtps_send_distance_sensor_s rtps_send_report = {} ; //bymark send this data to TX1 via RTPS
+    // struct rtps_send_distance_sensor_s rtps_send_report = {} ; //bymark send this data to TX1 via RTPS
 
     uint8_t j = 0;
 #ifdef MULTI_ADC
@@ -1169,14 +1171,14 @@ int MA40H1S::collect()
     #if NUM_OF_ULTRASOUND >2
             report.min_distance = distance_2; // bymark  to show ultrasound_2: left  on QGC
     #endif
-            rtps_send_report.current_distance[k] = distance_m;
+            // rtps_send_report.current_distance[k] = distance_m;
             orb_publish(ORB_ID(distance_sensor), _distance_sensor_pub[0], &report);
         }
     #if NUM_OF_ULTRASOUND > 1           
         else if (_ultrasound_id[0] == MA40H1S_ID_RIGHT && (uint8_t)_ultrasound_id[0] == k && _distance_sensor_pub[1] != nullptr) { 
         // ultrasound_1: MA40H1S_ID_RIGHT : right
             distance_1 = distance_m; //bymark
-            rtps_send_report.current_distance[k] = distance_m;
+            // rtps_send_report.current_distance[k] = distance_m;
             orb_publish(ORB_ID(distance_sensor), _distance_sensor_pub[1], &report);
         }
         // printf("[@ma40h1s.cpp][collect()]k is %d, ultasound_id[0] is %d\n", k, (uint8_t)_ultrasound_id[0]);
@@ -1186,7 +1188,7 @@ int MA40H1S::collect()
         else if (_ultrasound_id[0] == MA40H1S_ID_LEFT && (uint8_t)_ultrasound_id[0] == k && _distance_sensor_pub[2] != nullptr) {  
         // ultrasound_2: MA40H1S_ID_LEFT : left
             distance_2 = distance_m; // bymark
-            rtps_send_report.current_distance[k] = distance_m;
+            // rtps_send_report.current_distance[k] = distance_m;
             orb_publish(ORB_ID(distance_sensor), _distance_sensor_pub[2], &report);
         }
     #endif
@@ -1200,7 +1202,7 @@ int MA40H1S::collect()
     #if NUM_OF_ULTRASOUND >2
             report.min_distance = distance_2; // bymark  to show ultrasound_2: left  on QGC
     #endif
-            rtps_send_report.current_distance[k] = distance_m;
+            // rtps_send_report.current_distance[k] = distance_m;
             orb_publish(ORB_ID(distance_sensor), _distance_sensor_pub[0], &report);
         }
 
@@ -1209,7 +1211,7 @@ int MA40H1S::collect()
         // if (k == (uint8_t)MA40H1S_ID_RIGHT && _distance_sensor_pub[1] != nullptr) {  
         // ultrasound_1: MA40H1S_ID_RIGHT : right
             distance_1 = distance_m; // bymark
-            rtps_send_report.current_distance[k] = distance_m;
+            // rtps_send_report.current_distance[k] = distance_m;
             orb_publish(ORB_ID(distance_sensor), _distance_sensor_pub[1], &report);
         }
     #endif
@@ -1219,7 +1221,7 @@ int MA40H1S::collect()
         // if (k == (uint8_t)MA40H1S_ID_LEFT && _distance_sensor_pub[2] != nullptr) {   
         // ultrasound_2: MA40H1S_ID_LEFT : left
             distance_2 = distance_m; // bymark
-            rtps_send_report.current_distance[k] = distance_m;
+            // rtps_send_report.current_distance[k] = distance_m;
             orb_publish(ORB_ID(distance_sensor), _distance_sensor_pub[2], &report);
         }
     #endif     
@@ -1228,11 +1230,11 @@ int MA40H1S::collect()
     }  // end of for(){}
 
 
-    rtps_send_report.timestamp = hrt_absolute_time();
-    rtps_send_report.n_ultrasound = (uint8_t)NUM_OF_ULTRASOUND;
-    if (_rtps_send_distance_pub != nullptr) { 
-        orb_publish(ORB_ID(rtps_send_distance_sensor), _rtps_send_distance_pub, &rtps_send_report);
-    }    
+    // rtps_send_report.timestamp = hrt_absolute_time();
+    // rtps_send_report.n_ultrasound = (uint8_t)NUM_OF_ULTRASOUND;
+    // if (_rtps_send_distance_pub != nullptr) { 
+    //     orb_publish(ORB_ID(rtps_send_distance_sensor), _rtps_send_distance_pub, &rtps_send_report);
+    // }    
 
 #if NUM_OF_ULTRASOUND > 1   // when NUM_OF_ULTRASOUND is more than 2, using ADC2 and ADC3,or using only ADC2   Async. > 1 ;  Sync. : > 2 
     if (trig_state == 5) {
