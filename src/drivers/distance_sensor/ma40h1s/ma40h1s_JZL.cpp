@@ -800,127 +800,126 @@ float MA40H1S::get_maximum_distance()
 int MA40H1S::ioctl(struct file *filp, int cmd, unsigned long arg)
 {
     switch (cmd) {
+        case SENSORIOCSPOLLRATE: {
+                switch (arg) {
 
-    case SENSORIOCSPOLLRATE: {
-            switch (arg) {
-
-            /* switching to manual polling */
-            case SENSOR_POLLRATE_MANUAL:
-                stop();
-                _measure_ticks = 0;
-                return OK;
-
-            /* external signalling (DRDY) not supported */
-            case SENSOR_POLLRATE_EXTERNAL:
-
-            /* zero would be bad */
-            case 0:
-                return -EINVAL;
-
-            /* set default/max polling rate */
-            case SENSOR_POLLRATE_MAX:
-            case SENSOR_POLLRATE_DEFAULT: {
-                    /* do we need to start internal polling? */
-                    bool want_start = (_measure_ticks == 0);
-
-                    /* set interval for next measurement to minimum legal value */
-                    _measure_ticks = USEC2TICK(_cycling_rate);
-
-                    /* if we need to start the poll state machine, do it */
-                    if (want_start) {
-                        start();
-
-                    }
-
+                /* switching to manual polling */
+                case SENSOR_POLLRATE_MANUAL:
+                    stop();
+                    _measure_ticks = 0;
                     return OK;
-                }
 
-            /* adjust to a legal polling interval in Hz */
-            default: {
-                    /* do we need to start internal polling? */
-                    bool want_start = (_measure_ticks == 0);
+                /* external signalling (DRDY) not supported */
+                case SENSOR_POLLRATE_EXTERNAL:
 
-                    /* convert hz to tick interval via microseconds */
-                    int ticks = USEC2TICK(1000000 / arg);
+                /* zero would be bad */
+                case 0:
+                    return -EINVAL;
 
-                    /* check against maximum rate */
-                    if (ticks < USEC2TICK(_cycling_rate)) {
-                        return -EINVAL;
+                /* set default/max polling rate */
+                case SENSOR_POLLRATE_MAX:
+                case SENSOR_POLLRATE_DEFAULT: {
+                        /* do we need to start internal polling? */
+                        bool want_start = (_measure_ticks == 0);
+
+                        /* set interval for next measurement to minimum legal value */
+                        _measure_ticks = USEC2TICK(_cycling_rate);
+
+                        /* if we need to start the poll state machine, do it */
+                        if (want_start) {
+                            start();
+
+                        }
+
+                        return OK;
                     }
 
-                    /* update interval for next measurement */
-                    _measure_ticks = ticks;
+                /* adjust to a legal polling interval in Hz */
+                default: {
+                        /* do we need to start internal polling? */
+                        bool want_start = (_measure_ticks == 0);
 
-                    /* if we need to start the poll state machine, do it */
-                    if (want_start) {
-                        start();
+                        /* convert hz to tick interval via microseconds */
+                        int ticks = USEC2TICK(1000000 / arg);
+
+                        /* check against maximum rate */
+                        if (ticks < USEC2TICK(_cycling_rate)) {
+                            return -EINVAL;
+                        }
+
+                        /* update interval for next measurement */
+                        _measure_ticks = ticks;
+
+                        /* if we need to start the poll state machine, do it */
+                        if (want_start) {
+                            start();
+                        }
+
+                        return OK;
                     }
-
-                    return OK;
                 }
             }
-        }
 
-    case SENSORIOCGPOLLRATE:
-        if (_measure_ticks == 0) {
-            return SENSOR_POLLRATE_MANUAL;
-        }
-
-        return (1000 / _measure_ticks);
-
-    case SENSORIOCSQUEUEDEPTH: {
-            /* lower bound is mandatory, upper bound is a sanity check */
-            if ((arg < 1) || (arg > 100)) {
-                return -EINVAL;
+        case SENSORIOCGPOLLRATE:
+            if (_measure_ticks == 0) {
+                return SENSOR_POLLRATE_MANUAL;
             }
 
-            irqstate_t flags = px4_enter_critical_section();
+            return (1000 / _measure_ticks);
 
-            if (!_reports->resize(arg)) {
+        case SENSORIOCSQUEUEDEPTH: {
+                /* lower bound is mandatory, upper bound is a sanity check */
+                if ((arg < 1) || (arg > 100)) {
+                    return -EINVAL;
+                }
+
+                irqstate_t flags = px4_enter_critical_section();
+
+                if (!_reports->resize(arg)) {
+                    px4_leave_critical_section(flags);
+                    return -ENOMEM;
+                }
+
                 px4_leave_critical_section(flags);
-                return -ENOMEM;
+
+                return OK;
             }
 
-            px4_leave_critical_section(flags);
+        case SENSORIOCGQUEUEDEPTH:
+            return _reports->size();
 
-            return OK;
-        }
+        case SENSORIOCRESET:
+            /* XXX implement this */
+            return -EINVAL;
 
-    case SENSORIOCGQUEUEDEPTH:
-        return _reports->size();
+        case RANGEFINDERIOCSETMINIUMDISTANCE: {
+                set_minimum_distance(*(float *)arg);
+                return 0;
+            }
+            break;
 
-    case SENSORIOCRESET:
-        /* XXX implement this */
-        return -EINVAL;
-
-    case RANGEFINDERIOCSETMINIUMDISTANCE: {
-            set_minimum_distance(*(float *)arg);
-            return 0;
-        }
-        break;
-
-    case RANGEFINDERIOCSETMAXIUMDISTANCE: {
-            set_maximum_distance(*(float *)arg);
-            return 0;
-        }
-        break;
-    case RANGEFINDERSINGLEMEASURE: {
-            single_test_mode = true;
-            measure();
-            return 0;
-        }
-        break;
-    case RANGEFINDERSINGLECOLLECT: {
-            collect();
-            return (int)(distance_orginal*1000.0f);
-        }
-    case RANGEFINDERGETAVR:
-        return average_sample;
-    case RANGEFINDERGETTHR:
-        return adc_buffer[_end_index[0]];
-    default:
-        /* give it to the superclass */
-        return CDev::ioctl(filp, cmd, arg);
+        case RANGEFINDERIOCSETMAXIUMDISTANCE: {
+                set_maximum_distance(*(float *)arg);
+                return 0;
+            }
+            break;
+        case RANGEFINDERSINGLEMEASURE: {
+                single_test_mode = true;
+                measure();
+                return 0;
+            }
+            break;
+        case RANGEFINDERSINGLECOLLECT: {
+                collect();
+                return (int)(distance_orginal*1000.0f);
+            }
+        case RANGEFINDERGETAVR:
+            return average_sample;
+        case RANGEFINDERGETTHR:
+            return adc_buffer[_end_index[0]];
+        default:
+            /* give it to the superclass */
+            return CDev::ioctl(filp, cmd, arg);
     }
 }
 

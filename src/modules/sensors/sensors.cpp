@@ -715,9 +715,11 @@ Sensors::run()
 		/* Look for new r/c input data */
 		_rc_update.rc_poll(_parameter_handles);
 
-		/* bymark start subscribe two or three ultrasound, and then publish them*/
+		/****** bymark start ******/
+		/* subscribe two or three ultrasound, and then publish them*/
 		/* subscribe and copy */
 		struct rtps_send_distance_sensor_s rtps_send_report = {};
+		uint8_t count = 0;
 		for (int instance = 0; instance < NUM_OF_ULTRASOUND; instance++) { // 不用ORB_MULTI_MAX_INSTANCES(4)， 使用NUM_OF_ULTRASOUND
 			if (OK == orb_exists(ORB_ID(distance_sensor), instance)) {
 				int handle_sub = orb_subscribe_multi(ORB_ID(distance_sensor), instance);
@@ -728,22 +730,25 @@ Sensors::run()
 					// Note: 数组rtps_send_report.current_distance的长度是3
 					rtps_send_report.current_distance[instance] = ultrasound_data.current_distance;
 					orb_unsubscribe(handle_sub);
+					count++;
 				} else {
 					PX4_ERR("orb_subscribe_multi %s failed (%i)", (ORB_ID(distance_sensor))->o_name, errno);
 				}
 			}
 		}
 		/* dvertise and publish */
-		orb_advert_t    rtps_send_distance_pub = nullptr;
-		rtps_send_distance_pub = orb_advertise(ORB_ID(rtps_send_distance_sensor), &rtps_send_report);
-	        if (rtps_send_distance_pub == nullptr) {
-	        	PX4_ERR("failed to create rtps_send_distance_sensor object. Did you start uOrb?");
-	        } else {
-	     		rtps_send_report.timestamp = hrt_absolute_time();
-			rtps_send_report.n_ultrasound = (uint8_t)NUM_OF_ULTRASOUND;
-			orb_publish(ORB_ID(rtps_send_distance_sensor), rtps_send_distance_pub, &rtps_send_report);
-			orb_unadvertise(rtps_send_distance_pub);
-	        }
+		if (count == NUM_OF_ULTRASOUND) {
+			orb_advert_t    rtps_send_distance_pub = nullptr;
+			rtps_send_distance_pub = orb_advertise(ORB_ID(rtps_send_distance_sensor), &rtps_send_report);
+		        if (rtps_send_distance_pub == nullptr) {
+		        	PX4_ERR("failed to create rtps_send_distance_sensor object. Did you start uOrb?");
+		        } else {
+		     		rtps_send_report.timestamp = hrt_absolute_time();
+				rtps_send_report.n_ultrasound = (uint8_t)NUM_OF_ULTRASOUND;
+				orb_publish(ORB_ID(rtps_send_distance_sensor), rtps_send_distance_pub, &rtps_send_report);
+				orb_unadvertise(rtps_send_distance_pub);
+		        }		
+		}
 		/****** bymark  end ******/
 		perf_end(_loop_perf);
 	}
