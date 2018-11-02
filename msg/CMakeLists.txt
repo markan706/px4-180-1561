@@ -93,6 +93,7 @@ set(msg_files
 	rate_ctrl_status.msg
 	rc_channels.msg
 	rc_parameter_map.msg
+	rtps_send_distance_sensor.msg #bymark
 	safety.msg
 	satellite_info.msg
 	sensor_accel.msg

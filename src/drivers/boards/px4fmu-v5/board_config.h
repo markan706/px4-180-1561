@@ -436,7 +436,7 @@
 #define UI_LED_TIM5_CH2OUT /* PH11  T5C2  GREEN */ GPIO_TIM5_CH2OUT_2
 #define UI_LED_TIM5_CH3OUT /* PH12  T5C3  BLUE  */ GPIO_TIM5_CH3OUT_2
 
-#define NUM_OF_ULTRASOUND 3  // bymark		
+#define NUM_OF_ULTRASOUND 2  // bymark		
 
 
 /* User GPIOs
@@ -535,8 +535,8 @@
 #define HRT_PPM_CHANNEL         /* T8C1 */  1  /* use capture/compare channel 1 */
 #define GPIO_PPM_IN             /* PI5 T8C1 */ GPIO_TIM8_CH1IN_2
 
-#define RC_UXART_BASE                      STM32_USART6_BASE
-#define RC_SERIAL_PORT                     "/dev/ttyS4"
+#define RC_UXART_BASE                      STM32_USART6_BASE  //bymark  6->3
+#define RC_SERIAL_PORT                     "/dev/ttyS4" //bymar 4->2
 #define BOARD_HAS_SINGLE_WIRE              1 /* HW is capable of Single Wire */
 #define BOARD_HAS_SINGLE_WIRE_ON_TX        1 /* HW default is wired as Single Wire On TX pin */
 #define BOARD_HAS_RX_TX_SWAP               1 /* HW Can swap TX and RX */

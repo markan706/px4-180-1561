@@ -28,28 +28,28 @@ The CXX compiler identification is GNU, found in "/home/aee231/TG/code/px4-firmw
 Determining if the C compiler works passed with the following output:
 Change Dir: /home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_c1253/fast"
-/usr/bin/make -f CMakeFiles/cmTC_c1253.dir/build.make CMakeFiles/cmTC_c1253.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_abd2c/fast"
+/usr/bin/make -f CMakeFiles/cmTC_abd2c.dir/build.make CMakeFiles/cmTC_abd2c.dir/build
 make[1]: 进入目录“/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/CMakeTmp”
-Building C object CMakeFiles/cmTC_c1253.dir/testCCompiler.c.o
-/usr/bin/cc    -o CMakeFiles/cmTC_c1253.dir/testCCompiler.c.o   -c /home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/CMakeTmp/testCCompiler.c
-Linking C executable cmTC_c1253
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_c1253.dir/link.txt --verbose=1
-/usr/bin/cc      -rdynamic CMakeFiles/cmTC_c1253.dir/testCCompiler.c.o  -o cmTC_c1253 
+Building C object CMakeFiles/cmTC_abd2c.dir/testCCompiler.c.o
+/usr/bin/cc    -o CMakeFiles/cmTC_abd2c.dir/testCCompiler.c.o   -c /home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/CMakeTmp/testCCompiler.c
+Linking C executable cmTC_abd2c
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_abd2c.dir/link.txt --verbose=1
+/usr/bin/cc      -rdynamic CMakeFiles/cmTC_abd2c.dir/testCCompiler.c.o  -o cmTC_abd2c 
 make[1]: 离开目录“/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/CMakeTmp”
 
 
 Detecting C compiler ABI info compiled with the following output:
 Change Dir: /home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_e68a3/fast"
-/usr/bin/make -f CMakeFiles/cmTC_e68a3.dir/build.make CMakeFiles/cmTC_e68a3.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_d58e5/fast"
+/usr/bin/make -f CMakeFiles/cmTC_d58e5.dir/build.make CMakeFiles/cmTC_d58e5.dir/build
 make[1]: 进入目录“/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/CMakeTmp”
-Building C object CMakeFiles/cmTC_e68a3.dir/CMakeCCompilerABI.c.o
-/usr/bin/cc    -o CMakeFiles/cmTC_e68a3.dir/CMakeCCompilerABI.c.o   -c /usr/share/cmake-3.10/Modules/CMakeCCompilerABI.c
-Linking C executable cmTC_e68a3
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_e68a3.dir/link.txt --verbose=1
-/usr/bin/cc     -v -rdynamic CMakeFiles/cmTC_e68a3.dir/CMakeCCompilerABI.c.o  -o cmTC_e68a3 
+Building C object CMakeFiles/cmTC_d58e5.dir/CMakeCCompilerABI.c.o
+/usr/bin/cc    -o CMakeFiles/cmTC_d58e5.dir/CMakeCCompilerABI.c.o   -c /usr/share/cmake-3.10/Modules/CMakeCCompilerABI.c
+Linking C executable cmTC_d58e5
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_d58e5.dir/link.txt --verbose=1
+/usr/bin/cc     -v -rdynamic CMakeFiles/cmTC_d58e5.dir/CMakeCCompilerABI.c.o  -o cmTC_d58e5 
 Using built-in specs.
 COLLECT_GCC=/usr/bin/cc
 COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper
@@ -61,9 +61,9 @@ Thread model: posix
 gcc version 7.3.0 (Ubuntu 7.3.0-27ubuntu1~18.04) 
 COMPILER_PATH=/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/
 LIBRARY_PATH=/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../../lib/:/lib/x86_64-linux-gnu/:/lib/../lib/:/usr/lib/x86_64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../:/lib/:/usr/lib/
-COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_e68a3' '-mtune=generic' '-march=x86-64'
- /usr/lib/gcc/x86_64-linux-gnu/7/collect2 -plugin /usr/lib/gcc/x86_64-linux-gnu/7/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper -plugin-opt=-fresolution=/tmp/ccGnLPaJ.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --sysroot=/ --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -export-dynamic -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -z now -z relro -o cmTC_e68a3 /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/Scrt1.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/7/crtbeginS.o -L/usr/lib/gcc/x86_64-linux-gnu/7 -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/7/../../.. CMakeFiles/cmTC_e68a3.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/x86_64-linux-gnu/7/crtendS.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crtn.o
-COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_e68a3' '-mtune=generic' '-march=x86-64'
+COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_d58e5' '-mtune=generic' '-march=x86-64'
+ /usr/lib/gcc/x86_64-linux-gnu/7/collect2 -plugin /usr/lib/gcc/x86_64-linux-gnu/7/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper -plugin-opt=-fresolution=/tmp/cchBy1zV.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --sysroot=/ --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -export-dynamic -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -z now -z relro -o cmTC_d58e5 /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/Scrt1.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/7/crtbeginS.o -L/usr/lib/gcc/x86_64-linux-gnu/7 -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/7/../../.. CMakeFiles/cmTC_d58e5.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/x86_64-linux-gnu/7/crtendS.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crtn.o
+COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_d58e5' '-mtune=generic' '-march=x86-64'
 make[1]: 离开目录“/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/CMakeTmp”
 
 
@@ -71,14 +71,14 @@ Parsed C implicit link information from above output:
   link line regex: [^( *|.*[/\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
   ignore line: [Change Dir: /home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/CMakeTmp]
   ignore line: []
-  ignore line: [Run Build Command:"/usr/bin/make" "cmTC_e68a3/fast"]
-  ignore line: [/usr/bin/make -f CMakeFiles/cmTC_e68a3.dir/build.make CMakeFiles/cmTC_e68a3.dir/build]
+  ignore line: [Run Build Command:"/usr/bin/make" "cmTC_d58e5/fast"]
+  ignore line: [/usr/bin/make -f CMakeFiles/cmTC_d58e5.dir/build.make CMakeFiles/cmTC_d58e5.dir/build]
   ignore line: [make[1]: 进入目录“/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/CMakeTmp”]
-  ignore line: [Building C object CMakeFiles/cmTC_e68a3.dir/CMakeCCompilerABI.c.o]
-  ignore line: [/usr/bin/cc    -o CMakeFiles/cmTC_e68a3.dir/CMakeCCompilerABI.c.o   -c /usr/share/cmake-3.10/Modules/CMakeCCompilerABI.c]
-  ignore line: [Linking C executable cmTC_e68a3]
-  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_e68a3.dir/link.txt --verbose=1]
-  ignore line: [/usr/bin/cc     -v -rdynamic CMakeFiles/cmTC_e68a3.dir/CMakeCCompilerABI.c.o  -o cmTC_e68a3 ]
+  ignore line: [Building C object CMakeFiles/cmTC_d58e5.dir/CMakeCCompilerABI.c.o]
+  ignore line: [/usr/bin/cc    -o CMakeFiles/cmTC_d58e5.dir/CMakeCCompilerABI.c.o   -c /usr/share/cmake-3.10/Modules/CMakeCCompilerABI.c]
+  ignore line: [Linking C executable cmTC_d58e5]
+  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_d58e5.dir/link.txt --verbose=1]
+  ignore line: [/usr/bin/cc     -v -rdynamic CMakeFiles/cmTC_d58e5.dir/CMakeCCompilerABI.c.o  -o cmTC_d58e5 ]
   ignore line: [Using built-in specs.]
   ignore line: [COLLECT_GCC=/usr/bin/cc]
   ignore line: [COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper]
@@ -90,13 +90,13 @@ Parsed C implicit link information from above output:
   ignore line: [gcc version 7.3.0 (Ubuntu 7.3.0-27ubuntu1~18.04) ]
   ignore line: [COMPILER_PATH=/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/]
   ignore line: [LIBRARY_PATH=/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../../lib/:/lib/x86_64-linux-gnu/:/lib/../lib/:/usr/lib/x86_64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../:/lib/:/usr/lib/]
-  ignore line: [COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_e68a3' '-mtune=generic' '-march=x86-64']
-  link line: [ /usr/lib/gcc/x86_64-linux-gnu/7/collect2 -plugin /usr/lib/gcc/x86_64-linux-gnu/7/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper -plugin-opt=-fresolution=/tmp/ccGnLPaJ.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --sysroot=/ --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -export-dynamic -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -z now -z relro -o cmTC_e68a3 /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/Scrt1.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/7/crtbeginS.o -L/usr/lib/gcc/x86_64-linux-gnu/7 -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/7/../../.. CMakeFiles/cmTC_e68a3.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/x86_64-linux-gnu/7/crtendS.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crtn.o]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_d58e5' '-mtune=generic' '-march=x86-64']
+  link line: [ /usr/lib/gcc/x86_64-linux-gnu/7/collect2 -plugin /usr/lib/gcc/x86_64-linux-gnu/7/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper -plugin-opt=-fresolution=/tmp/cchBy1zV.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --sysroot=/ --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -export-dynamic -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -z now -z relro -o cmTC_d58e5 /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/Scrt1.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/7/crtbeginS.o -L/usr/lib/gcc/x86_64-linux-gnu/7 -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/7/../../.. CMakeFiles/cmTC_d58e5.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/x86_64-linux-gnu/7/crtendS.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crtn.o]
     arg [/usr/lib/gcc/x86_64-linux-gnu/7/collect2] ==> ignore
     arg [-plugin] ==> ignore
     arg [/usr/lib/gcc/x86_64-linux-gnu/7/liblto_plugin.so] ==> ignore
     arg [-plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper] ==> ignore
-    arg [-plugin-opt=-fresolution=/tmp/ccGnLPaJ.res] ==> ignore
+    arg [-plugin-opt=-fresolution=/tmp/cchBy1zV.res] ==> ignore
     arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
     arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
     arg [-plugin-opt=-pass-through=-lc] ==> ignore
@@ -116,7 +116,7 @@ Parsed C implicit link information from above output:
     arg [-znow] ==> ignore
     arg [-zrelro] ==> ignore
     arg [-o] ==> ignore
-    arg [cmTC_e68a3] ==> ignore
+    arg [cmTC_d58e5] ==> ignore
     arg [/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/Scrt1.o] ==> ignore
     arg [/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crti.o] ==> ignore
     arg [/usr/lib/gcc/x86_64-linux-gnu/7/crtbeginS.o] ==> ignore
@@ -128,7 +128,7 @@ Parsed C implicit link information from above output:
     arg [-L/usr/lib/x86_64-linux-gnu] ==> dir [/usr/lib/x86_64-linux-gnu]
     arg [-L/usr/lib/../lib] ==> dir [/usr/lib/../lib]
     arg [-L/usr/lib/gcc/x86_64-linux-gnu/7/../../..] ==> dir [/usr/lib/gcc/x86_64-linux-gnu/7/../../..]
-    arg [CMakeFiles/cmTC_e68a3.dir/CMakeCCompilerABI.c.o] ==> ignore
+    arg [CMakeFiles/cmTC_d58e5.dir/CMakeCCompilerABI.c.o] ==> ignore
     arg [-lgcc] ==> lib [gcc]
     arg [--push-state] ==> ignore
     arg [--as-needed] ==> ignore
@@ -160,14 +160,14 @@ Parsed C implicit link information from above output:
 Detecting C [-std=c11] compiler features compiled with the following output:
 Change Dir: /home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_6f77d/fast"
-/usr/bin/make -f CMakeFiles/cmTC_6f77d.dir/build.make CMakeFiles/cmTC_6f77d.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_4b8f2/fast"
+/usr/bin/make -f CMakeFiles/cmTC_4b8f2.dir/build.make CMakeFiles/cmTC_4b8f2.dir/build
 make[1]: 进入目录“/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/CMakeTmp”
-Building C object CMakeFiles/cmTC_6f77d.dir/feature_tests.c.o
-/usr/bin/cc   -std=c11 -o CMakeFiles/cmTC_6f77d.dir/feature_tests.c.o   -c /home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/feature_tests.c
-Linking C executable cmTC_6f77d
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_6f77d.dir/link.txt --verbose=1
-/usr/bin/cc      -rdynamic CMakeFiles/cmTC_6f77d.dir/feature_tests.c.o  -o cmTC_6f77d 
+Building C object CMakeFiles/cmTC_4b8f2.dir/feature_tests.c.o
+/usr/bin/cc   -std=c11 -o CMakeFiles/cmTC_4b8f2.dir/feature_tests.c.o   -c /home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/feature_tests.c
+Linking C executable cmTC_4b8f2
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_4b8f2.dir/link.txt --verbose=1
+/usr/bin/cc      -rdynamic CMakeFiles/cmTC_4b8f2.dir/feature_tests.c.o  -o cmTC_4b8f2 
 make[1]: 离开目录“/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/CMakeTmp”
 
 
@@ -180,14 +180,14 @@ make[1]: 离开目录“/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src
 Detecting C [-std=c99] compiler features compiled with the following output:
 Change Dir: /home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_6bab0/fast"
-/usr/bin/make -f CMakeFiles/cmTC_6bab0.dir/build.make CMakeFiles/cmTC_6bab0.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_27358/fast"
+/usr/bin/make -f CMakeFiles/cmTC_27358.dir/build.make CMakeFiles/cmTC_27358.dir/build
 make[1]: 进入目录“/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/CMakeTmp”
-Building C object CMakeFiles/cmTC_6bab0.dir/feature_tests.c.o
-/usr/bin/cc   -std=c99 -o CMakeFiles/cmTC_6bab0.dir/feature_tests.c.o   -c /home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/feature_tests.c
-Linking C executable cmTC_6bab0
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_6bab0.dir/link.txt --verbose=1
-/usr/bin/cc      -rdynamic CMakeFiles/cmTC_6bab0.dir/feature_tests.c.o  -o cmTC_6bab0 
+Building C object CMakeFiles/cmTC_27358.dir/feature_tests.c.o
+/usr/bin/cc   -std=c99 -o CMakeFiles/cmTC_27358.dir/feature_tests.c.o   -c /home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/feature_tests.c
+Linking C executable cmTC_27358
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_27358.dir/link.txt --verbose=1
+/usr/bin/cc      -rdynamic CMakeFiles/cmTC_27358.dir/feature_tests.c.o  -o cmTC_27358 
 make[1]: 离开目录“/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/CMakeTmp”
 
 
@@ -200,14 +200,14 @@ make[1]: 离开目录“/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src
 Detecting C [-std=c90] compiler features compiled with the following output:
 Change Dir: /home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_58091/fast"
-/usr/bin/make -f CMakeFiles/cmTC_58091.dir/build.make CMakeFiles/cmTC_58091.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_31bb4/fast"
+/usr/bin/make -f CMakeFiles/cmTC_31bb4.dir/build.make CMakeFiles/cmTC_31bb4.dir/build
 make[1]: 进入目录“/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/CMakeTmp”
-Building C object CMakeFiles/cmTC_58091.dir/feature_tests.c.o
-/usr/bin/cc   -std=c90 -o CMakeFiles/cmTC_58091.dir/feature_tests.c.o   -c /home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/feature_tests.c
-Linking C executable cmTC_58091
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_58091.dir/link.txt --verbose=1
-/usr/bin/cc      -rdynamic CMakeFiles/cmTC_58091.dir/feature_tests.c.o  -o cmTC_58091 
+Building C object CMakeFiles/cmTC_31bb4.dir/feature_tests.c.o
+/usr/bin/cc   -std=c90 -o CMakeFiles/cmTC_31bb4.dir/feature_tests.c.o   -c /home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/feature_tests.c
+Linking C executable cmTC_31bb4
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_31bb4.dir/link.txt --verbose=1
+/usr/bin/cc      -rdynamic CMakeFiles/cmTC_31bb4.dir/feature_tests.c.o  -o cmTC_31bb4 
 make[1]: 离开目录“/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/CMakeTmp”
 
 
@@ -218,28 +218,28 @@ make[1]: 离开目录“/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src
 Determining if the CXX compiler works passed with the following output:
 Change Dir: /home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_8cadd/fast"
-/usr/bin/make -f CMakeFiles/cmTC_8cadd.dir/build.make CMakeFiles/cmTC_8cadd.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_78144/fast"
+/usr/bin/make -f CMakeFiles/cmTC_78144.dir/build.make CMakeFiles/cmTC_78144.dir/build
 make[1]: 进入目录“/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/CMakeTmp”
-Building CXX object CMakeFiles/cmTC_8cadd.dir/testCXXCompiler.cxx.o
-/usr/bin/c++     -o CMakeFiles/cmTC_8cadd.dir/testCXXCompiler.cxx.o -c /home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/CMakeTmp/testCXXCompiler.cxx
-Linking CXX executable cmTC_8cadd
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_8cadd.dir/link.txt --verbose=1
-/usr/bin/c++       -rdynamic CMakeFiles/cmTC_8cadd.dir/testCXXCompiler.cxx.o  -o cmTC_8cadd 
+Building CXX object CMakeFiles/cmTC_78144.dir/testCXXCompiler.cxx.o
+/usr/bin/c++     -o CMakeFiles/cmTC_78144.dir/testCXXCompiler.cxx.o -c /home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/CMakeTmp/testCXXCompiler.cxx
+Linking CXX executable cmTC_78144
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_78144.dir/link.txt --verbose=1
+/usr/bin/c++       -rdynamic CMakeFiles/cmTC_78144.dir/testCXXCompiler.cxx.o  -o cmTC_78144 
 make[1]: 离开目录“/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/CMakeTmp”
 
 
 Detecting CXX compiler ABI info compiled with the following output:
 Change Dir: /home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_1eadd/fast"
-/usr/bin/make -f CMakeFiles/cmTC_1eadd.dir/build.make CMakeFiles/cmTC_1eadd.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_8cbae/fast"
+/usr/bin/make -f CMakeFiles/cmTC_8cbae.dir/build.make CMakeFiles/cmTC_8cbae.dir/build
 make[1]: 进入目录“/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/CMakeTmp”
-Building CXX object CMakeFiles/cmTC_1eadd.dir/CMakeCXXCompilerABI.cpp.o
-/usr/bin/c++     -o CMakeFiles/cmTC_1eadd.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-3.10/Modules/CMakeCXXCompilerABI.cpp
-Linking CXX executable cmTC_1eadd
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_1eadd.dir/link.txt --verbose=1
-/usr/bin/c++      -v -rdynamic CMakeFiles/cmTC_1eadd.dir/CMakeCXXCompilerABI.cpp.o  -o cmTC_1eadd 
+Building CXX object CMakeFiles/cmTC_8cbae.dir/CMakeCXXCompilerABI.cpp.o
+/usr/bin/c++     -o CMakeFiles/cmTC_8cbae.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-3.10/Modules/CMakeCXXCompilerABI.cpp
+Linking CXX executable cmTC_8cbae
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_8cbae.dir/link.txt --verbose=1
+/usr/bin/c++      -v -rdynamic CMakeFiles/cmTC_8cbae.dir/CMakeCXXCompilerABI.cpp.o  -o cmTC_8cbae 
 Using built-in specs.
 COLLECT_GCC=/usr/bin/c++
 COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper
@@ -251,9 +251,9 @@ Thread model: posix
 gcc version 7.3.0 (Ubuntu 7.3.0-27ubuntu1~18.04) 
 COMPILER_PATH=/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/
 LIBRARY_PATH=/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../../lib/:/lib/x86_64-linux-gnu/:/lib/../lib/:/usr/lib/x86_64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../:/lib/:/usr/lib/
-COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_1eadd' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
- /usr/lib/gcc/x86_64-linux-gnu/7/collect2 -plugin /usr/lib/gcc/x86_64-linux-gnu/7/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper -plugin-opt=-fresolution=/tmp/ccVM05x9.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --sysroot=/ --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -export-dynamic -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -z now -z relro -o cmTC_1eadd /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/Scrt1.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/7/crtbeginS.o -L/usr/lib/gcc/x86_64-linux-gnu/7 -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/7/../../.. CMakeFiles/cmTC_1eadd.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/x86_64-linux-gnu/7/crtendS.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crtn.o
-COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_1eadd' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
+COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_8cbae' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
+ /usr/lib/gcc/x86_64-linux-gnu/7/collect2 -plugin /usr/lib/gcc/x86_64-linux-gnu/7/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper -plugin-opt=-fresolution=/tmp/ccuZxG3i.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --sysroot=/ --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -export-dynamic -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -z now -z relro -o cmTC_8cbae /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/Scrt1.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/7/crtbeginS.o -L/usr/lib/gcc/x86_64-linux-gnu/7 -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/7/../../.. CMakeFiles/cmTC_8cbae.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/x86_64-linux-gnu/7/crtendS.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crtn.o
+COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_8cbae' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
 make[1]: 离开目录“/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/CMakeTmp”
 
 
@@ -261,14 +261,14 @@ Parsed CXX implicit link information from above output:
   link line regex: [^( *|.*[/\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
   ignore line: [Change Dir: /home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/CMakeTmp]
   ignore line: []
-  ignore line: [Run Build Command:"/usr/bin/make" "cmTC_1eadd/fast"]
-  ignore line: [/usr/bin/make -f CMakeFiles/cmTC_1eadd.dir/build.make CMakeFiles/cmTC_1eadd.dir/build]
+  ignore line: [Run Build Command:"/usr/bin/make" "cmTC_8cbae/fast"]
+  ignore line: [/usr/bin/make -f CMakeFiles/cmTC_8cbae.dir/build.make CMakeFiles/cmTC_8cbae.dir/build]
   ignore line: [make[1]: 进入目录“/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/CMakeTmp”]
-  ignore line: [Building CXX object CMakeFiles/cmTC_1eadd.dir/CMakeCXXCompilerABI.cpp.o]
-  ignore line: [/usr/bin/c++     -o CMakeFiles/cmTC_1eadd.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-3.10/Modules/CMakeCXXCompilerABI.cpp]
-  ignore line: [Linking CXX executable cmTC_1eadd]
-  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_1eadd.dir/link.txt --verbose=1]
-  ignore line: [/usr/bin/c++      -v -rdynamic CMakeFiles/cmTC_1eadd.dir/CMakeCXXCompilerABI.cpp.o  -o cmTC_1eadd ]
+  ignore line: [Building CXX object CMakeFiles/cmTC_8cbae.dir/CMakeCXXCompilerABI.cpp.o]
+  ignore line: [/usr/bin/c++     -o CMakeFiles/cmTC_8cbae.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-3.10/Modules/CMakeCXXCompilerABI.cpp]
+  ignore line: [Linking CXX executable cmTC_8cbae]
+  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_8cbae.dir/link.txt --verbose=1]
+  ignore line: [/usr/bin/c++      -v -rdynamic CMakeFiles/cmTC_8cbae.dir/CMakeCXXCompilerABI.cpp.o  -o cmTC_8cbae ]
   ignore line: [Using built-in specs.]
   ignore line: [COLLECT_GCC=/usr/bin/c++]
   ignore line: [COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper]
@@ -280,13 +280,13 @@ Parsed CXX implicit link information from above output:
   ignore line: [gcc version 7.3.0 (Ubuntu 7.3.0-27ubuntu1~18.04) ]
   ignore line: [COMPILER_PATH=/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/]
   ignore line: [LIBRARY_PATH=/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../../lib/:/lib/x86_64-linux-gnu/:/lib/../lib/:/usr/lib/x86_64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../:/lib/:/usr/lib/]
-  ignore line: [COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_1eadd' '-shared-libgcc' '-mtune=generic' '-march=x86-64']
-  link line: [ /usr/lib/gcc/x86_64-linux-gnu/7/collect2 -plugin /usr/lib/gcc/x86_64-linux-gnu/7/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper -plugin-opt=-fresolution=/tmp/ccVM05x9.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --sysroot=/ --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -export-dynamic -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -z now -z relro -o cmTC_1eadd /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/Scrt1.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/7/crtbeginS.o -L/usr/lib/gcc/x86_64-linux-gnu/7 -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/7/../../.. CMakeFiles/cmTC_1eadd.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/x86_64-linux-gnu/7/crtendS.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crtn.o]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_8cbae' '-shared-libgcc' '-mtune=generic' '-march=x86-64']
+  link line: [ /usr/lib/gcc/x86_64-linux-gnu/7/collect2 -plugin /usr/lib/gcc/x86_64-linux-gnu/7/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper -plugin-opt=-fresolution=/tmp/ccuZxG3i.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --sysroot=/ --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -export-dynamic -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -z now -z relro -o cmTC_8cbae /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/Scrt1.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/7/crtbeginS.o -L/usr/lib/gcc/x86_64-linux-gnu/7 -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/7/../../.. CMakeFiles/cmTC_8cbae.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/x86_64-linux-gnu/7/crtendS.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crtn.o]
     arg [/usr/lib/gcc/x86_64-linux-gnu/7/collect2] ==> ignore
     arg [-plugin] ==> ignore
     arg [/usr/lib/gcc/x86_64-linux-gnu/7/liblto_plugin.so] ==> ignore
     arg [-plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper] ==> ignore
-    arg [-plugin-opt=-fresolution=/tmp/ccVM05x9.res] ==> ignore
+    arg [-plugin-opt=-fresolution=/tmp/ccuZxG3i.res] ==> ignore
     arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
     arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
     arg [-plugin-opt=-pass-through=-lc] ==> ignore
@@ -306,7 +306,7 @@ Parsed CXX implicit link information from above output:
     arg [-znow] ==> ignore
     arg [-zrelro] ==> ignore
     arg [-o] ==> ignore
-    arg [cmTC_1eadd] ==> ignore
+    arg [cmTC_8cbae] ==> ignore
     arg [/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/Scrt1.o] ==> ignore
     arg [/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crti.o] ==> ignore
     arg [/usr/lib/gcc/x86_64-linux-gnu/7/crtbeginS.o] ==> ignore
@@ -318,7 +318,7 @@ Parsed CXX implicit link information from above output:
     arg [-L/usr/lib/x86_64-linux-gnu] ==> dir [/usr/lib/x86_64-linux-gnu]
     arg [-L/usr/lib/../lib] ==> dir [/usr/lib/../lib]
     arg [-L/usr/lib/gcc/x86_64-linux-gnu/7/../../..] ==> dir [/usr/lib/gcc/x86_64-linux-gnu/7/../../..]
-    arg [CMakeFiles/cmTC_1eadd.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
+    arg [CMakeFiles/cmTC_8cbae.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
     arg [-lstdc++] ==> lib [stdc++]
     arg [-lm] ==> lib [m]
     arg [-lgcc_s] ==> lib [gcc_s]
@@ -346,14 +346,14 @@ Parsed CXX implicit link information from above output:
 Detecting CXX [-std=c++1z] compiler features compiled with the following output:
 Change Dir: /home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_cd7c7/fast"
-/usr/bin/make -f CMakeFiles/cmTC_cd7c7.dir/build.make CMakeFiles/cmTC_cd7c7.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_cf0a8/fast"
+/usr/bin/make -f CMakeFiles/cmTC_cf0a8.dir/build.make CMakeFiles/cmTC_cf0a8.dir/build
 make[1]: 进入目录“/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/CMakeTmp”
-Building CXX object CMakeFiles/cmTC_cd7c7.dir/feature_tests.cxx.o
-/usr/bin/c++    -std=c++1z -o CMakeFiles/cmTC_cd7c7.dir/feature_tests.cxx.o -c /home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/feature_tests.cxx
-Linking CXX executable cmTC_cd7c7
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_cd7c7.dir/link.txt --verbose=1
-/usr/bin/c++       -rdynamic CMakeFiles/cmTC_cd7c7.dir/feature_tests.cxx.o  -o cmTC_cd7c7 
+Building CXX object CMakeFiles/cmTC_cf0a8.dir/feature_tests.cxx.o
+/usr/bin/c++    -std=c++1z -o CMakeFiles/cmTC_cf0a8.dir/feature_tests.cxx.o -c /home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/feature_tests.cxx
+Linking CXX executable cmTC_cf0a8
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_cf0a8.dir/link.txt --verbose=1
+/usr/bin/c++       -rdynamic CMakeFiles/cmTC_cf0a8.dir/feature_tests.cxx.o  -o cmTC_cf0a8 
 make[1]: 离开目录“/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/CMakeTmp”
 
 
@@ -419,14 +419,14 @@ make[1]: 离开目录“/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src
 Detecting CXX [-std=c++14] compiler features compiled with the following output:
 Change Dir: /home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_cee4f/fast"
-/usr/bin/make -f CMakeFiles/cmTC_cee4f.dir/build.make CMakeFiles/cmTC_cee4f.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_4543e/fast"
+/usr/bin/make -f CMakeFiles/cmTC_4543e.dir/build.make CMakeFiles/cmTC_4543e.dir/build
 make[1]: 进入目录“/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/CMakeTmp”
-Building CXX object CMakeFiles/cmTC_cee4f.dir/feature_tests.cxx.o
-/usr/bin/c++    -std=c++14 -o CMakeFiles/cmTC_cee4f.dir/feature_tests.cxx.o -c /home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/feature_tests.cxx
-Linking CXX executable cmTC_cee4f
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_cee4f.dir/link.txt --verbose=1
-/usr/bin/c++       -rdynamic CMakeFiles/cmTC_cee4f.dir/feature_tests.cxx.o  -o cmTC_cee4f 
+Building CXX object CMakeFiles/cmTC_4543e.dir/feature_tests.cxx.o
+/usr/bin/c++    -std=c++14 -o CMakeFiles/cmTC_4543e.dir/feature_tests.cxx.o -c /home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/feature_tests.cxx
+Linking CXX executable cmTC_4543e
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_4543e.dir/link.txt --verbose=1
+/usr/bin/c++       -rdynamic CMakeFiles/cmTC_4543e.dir/feature_tests.cxx.o  -o cmTC_4543e 
 make[1]: 离开目录“/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/CMakeTmp”
 
 
@@ -492,14 +492,14 @@ make[1]: 离开目录“/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src
 Detecting CXX [-std=c++11] compiler features compiled with the following output:
 Change Dir: /home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_5e47c/fast"
-/usr/bin/make -f CMakeFiles/cmTC_5e47c.dir/build.make CMakeFiles/cmTC_5e47c.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_c57b9/fast"
+/usr/bin/make -f CMakeFiles/cmTC_c57b9.dir/build.make CMakeFiles/cmTC_c57b9.dir/build
 make[1]: 进入目录“/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/CMakeTmp”
-Building CXX object CMakeFiles/cmTC_5e47c.dir/feature_tests.cxx.o
-/usr/bin/c++    -std=c++11 -o CMakeFiles/cmTC_5e47c.dir/feature_tests.cxx.o -c /home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/feature_tests.cxx
-Linking CXX executable cmTC_5e47c
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_5e47c.dir/link.txt --verbose=1
-/usr/bin/c++       -rdynamic CMakeFiles/cmTC_5e47c.dir/feature_tests.cxx.o  -o cmTC_5e47c 
+Building CXX object CMakeFiles/cmTC_c57b9.dir/feature_tests.cxx.o
+/usr/bin/c++    -std=c++11 -o CMakeFiles/cmTC_c57b9.dir/feature_tests.cxx.o -c /home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/feature_tests.cxx
+Linking CXX executable cmTC_c57b9
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_c57b9.dir/link.txt --verbose=1
+/usr/bin/c++       -rdynamic CMakeFiles/cmTC_c57b9.dir/feature_tests.cxx.o  -o cmTC_c57b9 
 make[1]: 离开目录“/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/CMakeTmp”
 
 
@@ -565,14 +565,14 @@ make[1]: 离开目录“/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src
 Detecting CXX [-std=c++98] compiler features compiled with the following output:
 Change Dir: /home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_6d8ea/fast"
-/usr/bin/make -f CMakeFiles/cmTC_6d8ea.dir/build.make CMakeFiles/cmTC_6d8ea.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_85010/fast"
+/usr/bin/make -f CMakeFiles/cmTC_85010.dir/build.make CMakeFiles/cmTC_85010.dir/build
 make[1]: 进入目录“/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/CMakeTmp”
-Building CXX object CMakeFiles/cmTC_6d8ea.dir/feature_tests.cxx.o
-/usr/bin/c++    -std=c++98 -o CMakeFiles/cmTC_6d8ea.dir/feature_tests.cxx.o -c /home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/feature_tests.cxx
-Linking CXX executable cmTC_6d8ea
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_6d8ea.dir/link.txt --verbose=1
-/usr/bin/c++       -rdynamic CMakeFiles/cmTC_6d8ea.dir/feature_tests.cxx.o  -o cmTC_6d8ea 
+Building CXX object CMakeFiles/cmTC_85010.dir/feature_tests.cxx.o
+/usr/bin/c++    -std=c++98 -o CMakeFiles/cmTC_85010.dir/feature_tests.cxx.o -c /home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/feature_tests.cxx
+Linking CXX executable cmTC_85010
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_85010.dir/link.txt --verbose=1
+/usr/bin/c++       -rdynamic CMakeFiles/cmTC_85010.dir/feature_tests.cxx.o  -o cmTC_85010 
 make[1]: 离开目录“/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/CMakeTmp”
 
 
@@ -636,14 +636,14 @@ make[1]: 离开目录“/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src
 Performing C++ SOURCE FILE Test SUPPORTS_CXX11 succeeded with the following output:
 Change Dir: /home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_331ac/fast"
-/usr/bin/make -f CMakeFiles/cmTC_331ac.dir/build.make CMakeFiles/cmTC_331ac.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_852ea/fast"
+/usr/bin/make -f CMakeFiles/cmTC_852ea.dir/build.make CMakeFiles/cmTC_852ea.dir/build
 make[1]: Entering directory '/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_331ac.dir/src.cxx.o
-/usr/bin/c++    -DSUPPORTS_CXX11   --std=c++11 -o CMakeFiles/cmTC_331ac.dir/src.cxx.o -c /home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/CMakeTmp/src.cxx
-Linking CXX executable cmTC_331ac
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_331ac.dir/link.txt --verbose=1
-/usr/bin/c++   -DSUPPORTS_CXX11    -rdynamic CMakeFiles/cmTC_331ac.dir/src.cxx.o  -o cmTC_331ac 
+Building CXX object CMakeFiles/cmTC_852ea.dir/src.cxx.o
+/usr/bin/c++    -DSUPPORTS_CXX11   --std=c++11 -o CMakeFiles/cmTC_852ea.dir/src.cxx.o -c /home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_852ea
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_852ea.dir/link.txt --verbose=1
+/usr/bin/c++   -DSUPPORTS_CXX11    -rdynamic CMakeFiles/cmTC_852ea.dir/src.cxx.o  -o cmTC_852ea 
 make[1]: Leaving directory '/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles/CMakeTmp'
 
 Source file was:

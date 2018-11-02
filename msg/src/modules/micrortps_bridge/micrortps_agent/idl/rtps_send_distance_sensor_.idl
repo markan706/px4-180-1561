@@ -1,0 +1,16 @@
+#ifndef __rtps_send_distance_sensor__idl__
+#define __rtps_send_distance_sensor__idl__
+
+
+
+struct rtps_send_distance_sensor_
+{
+    unsigned long long timestamp;
+    float current_distance[3];
+    octet n_ultrasound;
+
+}; // struct rtps_send_distance_sensor_
+
+#pragma keylist rtps_send_distance_sensor_
+
+#endif  // __rtps_send_distance_sensor__idl__

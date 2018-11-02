@@ -32,7 +32,7 @@
 
 #include <fastcdr/Cdr.h>
 
-#include "sensor_combined_Publisher.h"
+#include "rtps_send_distance_sensor_Publisher.h"
 #include "camera_trigger_Subscriber.h"
 #include "obstacle_distance_Subscriber.h"
 #include "optical_flow_Subscriber.h"
@@ -46,7 +46,7 @@ public:
 
 private:
     // Publishers
-    sensor_combined_Publisher _sensor_combined_pub;
+    rtps_send_distance_sensor_Publisher _rtps_send_distance_sensor_pub;
 
     // Subscribers
     camera_trigger_Subscriber _camera_trigger_sub;

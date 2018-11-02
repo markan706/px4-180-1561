@@ -11,9 +11,9 @@ file(REMOVE_RECURSE
   "CMakeFiles/micrortps_agent.dir/optical_flow_.cpp.o"
   "CMakeFiles/micrortps_agent.dir/optical_flow_PubSubTypes.cpp.o"
   "CMakeFiles/micrortps_agent.dir/optical_flow_Subscriber.cpp.o"
-  "CMakeFiles/micrortps_agent.dir/sensor_combined_.cpp.o"
-  "CMakeFiles/micrortps_agent.dir/sensor_combined_PubSubTypes.cpp.o"
-  "CMakeFiles/micrortps_agent.dir/sensor_combined_Publisher.cpp.o"
+  "CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_.cpp.o"
+  "CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_PubSubTypes.cpp.o"
+  "CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_Publisher.cpp.o"
   "micrortps_agent.pdb"
   "micrortps_agent"
 )

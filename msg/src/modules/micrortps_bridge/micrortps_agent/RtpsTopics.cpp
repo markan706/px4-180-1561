@@ -57,10 +57,10 @@ bool RtpsTopics::init()
     }
 
     // Initialise publishers
-    if (_sensor_combined_pub.init()) {
-        std::cout << "sensor_combined publisher started" << std::endl;
+    if (_rtps_send_distance_sensor_pub.init()) {
+        std::cout << "rtps_send_distance_sensor publisher started" << std::endl;
     } else {
-        std::cout << "ERROR starting sensor_combined publisher" << std::endl;
+        std::cout << "ERROR starting rtps_send_distance_sensor publisher" << std::endl;
         return false;
     }
 
@@ -71,13 +71,13 @@ void RtpsTopics::publish(uint8_t topic_ID, char data_buffer[], size_t len)
 {
     switch (topic_ID)
     {
-        case 64: // sensor_combined
+        case 137: // rtps_send_distance_sensor
         {
-            sensor_combined_ st;
+            rtps_send_distance_sensor_ st;
             eprosima::fastcdr::FastBuffer cdrbuffer(data_buffer, len);
             eprosima::fastcdr::Cdr cdr_des(cdrbuffer);
             st.deserialize(cdr_des);
-            _sensor_combined_pub.publish(&st);
+            _rtps_send_distance_sensor_pub.publish(&st);
         }
         break;
         default:

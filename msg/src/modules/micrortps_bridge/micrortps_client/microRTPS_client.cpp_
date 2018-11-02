@@ -42,14 +42,14 @@
 #include <px4_time.h>
 #include <uORB/uORB.h>
 
+#include <uORB/topics/rtps_send_distance_sensor.h>
+#include <uORB_microcdr/topics/rtps_send_distance_sensor.h>
 #include <uORB/topics/camera_trigger.h>
 #include <uORB_microcdr/topics/camera_trigger.h>
-#include <uORB/topics/optical_flow.h>
-#include <uORB_microcdr/topics/optical_flow.h>
 #include <uORB/topics/obstacle_distance.h>
 #include <uORB_microcdr/topics/obstacle_distance.h>
-#include <uORB/topics/sensor_combined.h>
-#include <uORB_microcdr/topics/sensor_combined.h>
+#include <uORB/topics/optical_flow.h>
+#include <uORB_microcdr/topics/optical_flow.h>
 
 void* send(void *data);
 
@@ -65,7 +65,7 @@ void* send(void* /*unused*/)
     int fds[1] = {};
 
     // orb_set_interval statblish an update interval period in milliseconds.
-    fds[0] = orb_subscribe(ORB_ID(sensor_combined));
+    fds[0] = orb_subscribe(ORB_ID(rtps_send_distance_sensor));
     orb_set_interval(fds[0], _options.update_time_ms);
 
     // MicroBuffer to serialized using the user defined buffer
@@ -83,13 +83,13 @@ void* send(void* /*unused*/)
         if (updated)
         {
             // obtained data for the file descriptor
-            struct sensor_combined_s data;
+            struct rtps_send_distance_sensor_s data;
             // copy raw data into local buffer
-            if (orb_copy(ORB_ID(sensor_combined), fds[0], &data) == 0) {
+            if (orb_copy(ORB_ID(rtps_send_distance_sensor), fds[0], &data) == 0) {
                 /* payload is shifted by header length to make room for header*/
-                serialize_sensor_combined(&MicroBufferWriter, &data, &data_buffer[header_length], &length);
+                serialize_rtps_send_distance_sensor(&MicroBufferWriter, &data, &data_buffer[header_length], &length);
 
-                if (0 < (read = transport_node->write((char)64, data_buffer, length)))
+                if (0 < (read = transport_node->write((char)137, data_buffer, length)))
                 {
                     total_sent += read;
                     ++sent;

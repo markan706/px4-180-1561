@@ -148,7 +148,7 @@ rtps:
     #send: true
   - msg: sensor_combined
     id: 64
-    send: true
+    #send: true
   - msg: sensor_correction
     id: 65
     #send: true
@@ -284,3 +284,6 @@ rtps:
     id: 135
   - msg: vehicle_trajectory_waypoint_desired
     id: 136
+  - msg: rtps_send_distance_sensor
+    id: 137
+    send: true    

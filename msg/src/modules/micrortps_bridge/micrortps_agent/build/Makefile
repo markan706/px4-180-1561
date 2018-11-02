@@ -447,86 +447,86 @@ optical_flow_Subscriber.cpp.s:
 	$(MAKE) -f CMakeFiles/micrortps_agent.dir/build.make CMakeFiles/micrortps_agent.dir/optical_flow_Subscriber.cpp.s
 .PHONY : optical_flow_Subscriber.cpp.s
 
-sensor_combined_.o: sensor_combined_.cpp.o
+rtps_send_distance_sensor_.o: rtps_send_distance_sensor_.cpp.o
 
-.PHONY : sensor_combined_.o
-
-# target to build an object file
-sensor_combined_.cpp.o:
-	$(MAKE) -f CMakeFiles/micrortps_agent.dir/build.make CMakeFiles/micrortps_agent.dir/sensor_combined_.cpp.o
-.PHONY : sensor_combined_.cpp.o
-
-sensor_combined_.i: sensor_combined_.cpp.i
-
-.PHONY : sensor_combined_.i
-
-# target to preprocess a source file
-sensor_combined_.cpp.i:
-	$(MAKE) -f CMakeFiles/micrortps_agent.dir/build.make CMakeFiles/micrortps_agent.dir/sensor_combined_.cpp.i
-.PHONY : sensor_combined_.cpp.i
-
-sensor_combined_.s: sensor_combined_.cpp.s
-
-.PHONY : sensor_combined_.s
-
-# target to generate assembly for a file
-sensor_combined_.cpp.s:
-	$(MAKE) -f CMakeFiles/micrortps_agent.dir/build.make CMakeFiles/micrortps_agent.dir/sensor_combined_.cpp.s
-.PHONY : sensor_combined_.cpp.s
-
-sensor_combined_PubSubTypes.o: sensor_combined_PubSubTypes.cpp.o
-
-.PHONY : sensor_combined_PubSubTypes.o
+.PHONY : rtps_send_distance_sensor_.o
 
 # target to build an object file
-sensor_combined_PubSubTypes.cpp.o:
-	$(MAKE) -f CMakeFiles/micrortps_agent.dir/build.make CMakeFiles/micrortps_agent.dir/sensor_combined_PubSubTypes.cpp.o
-.PHONY : sensor_combined_PubSubTypes.cpp.o
+rtps_send_distance_sensor_.cpp.o:
+	$(MAKE) -f CMakeFiles/micrortps_agent.dir/build.make CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_.cpp.o
+.PHONY : rtps_send_distance_sensor_.cpp.o
 
-sensor_combined_PubSubTypes.i: sensor_combined_PubSubTypes.cpp.i
+rtps_send_distance_sensor_.i: rtps_send_distance_sensor_.cpp.i
 
-.PHONY : sensor_combined_PubSubTypes.i
+.PHONY : rtps_send_distance_sensor_.i
 
 # target to preprocess a source file
-sensor_combined_PubSubTypes.cpp.i:
-	$(MAKE) -f CMakeFiles/micrortps_agent.dir/build.make CMakeFiles/micrortps_agent.dir/sensor_combined_PubSubTypes.cpp.i
-.PHONY : sensor_combined_PubSubTypes.cpp.i
+rtps_send_distance_sensor_.cpp.i:
+	$(MAKE) -f CMakeFiles/micrortps_agent.dir/build.make CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_.cpp.i
+.PHONY : rtps_send_distance_sensor_.cpp.i
 
-sensor_combined_PubSubTypes.s: sensor_combined_PubSubTypes.cpp.s
+rtps_send_distance_sensor_.s: rtps_send_distance_sensor_.cpp.s
 
-.PHONY : sensor_combined_PubSubTypes.s
+.PHONY : rtps_send_distance_sensor_.s
 
 # target to generate assembly for a file
-sensor_combined_PubSubTypes.cpp.s:
-	$(MAKE) -f CMakeFiles/micrortps_agent.dir/build.make CMakeFiles/micrortps_agent.dir/sensor_combined_PubSubTypes.cpp.s
-.PHONY : sensor_combined_PubSubTypes.cpp.s
+rtps_send_distance_sensor_.cpp.s:
+	$(MAKE) -f CMakeFiles/micrortps_agent.dir/build.make CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_.cpp.s
+.PHONY : rtps_send_distance_sensor_.cpp.s
 
-sensor_combined_Publisher.o: sensor_combined_Publisher.cpp.o
+rtps_send_distance_sensor_PubSubTypes.o: rtps_send_distance_sensor_PubSubTypes.cpp.o
 
-.PHONY : sensor_combined_Publisher.o
+.PHONY : rtps_send_distance_sensor_PubSubTypes.o
 
 # target to build an object file
-sensor_combined_Publisher.cpp.o:
-	$(MAKE) -f CMakeFiles/micrortps_agent.dir/build.make CMakeFiles/micrortps_agent.dir/sensor_combined_Publisher.cpp.o
-.PHONY : sensor_combined_Publisher.cpp.o
+rtps_send_distance_sensor_PubSubTypes.cpp.o:
+	$(MAKE) -f CMakeFiles/micrortps_agent.dir/build.make CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_PubSubTypes.cpp.o
+.PHONY : rtps_send_distance_sensor_PubSubTypes.cpp.o
 
-sensor_combined_Publisher.i: sensor_combined_Publisher.cpp.i
+rtps_send_distance_sensor_PubSubTypes.i: rtps_send_distance_sensor_PubSubTypes.cpp.i
 
-.PHONY : sensor_combined_Publisher.i
+.PHONY : rtps_send_distance_sensor_PubSubTypes.i
 
 # target to preprocess a source file
-sensor_combined_Publisher.cpp.i:
-	$(MAKE) -f CMakeFiles/micrortps_agent.dir/build.make CMakeFiles/micrortps_agent.dir/sensor_combined_Publisher.cpp.i
-.PHONY : sensor_combined_Publisher.cpp.i
+rtps_send_distance_sensor_PubSubTypes.cpp.i:
+	$(MAKE) -f CMakeFiles/micrortps_agent.dir/build.make CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_PubSubTypes.cpp.i
+.PHONY : rtps_send_distance_sensor_PubSubTypes.cpp.i
 
-sensor_combined_Publisher.s: sensor_combined_Publisher.cpp.s
+rtps_send_distance_sensor_PubSubTypes.s: rtps_send_distance_sensor_PubSubTypes.cpp.s
 
-.PHONY : sensor_combined_Publisher.s
+.PHONY : rtps_send_distance_sensor_PubSubTypes.s
 
 # target to generate assembly for a file
-sensor_combined_Publisher.cpp.s:
-	$(MAKE) -f CMakeFiles/micrortps_agent.dir/build.make CMakeFiles/micrortps_agent.dir/sensor_combined_Publisher.cpp.s
-.PHONY : sensor_combined_Publisher.cpp.s
+rtps_send_distance_sensor_PubSubTypes.cpp.s:
+	$(MAKE) -f CMakeFiles/micrortps_agent.dir/build.make CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_PubSubTypes.cpp.s
+.PHONY : rtps_send_distance_sensor_PubSubTypes.cpp.s
+
+rtps_send_distance_sensor_Publisher.o: rtps_send_distance_sensor_Publisher.cpp.o
+
+.PHONY : rtps_send_distance_sensor_Publisher.o
+
+# target to build an object file
+rtps_send_distance_sensor_Publisher.cpp.o:
+	$(MAKE) -f CMakeFiles/micrortps_agent.dir/build.make CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_Publisher.cpp.o
+.PHONY : rtps_send_distance_sensor_Publisher.cpp.o
+
+rtps_send_distance_sensor_Publisher.i: rtps_send_distance_sensor_Publisher.cpp.i
+
+.PHONY : rtps_send_distance_sensor_Publisher.i
+
+# target to preprocess a source file
+rtps_send_distance_sensor_Publisher.cpp.i:
+	$(MAKE) -f CMakeFiles/micrortps_agent.dir/build.make CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_Publisher.cpp.i
+.PHONY : rtps_send_distance_sensor_Publisher.cpp.i
+
+rtps_send_distance_sensor_Publisher.s: rtps_send_distance_sensor_Publisher.cpp.s
+
+.PHONY : rtps_send_distance_sensor_Publisher.s
+
+# target to generate assembly for a file
+rtps_send_distance_sensor_Publisher.cpp.s:
+	$(MAKE) -f CMakeFiles/micrortps_agent.dir/build.make CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_Publisher.cpp.s
+.PHONY : rtps_send_distance_sensor_Publisher.cpp.s
 
 # Help Target
 help:
@@ -573,15 +573,15 @@ help:
 	@echo "... optical_flow_Subscriber.o"
 	@echo "... optical_flow_Subscriber.i"
 	@echo "... optical_flow_Subscriber.s"
-	@echo "... sensor_combined_.o"
-	@echo "... sensor_combined_.i"
-	@echo "... sensor_combined_.s"
-	@echo "... sensor_combined_PubSubTypes.o"
-	@echo "... sensor_combined_PubSubTypes.i"
-	@echo "... sensor_combined_PubSubTypes.s"
-	@echo "... sensor_combined_Publisher.o"
-	@echo "... sensor_combined_Publisher.i"
-	@echo "... sensor_combined_Publisher.s"
+	@echo "... rtps_send_distance_sensor_.o"
+	@echo "... rtps_send_distance_sensor_.i"
+	@echo "... rtps_send_distance_sensor_.s"
+	@echo "... rtps_send_distance_sensor_PubSubTypes.o"
+	@echo "... rtps_send_distance_sensor_PubSubTypes.i"
+	@echo "... rtps_send_distance_sensor_PubSubTypes.s"
+	@echo "... rtps_send_distance_sensor_Publisher.o"
+	@echo "... rtps_send_distance_sensor_Publisher.i"
+	@echo "... rtps_send_distance_sensor_Publisher.s"
 .PHONY : help
 
 

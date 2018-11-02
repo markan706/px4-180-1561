@@ -12,40 +12,40 @@ LIBS =  -lfastcdr -lfastrtps $(SYSLIBS)
 
 DIRECTORIES= output.dir output/x64Linux2.6gcc.dir lib.dir lib/x64Linux2.6gcc.dir bin.dir bin/x64Linux2.6gcc.dir
 
-all: $(DIRECTORIES) sensor_combined_ sensor_combined_PublisherSubscriber
+all: $(DIRECTORIES) rtps_send_distance_sensor_ rtps_send_distance_sensor_PublisherSubscriber
 
 
-sensor_combined__TARGET= lib/x64Linux2.6gcc/libsensor_combined_.so
-sensor_combined__TARGET_Z= lib/x64Linux2.6gcc/libsensor_combined_.a
+rtps_send_distance_sensor__TARGET= lib/x64Linux2.6gcc/librtps_send_distance_sensor_.so
+rtps_send_distance_sensor__TARGET_Z= lib/x64Linux2.6gcc/librtps_send_distance_sensor_.a
 
-sensor_combined__CLIENT_EXAMPLE_TARGET= bin/x64Linux2.6gcc/sensor_combined_PublisherSubscriber
-sensor_combined__COMMON_SRC_CXXFILES = sensor_combined_.cxx
+rtps_send_distance_sensor__CLIENT_EXAMPLE_TARGET= bin/x64Linux2.6gcc/rtps_send_distance_sensor_PublisherSubscriber
+rtps_send_distance_sensor__COMMON_SRC_CXXFILES = rtps_send_distance_sensor_.cxx
 
-sensor_combined__COMMON_SRC_CPPFILES=
+rtps_send_distance_sensor__COMMON_SRC_CPPFILES=
 
-sensor_combined__CLIENTSOURCES = sensor_combined_PubSubTypes.cxx \
-	sensor_combined_Publisher.cxx \
-	sensor_combined_Subscriber.cxx \
-	sensor_combined_PubSubMain.cxx
+rtps_send_distance_sensor__CLIENTSOURCES = rtps_send_distance_sensor_PubSubTypes.cxx \
+	rtps_send_distance_sensor_Publisher.cxx \
+	rtps_send_distance_sensor_Subscriber.cxx \
+	rtps_send_distance_sensor_PubSubMain.cxx
 
-sensor_combined__COMMONOBJS    = $(sensor_combined__COMMON_SRC_CXXFILES:%.cxx=output/x64Linux2.6gcc/%.o) $(sensor_combined__COMMON_SRC_CPPFILES:%.cpp=output/x64Linux2.6gcc/%.o)
+rtps_send_distance_sensor__COMMONOBJS    = $(rtps_send_distance_sensor__COMMON_SRC_CXXFILES:%.cxx=output/x64Linux2.6gcc/%.o) $(rtps_send_distance_sensor__COMMON_SRC_CPPFILES:%.cpp=output/x64Linux2.6gcc/%.o)
 
-sensor_combined__CLIENTOBJS    = $(sensor_combined__CLIENTSOURCES:%.cxx=output/x64Linux2.6gcc/%.o)
+rtps_send_distance_sensor__CLIENTOBJS    = $(rtps_send_distance_sensor__CLIENTSOURCES:%.cxx=output/x64Linux2.6gcc/%.o)
 
-sensor_combined_OBJS+= $(sensor_combined__COMMONOBJS) $(sensor_combined__CLIENTOBJS)
-OBJS+= $(sensor_combined_OBJS)
+rtps_send_distance_sensor_OBJS+= $(rtps_send_distance_sensor__COMMONOBJS) $(rtps_send_distance_sensor__CLIENTOBJS)
+OBJS+= $(rtps_send_distance_sensor_OBJS)
 
-$(sensor_combined__TARGET): $(sensor_combined__COMMONOBJS)
-	$(LN) $(LDFLAGS) -shared -o $(sensor_combined__TARGET) $(sensor_combined__COMMONOBJS) $(LIBS) -Llib/x64Linux2.6gcc 
+$(rtps_send_distance_sensor__TARGET): $(rtps_send_distance_sensor__COMMONOBJS)
+	$(LN) $(LDFLAGS) -shared -o $(rtps_send_distance_sensor__TARGET) $(rtps_send_distance_sensor__COMMONOBJS) $(LIBS) -Llib/x64Linux2.6gcc 
 
-$(sensor_combined__TARGET_Z): $(sensor_combined__COMMONOBJS)
-	$(AR) -cru $(sensor_combined__TARGET_Z) $(sensor_combined__COMMONOBJS)
+$(rtps_send_distance_sensor__TARGET_Z): $(rtps_send_distance_sensor__COMMONOBJS)
+	$(AR) -cru $(rtps_send_distance_sensor__TARGET_Z) $(rtps_send_distance_sensor__COMMONOBJS)
 
-$(sensor_combined__CLIENT_EXAMPLE_TARGET): $(sensor_combined_OBJS) lib/x64Linux2.6gcc/libsensor_combined_.a 
-	$(LN) $(LDFLAGS) -o $@ $(sensor_combined_OBJS) -Wl,-Bstatic -Llib/x64Linux2.6gcc -lsensor_combined_  -Wl,-Bdynamic $(LIBS)
+$(rtps_send_distance_sensor__CLIENT_EXAMPLE_TARGET): $(rtps_send_distance_sensor_OBJS) lib/x64Linux2.6gcc/librtps_send_distance_sensor_.a 
+	$(LN) $(LDFLAGS) -o $@ $(rtps_send_distance_sensor_OBJS) -Wl,-Bstatic -Llib/x64Linux2.6gcc -lrtps_send_distance_sensor_  -Wl,-Bdynamic $(LIBS)
 
-sensor_combined_PublisherSubscriber : $(sensor_combined__CLIENT_EXAMPLE_TARGET)
-sensor_combined_: $(sensor_combined__TARGET) $(sensor_combined__TARGET_Z) sensor_combined_PublisherSubscriber
+rtps_send_distance_sensor_PublisherSubscriber : $(rtps_send_distance_sensor__CLIENT_EXAMPLE_TARGET)
+rtps_send_distance_sensor_: $(rtps_send_distance_sensor__TARGET) $(rtps_send_distance_sensor__TARGET_Z) rtps_send_distance_sensor_PublisherSubscriber
 
 output/x64Linux2.6gcc/%.o:%.cxx
 	$(CPP) $(CPPFLAGS) $(INCLUDES) $(DEFINES) -c $< -o $@
@@ -53,7 +53,7 @@ output/x64Linux2.6gcc/%.o:%.cxx
 output/x64Linux2.6gcc/%.o:%.cpp
 	$(CPP) $(CPPFLAGS) $(INCLUDES) $(DEFINES) -c $< -o $@
 
-.PHONY: sensor_combined_ sensor_combined_PublisherSubscriber
+.PHONY: rtps_send_distance_sensor_ rtps_send_distance_sensor_PublisherSubscriber
 
 clean:
 	@rm -f $(OBJS)

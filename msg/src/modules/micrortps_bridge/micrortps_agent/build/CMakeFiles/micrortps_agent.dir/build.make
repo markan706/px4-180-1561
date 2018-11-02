@@ -345,76 +345,76 @@ CMakeFiles/micrortps_agent.dir/optical_flow_Subscriber.cpp.o.provides: CMakeFile
 CMakeFiles/micrortps_agent.dir/optical_flow_Subscriber.cpp.o.provides.build: CMakeFiles/micrortps_agent.dir/optical_flow_Subscriber.cpp.o
 
 
-CMakeFiles/micrortps_agent.dir/sensor_combined_.cpp.o: CMakeFiles/micrortps_agent.dir/flags.make
-CMakeFiles/micrortps_agent.dir/sensor_combined_.cpp.o: ../sensor_combined_.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/micrortps_agent.dir/sensor_combined_.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/micrortps_agent.dir/sensor_combined_.cpp.o -c /home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/sensor_combined_.cpp
+CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_.cpp.o: CMakeFiles/micrortps_agent.dir/flags.make
+CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_.cpp.o: ../rtps_send_distance_sensor_.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_.cpp.o -c /home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/rtps_send_distance_sensor_.cpp
 
-CMakeFiles/micrortps_agent.dir/sensor_combined_.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/micrortps_agent.dir/sensor_combined_.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/sensor_combined_.cpp > CMakeFiles/micrortps_agent.dir/sensor_combined_.cpp.i
+CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/rtps_send_distance_sensor_.cpp > CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_.cpp.i
 
-CMakeFiles/micrortps_agent.dir/sensor_combined_.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/micrortps_agent.dir/sensor_combined_.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/sensor_combined_.cpp -o CMakeFiles/micrortps_agent.dir/sensor_combined_.cpp.s
+CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/rtps_send_distance_sensor_.cpp -o CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_.cpp.s
 
-CMakeFiles/micrortps_agent.dir/sensor_combined_.cpp.o.requires:
+CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_.cpp.o.requires:
 
-.PHONY : CMakeFiles/micrortps_agent.dir/sensor_combined_.cpp.o.requires
+.PHONY : CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_.cpp.o.requires
 
-CMakeFiles/micrortps_agent.dir/sensor_combined_.cpp.o.provides: CMakeFiles/micrortps_agent.dir/sensor_combined_.cpp.o.requires
-	$(MAKE) -f CMakeFiles/micrortps_agent.dir/build.make CMakeFiles/micrortps_agent.dir/sensor_combined_.cpp.o.provides.build
-.PHONY : CMakeFiles/micrortps_agent.dir/sensor_combined_.cpp.o.provides
+CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_.cpp.o.provides: CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_.cpp.o.requires
+	$(MAKE) -f CMakeFiles/micrortps_agent.dir/build.make CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_.cpp.o.provides.build
+.PHONY : CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_.cpp.o.provides
 
-CMakeFiles/micrortps_agent.dir/sensor_combined_.cpp.o.provides.build: CMakeFiles/micrortps_agent.dir/sensor_combined_.cpp.o
-
-
-CMakeFiles/micrortps_agent.dir/sensor_combined_PubSubTypes.cpp.o: CMakeFiles/micrortps_agent.dir/flags.make
-CMakeFiles/micrortps_agent.dir/sensor_combined_PubSubTypes.cpp.o: ../sensor_combined_PubSubTypes.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/micrortps_agent.dir/sensor_combined_PubSubTypes.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/micrortps_agent.dir/sensor_combined_PubSubTypes.cpp.o -c /home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/sensor_combined_PubSubTypes.cpp
-
-CMakeFiles/micrortps_agent.dir/sensor_combined_PubSubTypes.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/micrortps_agent.dir/sensor_combined_PubSubTypes.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/sensor_combined_PubSubTypes.cpp > CMakeFiles/micrortps_agent.dir/sensor_combined_PubSubTypes.cpp.i
-
-CMakeFiles/micrortps_agent.dir/sensor_combined_PubSubTypes.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/micrortps_agent.dir/sensor_combined_PubSubTypes.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/sensor_combined_PubSubTypes.cpp -o CMakeFiles/micrortps_agent.dir/sensor_combined_PubSubTypes.cpp.s
-
-CMakeFiles/micrortps_agent.dir/sensor_combined_PubSubTypes.cpp.o.requires:
-
-.PHONY : CMakeFiles/micrortps_agent.dir/sensor_combined_PubSubTypes.cpp.o.requires
-
-CMakeFiles/micrortps_agent.dir/sensor_combined_PubSubTypes.cpp.o.provides: CMakeFiles/micrortps_agent.dir/sensor_combined_PubSubTypes.cpp.o.requires
-	$(MAKE) -f CMakeFiles/micrortps_agent.dir/build.make CMakeFiles/micrortps_agent.dir/sensor_combined_PubSubTypes.cpp.o.provides.build
-.PHONY : CMakeFiles/micrortps_agent.dir/sensor_combined_PubSubTypes.cpp.o.provides
-
-CMakeFiles/micrortps_agent.dir/sensor_combined_PubSubTypes.cpp.o.provides.build: CMakeFiles/micrortps_agent.dir/sensor_combined_PubSubTypes.cpp.o
+CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_.cpp.o.provides.build: CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_.cpp.o
 
 
-CMakeFiles/micrortps_agent.dir/sensor_combined_Publisher.cpp.o: CMakeFiles/micrortps_agent.dir/flags.make
-CMakeFiles/micrortps_agent.dir/sensor_combined_Publisher.cpp.o: ../sensor_combined_Publisher.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object CMakeFiles/micrortps_agent.dir/sensor_combined_Publisher.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/micrortps_agent.dir/sensor_combined_Publisher.cpp.o -c /home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/sensor_combined_Publisher.cpp
+CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_PubSubTypes.cpp.o: CMakeFiles/micrortps_agent.dir/flags.make
+CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_PubSubTypes.cpp.o: ../rtps_send_distance_sensor_PubSubTypes.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_PubSubTypes.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_PubSubTypes.cpp.o -c /home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/rtps_send_distance_sensor_PubSubTypes.cpp
 
-CMakeFiles/micrortps_agent.dir/sensor_combined_Publisher.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/micrortps_agent.dir/sensor_combined_Publisher.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/sensor_combined_Publisher.cpp > CMakeFiles/micrortps_agent.dir/sensor_combined_Publisher.cpp.i
+CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_PubSubTypes.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_PubSubTypes.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/rtps_send_distance_sensor_PubSubTypes.cpp > CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_PubSubTypes.cpp.i
 
-CMakeFiles/micrortps_agent.dir/sensor_combined_Publisher.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/micrortps_agent.dir/sensor_combined_Publisher.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/sensor_combined_Publisher.cpp -o CMakeFiles/micrortps_agent.dir/sensor_combined_Publisher.cpp.s
+CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_PubSubTypes.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_PubSubTypes.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/rtps_send_distance_sensor_PubSubTypes.cpp -o CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_PubSubTypes.cpp.s
 
-CMakeFiles/micrortps_agent.dir/sensor_combined_Publisher.cpp.o.requires:
+CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_PubSubTypes.cpp.o.requires:
 
-.PHONY : CMakeFiles/micrortps_agent.dir/sensor_combined_Publisher.cpp.o.requires
+.PHONY : CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_PubSubTypes.cpp.o.requires
 
-CMakeFiles/micrortps_agent.dir/sensor_combined_Publisher.cpp.o.provides: CMakeFiles/micrortps_agent.dir/sensor_combined_Publisher.cpp.o.requires
-	$(MAKE) -f CMakeFiles/micrortps_agent.dir/build.make CMakeFiles/micrortps_agent.dir/sensor_combined_Publisher.cpp.o.provides.build
-.PHONY : CMakeFiles/micrortps_agent.dir/sensor_combined_Publisher.cpp.o.provides
+CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_PubSubTypes.cpp.o.provides: CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_PubSubTypes.cpp.o.requires
+	$(MAKE) -f CMakeFiles/micrortps_agent.dir/build.make CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_PubSubTypes.cpp.o.provides.build
+.PHONY : CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_PubSubTypes.cpp.o.provides
 
-CMakeFiles/micrortps_agent.dir/sensor_combined_Publisher.cpp.o.provides.build: CMakeFiles/micrortps_agent.dir/sensor_combined_Publisher.cpp.o
+CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_PubSubTypes.cpp.o.provides.build: CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_PubSubTypes.cpp.o
+
+
+CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_Publisher.cpp.o: CMakeFiles/micrortps_agent.dir/flags.make
+CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_Publisher.cpp.o: ../rtps_send_distance_sensor_Publisher.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_Publisher.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_Publisher.cpp.o -c /home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/rtps_send_distance_sensor_Publisher.cpp
+
+CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_Publisher.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_Publisher.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/rtps_send_distance_sensor_Publisher.cpp > CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_Publisher.cpp.i
+
+CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_Publisher.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_Publisher.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/rtps_send_distance_sensor_Publisher.cpp -o CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_Publisher.cpp.s
+
+CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_Publisher.cpp.o.requires:
+
+.PHONY : CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_Publisher.cpp.o.requires
+
+CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_Publisher.cpp.o.provides: CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_Publisher.cpp.o.requires
+	$(MAKE) -f CMakeFiles/micrortps_agent.dir/build.make CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_Publisher.cpp.o.provides.build
+.PHONY : CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_Publisher.cpp.o.provides
+
+CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_Publisher.cpp.o.provides.build: CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_Publisher.cpp.o
 
 
 # Object files for target micrortps_agent
@@ -431,9 +431,9 @@ micrortps_agent_OBJECTS = \
 "CMakeFiles/micrortps_agent.dir/optical_flow_.cpp.o" \
 "CMakeFiles/micrortps_agent.dir/optical_flow_PubSubTypes.cpp.o" \
 "CMakeFiles/micrortps_agent.dir/optical_flow_Subscriber.cpp.o" \
-"CMakeFiles/micrortps_agent.dir/sensor_combined_.cpp.o" \
-"CMakeFiles/micrortps_agent.dir/sensor_combined_PubSubTypes.cpp.o" \
-"CMakeFiles/micrortps_agent.dir/sensor_combined_Publisher.cpp.o"
+"CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_.cpp.o" \
+"CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_PubSubTypes.cpp.o" \
+"CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_Publisher.cpp.o"
 
 # External object files for target micrortps_agent
 micrortps_agent_EXTERNAL_OBJECTS =
@@ -450,9 +450,9 @@ micrortps_agent: CMakeFiles/micrortps_agent.dir/obstacle_distance_Subscriber.cpp
 micrortps_agent: CMakeFiles/micrortps_agent.dir/optical_flow_.cpp.o
 micrortps_agent: CMakeFiles/micrortps_agent.dir/optical_flow_PubSubTypes.cpp.o
 micrortps_agent: CMakeFiles/micrortps_agent.dir/optical_flow_Subscriber.cpp.o
-micrortps_agent: CMakeFiles/micrortps_agent.dir/sensor_combined_.cpp.o
-micrortps_agent: CMakeFiles/micrortps_agent.dir/sensor_combined_PubSubTypes.cpp.o
-micrortps_agent: CMakeFiles/micrortps_agent.dir/sensor_combined_Publisher.cpp.o
+micrortps_agent: CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_.cpp.o
+micrortps_agent: CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_PubSubTypes.cpp.o
+micrortps_agent: CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_Publisher.cpp.o
 micrortps_agent: CMakeFiles/micrortps_agent.dir/build.make
 micrortps_agent: /usr/local/lib/libfastrtps.so.1.6.0
 micrortps_agent: /usr/local/lib/libfastcdr.so.1.0.7
@@ -477,9 +477,9 @@ CMakeFiles/micrortps_agent.dir/requires: CMakeFiles/micrortps_agent.dir/obstacle
 CMakeFiles/micrortps_agent.dir/requires: CMakeFiles/micrortps_agent.dir/optical_flow_.cpp.o.requires
 CMakeFiles/micrortps_agent.dir/requires: CMakeFiles/micrortps_agent.dir/optical_flow_PubSubTypes.cpp.o.requires
 CMakeFiles/micrortps_agent.dir/requires: CMakeFiles/micrortps_agent.dir/optical_flow_Subscriber.cpp.o.requires
-CMakeFiles/micrortps_agent.dir/requires: CMakeFiles/micrortps_agent.dir/sensor_combined_.cpp.o.requires
-CMakeFiles/micrortps_agent.dir/requires: CMakeFiles/micrortps_agent.dir/sensor_combined_PubSubTypes.cpp.o.requires
-CMakeFiles/micrortps_agent.dir/requires: CMakeFiles/micrortps_agent.dir/sensor_combined_Publisher.cpp.o.requires
+CMakeFiles/micrortps_agent.dir/requires: CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_.cpp.o.requires
+CMakeFiles/micrortps_agent.dir/requires: CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_PubSubTypes.cpp.o.requires
+CMakeFiles/micrortps_agent.dir/requires: CMakeFiles/micrortps_agent.dir/rtps_send_distance_sensor_Publisher.cpp.o.requires
 
 .PHONY : CMakeFiles/micrortps_agent.dir/requires
 

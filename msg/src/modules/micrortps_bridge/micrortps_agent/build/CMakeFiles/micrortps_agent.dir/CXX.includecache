@@ -13,8 +13,8 @@ RtpsTopics.h
 /home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/RtpsTopics.h
 fastcdr/Cdr.h
 -
-sensor_combined_Publisher.h
-/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/sensor_combined_Publisher.h
+rtps_send_distance_sensor_Publisher.h
+/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/rtps_send_distance_sensor_Publisher.h
 camera_trigger_Subscriber.h
 /home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/camera_trigger_Subscriber.h
 obstacle_distance_Subscriber.h
@@ -252,9 +252,9 @@ fastrtps/subscriber/SampleInfo.h
 optical_flow_PubSubTypes.h
 /home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/optical_flow_PubSubTypes.h
 
-/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/sensor_combined_.cpp
-sensor_combined_.h
-/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/sensor_combined_.h
+/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/rtps_send_distance_sensor_.cpp
+rtps_send_distance_sensor_.h
+/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/rtps_send_distance_sensor_.h
 fastcdr/Cdr.h
 -
 fastcdr/exceptions/BadParamException.h
@@ -262,7 +262,7 @@ fastcdr/exceptions/BadParamException.h
 utility
 -
 
-/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/sensor_combined_.h
+/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/rtps_send_distance_sensor_.h
 stdint.h
 -
 array
@@ -272,21 +272,21 @@ string
 vector
 -
 
-/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/sensor_combined_PubSubTypes.cpp
+/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/rtps_send_distance_sensor_PubSubTypes.cpp
 fastcdr/FastBuffer.h
 -
 fastcdr/Cdr.h
 -
-sensor_combined_PubSubTypes.h
-/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/sensor_combined_PubSubTypes.h
+rtps_send_distance_sensor_PubSubTypes.h
+/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/rtps_send_distance_sensor_PubSubTypes.h
 
-/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/sensor_combined_PubSubTypes.h
+/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/rtps_send_distance_sensor_PubSubTypes.h
 fastrtps/TopicDataType.h
 -
-sensor_combined_.h
-/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/sensor_combined_.h
+rtps_send_distance_sensor_.h
+/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/rtps_send_distance_sensor_.h
 
-/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/sensor_combined_Publisher.cpp
+/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/rtps_send_distance_sensor_Publisher.cpp
 fastrtps/participant/Participant.h
 -
 fastrtps/attributes/ParticipantAttributes.h
@@ -299,16 +299,16 @@ fastrtps/Domain.h
 -
 fastrtps/utils/eClock.h
 -
-sensor_combined_Publisher.h
-/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/sensor_combined_Publisher.h
+rtps_send_distance_sensor_Publisher.h
+/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/rtps_send_distance_sensor_Publisher.h
 
-/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/sensor_combined_Publisher.h
+/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/rtps_send_distance_sensor_Publisher.h
 fastrtps/fastrtps_fwd.h
 -
 fastrtps/publisher/PublisherListener.h
 -
-sensor_combined_PubSubTypes.h
-/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/sensor_combined_PubSubTypes.h
+rtps_send_distance_sensor_PubSubTypes.h
+/home/aee231/TG/code/px4-firmware-1.8.0/Firmware/msg/src/modules/micrortps_bridge/micrortps_agent/rtps_send_distance_sensor_PubSubTypes.h
 
 /usr/local/include/fastcdr/Cdr.h
 fastcdr_dll.h
