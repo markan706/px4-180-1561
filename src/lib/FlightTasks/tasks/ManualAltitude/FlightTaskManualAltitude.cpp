@@ -91,27 +91,33 @@ void FlightTaskManualAltitude::_updateAltitudeLock()
 	// Depending on stick inputs and velocity, position is locked.
 	// If not locked, altitude setpoint is set to NAN.
 
+	// bymark position是否锁定取决于杆量输入和速度
+
 	// Check if user wants to break
+	// bymark 当杆量sticks(2)很小时，要进行刹车
 	const bool apply_brake = fabsf(_sticks_expo(2)) <= FLT_EPSILON;
 
 	// Check if vehicle has stopped
+	// bymark MPC_HOLD_MAX_Z(0.6m/s)
 	const bool stopped = (MPC_HOLD_MAX_Z.get() < FLT_EPSILON || fabsf(_velocity(2)) < MPC_HOLD_MAX_Z.get());
 
-	// Manage transition between use of distance to ground and distance to local origin
-	// when terrain hold behaviour has been selected.
+	// Manage transition between use of distance to ground and distance to local origin 
+	// bymark 距离的两种表示：以地面为参考点（离地距离）；以起飞点/逻辑原点为参考的(逻辑距离)。例如在某个平台上起飞，平台离地面是有一定距离的
+	// when terrain hold behaviour has been selected. 地形保持
 	if (MPC_ALT_MODE.get() == 2) {
-		// Use horizontal speed as a transition criteria
+		// Use horizontal speed as a transition criteria 以当前水平速度作为过度准则
 		float spd_xy = Vector2f(_velocity).length();
 
-		// Use presence of horizontal stick inputs as a transition criteria
+		// Use presence of horizontal stick inputs as a transition criteria 以xy杆量为过度准则
 		float stick_xy = Vector2f(&_sticks_expo(0)).length();
 		bool stick_input = stick_xy > 0.001f;
 
 		if (_terrain_hold) {
-			bool too_fast = spd_xy > MPC_HOLD_MAX_XY.get();
+			bool too_fast = spd_xy > MPC_HOLD_MAX_XY.get();   // spd_xy > 0.8
 
 			if (stick_input || too_fast || !PX4_ISFINITE(_dist_to_bottom)) {
 				// Stop using distance to ground
+				// bymark 不使用离地距离_dist_to_bottom
 				_terrain_hold = false;
 				_terrain_follow = false;
 
@@ -129,6 +135,7 @@ void FlightTaskManualAltitude::_updateAltitudeLock()
 
 			if (!stick_input && not_moving && PX4_ISFINITE(_dist_to_bottom)) {
 				// Start using distance to ground
+				// bymark 使用离地距离_dist_to_bottom
 				_terrain_hold = true;
 				_terrain_follow = true;
 
@@ -251,7 +258,8 @@ void FlightTaskManualAltitude::_respectMaxAltitude()
 
 void FlightTaskManualAltitude::_updateSetpoints()
 {
-	FlightTaskManualStabilized::_updateHeadingSetpoints(); // get yaw setpoint
+	FlightTaskManualStabilized::_updateHeadingSetpoints(); // get yaw setpoint 
+	// bymark 在考虑yawspeed_sp的情况下更新yaw_sp
 
 	// Thrust in xy are extracted directly from stick inputs. A magnitude of
 	// 1 means that maximum thrust along xy is demanded. A magnitude of 0 means no

@@ -627,3 +627,9 @@ unset VEHICLE_TYPE
 # Boot is complete, inform MAVLink app(s) that the system is now fully up and running.
 #
 mavlink boot_complete
+
+#ma40h1s start
+
+#micrortps_client start -u 20 -d /dev/ttyS3
+
+

@@ -57,8 +57,8 @@ bool FlightTaskManual::initializeSubscriptions(SubscriptionArray &subscription_a
 
 bool FlightTaskManual::updateInitialize()
 {
-	bool ret = FlightTask::updateInitialize();
-	const bool sticks_available = _evaluateSticks();
+	bool ret = FlightTask::updateInitialize(); // bymark 父类的成员函数，初始化时间，更新local_position数据
+	const bool sticks_available = _evaluateSticks(); // bymark 获取杆量信息
 
 	if (_sticks_data_required) {
 		ret = ret && sticks_available;

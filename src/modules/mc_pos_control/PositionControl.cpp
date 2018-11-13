@@ -62,10 +62,11 @@ bool PositionControl::updateSetpoint(const vehicle_local_position_setpoint_s &se
 	_thr_sp = Vector3f(setpoint.thrust);
 	_yaw_sp = setpoint.yaw;
 	_yawspeed_sp = setpoint.yawspeed;
-	bool mapping_succeeded = _interfaceMapping();
+	bool mapping_succeeded = _interfaceMapping(); // bymark sp --> desired sp 用于前馈， 分别考虑位置控制，速度控制，以及都不控的情况
 
 	// If full manual is required (thrust already generated), don't run position/velocity
 	// controller and just return thrust.
+	// bymark 在自稳飞行任务下，推力矢量sp已经生成了，就不需要执行位置/速度控制了，但在定高飞行任务下，推力矢量sp[2]还没生成
 	_skip_controller = PX4_ISFINITE(setpoint.thrust[0]) && PX4_ISFINITE(setpoint.thrust[1])
 			   && PX4_ISFINITE(setpoint.thrust[2]);
 
@@ -92,8 +93,8 @@ void PositionControl::generateThrustYawSetpoint(const float dt)
 		_acc_sp = _acc;
 
 	} else {
-		_positionController();
-		_velocityController(dt);
+		_positionController(); // bymark 由P控制+前馈给出vel_sp(2), 由P控制给出vel_sp(0:1)
+		_velocityController(dt); // bymark 由PID控制+抗积分饱和给出thr_sp
 	}
 }
 
@@ -105,29 +106,33 @@ bool PositionControl::_interfaceMapping()
 	// Respects FlightTask interface, where NAN-set-points are of no interest
 	// and do not require control. A valide position and velocity setpoint will
 	// be mapped to a desired position setpoint with a feed-forward term.
-	for (int i = 0; i <= 2; i++) {
+	// bymark 并不关心sp为NAN的量，因为不控它们。对于有效的pos_sp和vel_sp,将其映射为desired sp，好用于前馈
+	for (int i = 0; i <= 2; i++) {	// bymark 三个通道分别考虑各自的前馈使用情况
 
-		if (PX4_ISFINITE(_pos_sp(i))) {
+		if (PX4_ISFINITE(_pos_sp(i))) { // bymark 需要位置控制环，进行位置控制
 			// Position control is required
 
-			if (!PX4_ISFINITE(_vel_sp(i))) {
+			if (!PX4_ISFINITE(_vel_sp(i))) { // bymark 当vel_sp为NAN时，不用速度前馈
 				// Velocity is not used as feedforward term.
 				_vel_sp(i) = 0.0f;
 			}
 
-			// thrust setpoint is not supported in position control
+			// thrust setpoint is not supported in position control 
+			// bymark 在控位置时，thr_sp应该由控制器给出
 			_thr_sp(i) = 0.0f;
 
 			// to run position control, we require valid position and velocity
+			// bymark 在使用位置控制器时，位置和速度反馈量应该是有效的,否则进入失效保护
 			if (!PX4_ISFINITE(_pos(i)) || !PX4_ISFINITE(_vel(i))) {
 				failsafe = true;
 			}
 
-		} else if (PX4_ISFINITE(_vel_sp(i))) {
+		} else if (PX4_ISFINITE(_vel_sp(i))) {	// bymark 不控位置，控速度
 
 			// Velocity controller is active without position control.
 			// Set the desired position set-point equal to current position
 			// such that error is zero.
+			// bymark 由于不控位置，所以让位置偏差为0，即pos_sp就是当前pos
 			if (PX4_ISFINITE(_pos(i))) {
 				_pos_sp(i) = _pos(i);
 
@@ -136,14 +141,16 @@ bool PositionControl::_interfaceMapping()
 			}
 
 			// thrust setpoint is not supported in position control
+			// bymark 在控速度时，thr_sp应该由控制器给出
 			_thr_sp(i) = 0.0f;
 
 			// to run velocity control, we require valid velocity
+			// bymark 在使用速度控制器时，速度反馈量应该是有效的，否则进入失效保护
 			if (!PX4_ISFINITE(_vel(i))) {
 				failsafe = true;
 			}
 
-		} else if (PX4_ISFINITE(_thr_sp(i))) {
+		} else if (PX4_ISFINITE(_thr_sp(i))) { // bymark 位置，速度都不控， thr_sp直接由杆量生成，所以将位置偏差和速度偏差都设为0
 
 			// Thrust setpoint was generated from sticks directly.
 			// Set all other set-points equal MC states.
@@ -162,17 +169,21 @@ bool PositionControl::_interfaceMapping()
 			}
 
 			// Reset the Integral term.
+			// bymark 积分项重置为0
 			_thr_int(i) = 0.0f;
 			// Don't require velocity derivative.
+			// bymark 不使用速度微分
 			_vel_dot(i) = 0.0f;
 
 		} else {
 			// nothing is valid. do failsafe
+			// bymark 当pos_sp, vel_sp和thr_sp没有一个有效时，进入失效保护 
 			failsafe = true;
 		}
 	}
 
 	// ensure that vel_dot is finite, otherwise set to 0
+	// bymark 确保vel_dot有效，否则置为0
 	if (!PX4_ISFINITE(_vel_dot(0)) || !PX4_ISFINITE(_vel_dot(1))) {
 		_vel_dot(0) = _vel_dot(1) = 0.0f;
 	}
@@ -181,12 +192,12 @@ bool PositionControl::_interfaceMapping()
 		_vel_dot(2) = 0.0f;
 	}
 
-	if (!PX4_ISFINITE(_yawspeed_sp)) {
+	if (!PX4_ISFINITE(_yawspeed_sp)) { // bymark 确保yawspeed_sp有效，否则置为0
 		// Set the yawspeed to 0 since not used.
 		_yawspeed_sp = 0.0f;
 	}
 
-	if (!PX4_ISFINITE(_yaw_sp)) {
+	if (!PX4_ISFINITE(_yaw_sp)) {	// bymark 确保yaw_sp有效，否则置为当前yaw
 		// Set the yaw-sp equal the current yaw.
 		// That is the best we can do and it also
 		// agrees with FlightTask-interface definition.
@@ -199,7 +210,7 @@ bool PositionControl::_interfaceMapping()
 	}
 
 	// check failsafe
-	if (failsafe) {
+	if (failsafe) { // bymark 进入失效保护，设置thr_sp
 		// point the thrust upwards
 		_thr_sp(0) = _thr_sp(1) = 0.0f;
 		// throttle down such that vehicle goes down with
@@ -212,12 +223,13 @@ bool PositionControl::_interfaceMapping()
 
 void PositionControl::_positionController()
 {
-	// P-position controller
+	// P-position controller + 前馈
 	const Vector3f vel_sp_position = (_pos_sp - _pos).emult(Vector3f(MPC_XY_P.get(), MPC_XY_P.get(), MPC_Z_P.get()));
 	_vel_sp = vel_sp_position + _vel_sp;
 
 	// Constrain horizontal velocity by prioritizing the velocity component along the
 	// the desired position setpoint over the feed-forward term.
+	// bymark 对P控制器输出值进行限幅，不考虑前馈量，并且只是约束水平速度， 所以水平控制不用速度前馈？？
 	const Vector2f vel_sp_xy = ControlMath::constrainXY(Vector2f(vel_sp_position),
 				   Vector2f(_vel_sp - vel_sp_position), _constraints.speed_xy);
 	_vel_sp(0) = vel_sp_xy(0);
@@ -229,21 +241,21 @@ void PositionControl::_positionController()
 void PositionControl::_velocityController(const float &dt)
 {
 
-	// Generate desired thrust setpoint.
+	// Generate desired thrust setpoint. 速度控制器给出是thr_sp
 	// PID
-	// u_des = P(vel_err) + D(vel_err_dot) + I(vel_integral)
+	// u_des = P(vel_err) + D(vel_err_dot) + I(vel_integral)  Note: vel_err = vel_sp - vel
 	// Umin <= u_des <= Umax
 	//
 	// Anti-Windup:
 	// u_des = _thr_sp; r = _vel_sp; y = _vel
-	// u_des >= Umax and r - y >= 0 => Saturation = true
-	// u_des >= Umax and r - y <= 0 => Saturation = false
-	// u_des <= Umin and r - y <= 0 => Saturation = true
-	// u_des <= Umin and r - y >= 0 => Saturation = false
+	// u_des >= Umax and r - y >= 0 ===> Saturation = true  达到上限，并且偏差为正
+	// u_des >= Umax and r - y <= 0 ===> Saturation = false 达到上限，并且偏差为负
+	// u_des <= Umin and r - y <= 0 ===> Saturation = true  达到下限，并且偏差为负
+	// u_des <= Umin and r - y >= 0 ===> Saturation = false 达到下限，并且偏差为正
 	//
 	// 	Notes:
-	// - PID implementation is in NED-frame
-	// - control output in D-direction has priority over NE-direction
+	// - PID implementation is in NED-frame  地面坐标系
+	// - control output in D-direction has priority over NE-direction  垂直速度控制的优先级高于水平速度控制
 	// - the equilibrium point for the PID is at hover-thrust
 	// - the maximum tilt cannot exceed 90 degrees. This means that it is
 	// 	 not possible to have a desired thrust direction pointing in the positive
@@ -256,6 +268,7 @@ void PositionControl::_velocityController(const float &dt)
 	const Vector3f vel_err = _vel_sp - _vel;
 
 	// Consider thrust in D-direction.
+	// bymark D方向的PID运算
 	float thrust_desired_D = MPC_Z_VEL_P.get() * vel_err(2) +  MPC_Z_VEL_D.get() * _vel_dot(2) + _thr_int(
 					 2) - MPC_THR_HOVER.get();
 
@@ -275,22 +288,24 @@ void PositionControl::_velocityController(const float &dt)
 	}
 
 	// Saturate thrust setpoint in D-direction.
+	// bymark D方向的PID运算后进行限幅处理
 	_thr_sp(2) = math::constrain(thrust_desired_D, uMin, uMax);
 
-	if (fabsf(_thr_sp(0)) + fabsf(_thr_sp(1))  > FLT_EPSILON) {
+	if (fabsf(_thr_sp(0)) + fabsf(_thr_sp(1))  > FLT_EPSILON) { // bymark 当thr_sp(0:1)已经被提供后，例如定高模式， 只需使用最大倾斜角对其进行缩放
 		// Thrust set-point in NE-direction is already provided. Only
 		// scaling by the maximum tilt is required.
 		float thr_xy_max = fabsf(_thr_sp(2)) * tanf(_constraints.tilt);
 		_thr_sp(0) *= thr_xy_max;
 		_thr_sp(1) *= thr_xy_max;
 
-	} else {
+	} else { // bymark 用PID计算thr_sp(0:1)
 		// PID-velocity controller for NE-direction.
 		Vector2f thrust_desired_NE;
 		thrust_desired_NE(0) = MPC_XY_VEL_P.get() * vel_err(0) + MPC_XY_VEL_D.get() * _vel_dot(0) + _thr_int(0);
 		thrust_desired_NE(1) = MPC_XY_VEL_P.get() * vel_err(1) + MPC_XY_VEL_D.get() * _vel_dot(1) + _thr_int(1);
 
 		// Get maximum allowed thrust in NE based on tilt and excess thrust.
+		// bymark 根据最大倾斜角和最大推力来计算推力水平方分量的最大值thrust_max_NE，这是幅值
 		float thrust_max_NE_tilt = fabsf(_thr_sp(2)) * tanf(_constraints.tilt);
 		float thrust_max_NE = sqrtf(MPC_THR_MAX.get() * MPC_THR_MAX.get() - _thr_sp(2) * _thr_sp(2));
 		thrust_max_NE = math::min(thrust_max_NE_tilt, thrust_max_NE);
@@ -299,7 +314,7 @@ void PositionControl::_velocityController(const float &dt)
 		_thr_sp(0) = thrust_desired_NE(0);
 		_thr_sp(1) = thrust_desired_NE(1);
 
-		if (thrust_desired_NE * thrust_desired_NE > thrust_max_NE * thrust_max_NE) {
+		if (thrust_desired_NE * thrust_desired_NE > thrust_max_NE * thrust_max_NE) { // bymark PID输出值（模值的平方）> thrust_max_NE的平方
 			float mag = thrust_desired_NE.length();
 			_thr_sp(0) = thrust_desired_NE(0) / mag * thrust_max_NE;
 			_thr_sp(1) = thrust_desired_NE(1) / mag * thrust_max_NE;

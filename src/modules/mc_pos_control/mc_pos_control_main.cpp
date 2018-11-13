@@ -60,6 +60,9 @@
 #include <mathlib/mathlib.h>
 #include <systemlib/mavlink_log.h>
 
+// bymark 
+#include <uORB/topics/mavlink_log.h>
+
 #include <controllib/blocks.hpp>
 
 #include <lib/FlightTasks/FlightTasks.hpp>
@@ -71,6 +74,10 @@
  * Multicopter position control app start / stop handling function
  */
 extern "C" __EXPORT int mc_pos_control_main(int argc, char *argv[]);
+
+/* bymark Adding Mavlink log uORB handle */
+static orb_advert_t mavlink_log_pub = nullptr;
+
 
 class MulticopterPositionControl : public ModuleBase<MulticopterPositionControl>, public control::SuperBlock,
 	public ModuleParams
@@ -454,7 +461,7 @@ MulticopterPositionControl::limit_altitude(vehicle_local_position_setpoint_s &se
 		return;
 	}
 
-	float altitude_above_home = -(_states.position(2) - _home_pos.z);
+	float altitude_above_home = -(_states.position(2) - _home_pos.z); // bymark 由于向下为正，所以会增加一个负号
 
 	if (altitude_above_home > _vehicle_land_detected.alt_max) {
 		// we are above maximum altitude
@@ -600,6 +607,7 @@ MulticopterPositionControl::run()
 
 		// activate the weathervane controller if required. If activated a flighttask can use it to implement a yaw-rate control strategy
 		// that turns the nose of the vehicle into the wind
+		// bymark 什么是weathervane controller(风标控制器)控制偏航角速率 由poll_subscriptions()可知道 只有vtol机型可用
 		if (_wv_controller != nullptr) {
 
 			// in manual mode we just want to use weathervane if position is controlled as well
@@ -614,39 +622,44 @@ MulticopterPositionControl::run()
 			_wv_controller->update(matrix::Quatf(_att_sp.q_d), _local_pos.yaw);
 		}
 
-		if (_control_mode.flag_armed) {
-			// as soon vehicle is armed check for flighttask
-			start_flight_task();
+		if (_control_mode.flag_armed) {  // bymark 解锁后
+			// as soon vehicle is armed check for flighttask 只要飞机处于解锁状态，就check飞行任务
+			start_flight_task(); // bymark 根据navigation状态来start相应的飞行任务，即完成飞行任务的切换，以及初始化
 			// arm hysteresis prevents vehicle to takeoff
 			// before propeller reached idle speed.
+			// bymark 在桨叶达到怠速之前arm_hyteresis阻止飞机起飞
+			// 一旦飞机处于解锁arm状态长达MPC_IDLE_TKO(0)秒，_arm_hysteresis变为true
 			_arm_hysteresis.set_state_and_update(true);
 
-		} else {
-			// disable flighttask
+		} else {	// bymark 上锁状态
+			// disable flighttask 
 			_flight_tasks.switchTask(FlightTaskIndex::None);
 			// reset arm hysteresis
 			_arm_hysteresis.set_state_and_update(false);
 		}
 
 		// check if any task is active
+		// bymark 检查是否有飞行任务处于激活状态
 		if (_flight_tasks.isAnyTaskActive()) {
 
 			// setpoints from flighttask
+			// bymark 从飞行任务中获取postion_sp存放于setpoint中
 			vehicle_local_position_setpoint_s setpoint;
 
-			_flight_tasks.setYawHandler(_wv_controller);
+			_flight_tasks.setYawHandler(_wv_controller); // bymark 只有vtol才用_wv_controller风标控制器
 
-			// update task
-			if (!_flight_tasks.update()) {
+			// update task 飞行任务更新
+			if (!_flight_tasks.update()) {	// bymark 更新失败 启动失效保护, update()在manual下主要完成杆量映射
 				// FAILSAFE
 				// Task was not able to update correctly. Do Failsafe.
-				failsafe(setpoint, _states, false, !was_in_failsafe);
+				failsafe(setpoint, _states, false, !was_in_failsafe);  // bymark _states是位置控制的状态信息，包含位置pos，速度vel，加速度accel和偏航角yaw
 
-			} else {
-				setpoint = _flight_tasks.getPositionSetpoint();
-				_failsafe_land_hysteresis.set_state_and_update(false);
+			} else {	// bymark 飞行任务更新成功
+				setpoint = _flight_tasks.getPositionSetpoint(); // bymark 获取position_sp,包含位置矢量sp, 速度矢量sp, 加速度矢量sp, 推力矢量sp, 偏航角sp和偏航角速度sp
+				_failsafe_land_hysteresis.set_state_and_update(false); // bymark  这是干嘛的？
 
 				// Check if position, velocity or thrust pairs are valid -> trigger failsaife if no pair is valid
+				// bymark 如果水平方向上的pos_sp, vel_sp, thr_sp 没有一对有效，则进入if触发失效保护
 				if (!(PX4_ISFINITE(setpoint.x) && PX4_ISFINITE(setpoint.y)) &&
 				    !(PX4_ISFINITE(setpoint.vx) && PX4_ISFINITE(setpoint.vy)) &&
 				    !(PX4_ISFINITE(setpoint.thrust[0]) && PX4_ISFINITE(setpoint.thrust[1]))) {
@@ -655,41 +668,44 @@ MulticopterPositionControl::run()
 
 				// Check if altitude, climbrate or thrust in D-direction are valid -> trigger failsafe if none
 				// of these setpoints are valid
+				// bymark 如果垂直方向上的alt_sp, clim_sp, thr_sp没有一个有效,则进入if触发失效保护
 				if (!PX4_ISFINITE(setpoint.z) && !PX4_ISFINITE(setpoint.vz) && !PX4_ISFINITE(setpoint.thrust[2])) {
 					failsafe(setpoint, _states, true, !was_in_failsafe);
 				}
 			}
 
-			/* desired waypoints for obstacle avoidance:
-			 * point_0 contains the current position with the desired velocity
+			/* desired waypoints for obstacle avoidance:  // bymark 考虑在蔽障的情况下的航点期望值
+			 * point_0 contains the current position with the desired velocity  
 			 * point_1 contains _pos_sp_triplet.current if valid
 			 */
-			update_avoidance_waypoint_desired(_states, setpoint);
+			update_avoidance_waypoint_desired(_states, setpoint); // bymark 更新蔽障下的position_sp
 
-			vehicle_constraints_s constraints = _flight_tasks.getConstraints();
+			vehicle_constraints_s constraints = _flight_tasks.getConstraints();	// bymark 这个约束是干嘛的？
 
 			// check if all local states are valid and map accordingly
-			set_vehicle_states(setpoint.vz);
+			set_vehicle_states(setpoint.vz);  // bymark check and set 位置控制的状态信息_states
 
 			// we can only do a smooth takeoff if a valid velocity or position is available and are
-			// armed long enough
+			// armed long enough 
+			// bymark 只有在速度或位置可用，且已解锁足够长的时间才执行smooth takeoff, 那么_arm_hysteresis.get_state()与解锁时间有关系
 			if (_arm_hysteresis.get_state() && PX4_ISFINITE(_states.position(2)) && PX4_ISFINITE(_states.velocity(2))) {
-				check_for_smooth_takeoff(setpoint.z, setpoint.vz, constraints);
+				check_for_smooth_takeoff(setpoint.z, setpoint.vz, constraints); // bymark 检查是否要takeoff
 				update_smooth_takeoff(setpoint.z, setpoint.vz);
 			}
 
 			// disable horizontal / yaw control during smooth takeoff and limit maximum speed upwards
-			if (_in_smooth_takeoff) {
+			// bymark 在smooth takeoff阶段，关闭水平/偏航控制，并且限制最大上升速度
+			if (_in_smooth_takeoff) { // bymark 在自稳飞行任务下，_in_smooth_takeoff一直为false
 
 				// during smooth takeoff, constrain speed to takeoff speed
-				constraints.speed_up = _takeoff_speed;
+				constraints.speed_up = _takeoff_speed;	// bymark 设置起飞速度
 				// altitude above reference takeoff
-				const float alt_above_tko = -(_states.position(2) - _takeoff_reference_z);
+				const float alt_above_tko = -(_states.position(2) - _takeoff_reference_z); // bymark 在起飞阶段，相对于参考点的飞行高度
 
 				// disable yaw control when close to ground
-				if (alt_above_tko <= ALTITUDE_THRESHOLD) {
+				if (alt_above_tko <= ALTITUDE_THRESHOLD) { // bymark 当起飞高度低于0.3m（ALTITUDE_THRESHOLD）时，不控yaw, 同时限制倾斜角 
 
-					setpoint.yawspeed = NAN;
+					setpoint.yawspeed = NAN;	// bymark 通过设置yawspeed_sp为无穷大来disable偏航控制
 
 					// if there is a valid yaw estimate, just set setpoint to yaw
 					if (PX4_ISFINITE(_states.yaw)) {
@@ -697,10 +713,11 @@ MulticopterPositionControl::run()
 					}
 
 					// limit tilt during smooth takeoff when still close to ground
-					constraints.tilt = math::radians(MPC_TILTMAX_LND.get());
+					constraints.tilt = math::radians(MPC_TILTMAX_LND.get()); // bymark  限制倾斜角tilt到12degree
 				}
 			}
 
+			// bymark 当已着陆且没起飞，但为何要考虑setpoint.thrust[2]的有效性？
 			if (_vehicle_land_detected.landed && !_in_smooth_takeoff && !PX4_ISFINITE(setpoint.thrust[2])) {
 				// Keep throttle low when landed and NOT in smooth takeoff
 				setpoint.thrust[0] = setpoint.thrust[1] = setpoint.thrust[2] = 0.0f;
@@ -714,36 +731,43 @@ MulticopterPositionControl::run()
 			}
 
 			// limit altitude only if local position is valid
+			// bymark 当pos(2)有效时，对altitude_sp限幅
 			if (PX4_ISFINITE(_states.position(2))) {
-				limit_altitude(setpoint);
+				limit_altitude(setpoint); // bymark 当_vehicle_land_detected.alt_max为正时，对z_sp和vz_sp进行限幅处理
 			}
 
 			// Update states, setpoints and constraints.
-			_control.updateConstraints(constraints);
-			_control.updateState(_states);
+			// bymark 更新位置控制的状态，sp和约束
+			_control.updateConstraints(constraints); // bymark 为位置控制更新倾斜角tilt, speed_up, speed_down, speed_xy的约束，该约束优先级高于global约束
+			_control.updateState(_states);// bymark 为位置控制更新飞机当前的pos, vel, accel和yaw
 
 			// adjust setpoints based on avoidance
+			// bymark 基于蔽障重新调节sp
 			if (use_obstacle_avoidance()) {
 				execute_avoidance_waypoint(setpoint);
 			}
 
 			// update position controller setpoints
+			// bymark 为位置控制器更新sp:pos_sp, vel_sp, accel_sp, yaw_sp, yawspeed_sp和thr_sp
 			if (!_control.updateSetpoint(setpoint)) {
 				warn_rate_limited("Position-Control Setpoint-Update failed");
 			}
 
 			// Generate desired thrust and yaw.
-			_control.generateThrustYawSetpoint(_dt);
+			// bymark 计算期望的推力和偏航角
+			_control.generateThrustYawSetpoint(_dt); // bymark 通过/不通过控制器给出thr_sp
 
 			matrix::Vector3f thr_sp = _control.getThrustSetpoint();
 
 			// Adjust thrust setpoint based on landdetector only if the
 			// vehicle is NOT in pure Manual mode and NOT in smooth takeoff
+			// bymark 只有在非纯手动且不在takeoff状态下，才会根据landdetector调整thr_sp
 			if (!_in_smooth_takeoff && !PX4_ISFINITE(setpoint.thrust[2])) {
 				limit_thrust_during_landing(thr_sp);
 			}
 
 			// Fill local position, velocity and thrust setpoint.
+			// bymark 收集local_pos_sp数据，为publish做准备，该数据只用于logging
 			vehicle_local_position_setpoint_s local_pos_sp{};
 			local_pos_sp.timestamp = hrt_absolute_time();
 			local_pos_sp.x = _control.getPosSp()(0);
@@ -762,12 +786,13 @@ MulticopterPositionControl::run()
 
 
 			// Fill attitude setpoint. Attitude is computed from yaw and thrust setpoint.
-			_att_sp = ControlMath::thrustToAttitude(thr_sp, _control.getYawSetpoint());
-			_att_sp.yaw_sp_move_rate = _control.getYawspeedSetpoint();
+			// bymark 收集attitude_sp. 通过yaw_sp和thr_sp计算出attitude_sp
+			_att_sp = ControlMath::thrustToAttitude(thr_sp, _control.getYawSetpoint()); // bymark 推力矢量sp和yaw_sp --> R_sp(DCM_sp)--> q_sp 和 euler_sp
+			_att_sp.yaw_sp_move_rate = _control.getYawspeedSetpoint(); // bymark 设置偏航角速率setpoint
 			_att_sp.fw_control_yaw = false;
 			_att_sp.apply_flaps = false;
 
-			if (!constraints.landing_gear) {
+			if (!constraints.landing_gear) { // bymark landing_gear：起落架
 				if (constraints.landing_gear == vehicle_constraints_s::GEAR_UP) {
 					_att_sp.landing_gear = vehicle_attitude_setpoint_s::LANDING_GEAR_UP;
 				}
@@ -782,9 +807,12 @@ MulticopterPositionControl::run()
 			// an attitude setpoint is because for non-flighttask modes
 			// the attitude septoint should come from another source, otherwise
 			// they might conflict with each other such as in offboard attitude control.
+
+			// bymark 在发布attitude_sp时，需要review，因为在non-flighttask modes下是不发送attitude_sp的，
+			// 此时，attitude_sp是来源于其他地方，例如在offboard attitude control模式下，否则会发生冲突的。
 			publish_attitude();
 
-		} else {
+		} else {	// bymark 没有任何飞行任务处于激活状态
 			// no flighttask is active: set attitude setpoint to idle
 			_att_sp.roll_body = _att_sp.pitch_body = 0.0f;
 			_att_sp.yaw_body = _local_pos.yaw;
@@ -813,7 +841,9 @@ MulticopterPositionControl::start_flight_task()
 	bool task_failure = false;
 	int prev_failure_count = _task_failure_count;
 
-	// offboard
+	// offboard 
+	// bymark navigation状态为offboard, 且控制模式是定高、定点、控垂直速度、控水平速度、控加速度
+	// bymark offboard模式下，setpoint不来自飞控的mcu,而是来自外部
 	if (_vehicle_status.nav_state == vehicle_status_s::NAVIGATION_STATE_OFFBOARD
 	    && (_control_mode.flag_control_altitude_enabled ||
 		_control_mode.flag_control_position_enabled ||
@@ -821,8 +851,7 @@ MulticopterPositionControl::start_flight_task()
 		_control_mode.flag_control_velocity_enabled ||
 		_control_mode.flag_control_acceleration_enabled)) {
 
-		int error = _flight_tasks.switchTask(FlightTaskIndex::Offboard);
-
+		int error = _flight_tasks.switchTask(FlightTaskIndex::Offboard); // bymark 根据导航状态切换flight_task为offboard
 		if (error != 0) {
 			if (prev_failure_count == 0) {
 				PX4_WARN("Offboard activation failed with error: %s", _flight_tasks.errorToString(error));
@@ -837,8 +866,9 @@ MulticopterPositionControl::start_flight_task()
 	}
 
 	// Auto-follow me
+	// bymark navigation状态为auto_follow_target
 	if (_vehicle_status.nav_state == vehicle_status_s::NAVIGATION_STATE_AUTO_FOLLOW_TARGET) {
-		int error = _flight_tasks.switchTask(FlightTaskIndex::AutoFollowMe);
+		int error = _flight_tasks.switchTask(FlightTaskIndex::AutoFollowMe);	// bymark 根据导航状态切换flight_task为auto_follow_me
 
 		if (error != 0) {
 			if (prev_failure_count == 0) {
@@ -852,9 +882,9 @@ MulticopterPositionControl::start_flight_task()
 			_task_failure_count = 0;
 		}
 
-	} else if (_control_mode.flag_control_auto_enabled) {
+	} else if (_control_mode.flag_control_auto_enabled) { // bymark 控制模式是auto
 		// Auto relate maneuvers
-		int error = _flight_tasks.switchTask(FlightTaskIndex::AutoLine);
+		int error = _flight_tasks.switchTask(FlightTaskIndex::AutoLine);	// bymark 根据控制模式切换flight_task为auto_line
 
 		if (error != 0) {
 			if (prev_failure_count == 0) {
@@ -870,20 +900,24 @@ MulticopterPositionControl::start_flight_task()
 	}
 
 	// manual position control
+	// bymark navigation状态为position_control(定点),或者前面进行飞行任务切换时失败
 	if (_vehicle_status.nav_state == vehicle_status_s::NAVIGATION_STATE_POSCTL || task_failure) {
 
 		int error = 0;
 
-		switch (MPC_POS_MODE.get()) {
+		switch (MPC_POS_MODE.get()) {	// bymark  默认情况下MPC_POS_MODE为1
 		case 0:
+			// bymark  将杆量直接映射为位置或速度。最大水平速度为MPC_VEL_MANUAL(10m/s)
 			error =  _flight_tasks.switchTask(FlightTaskIndex::ManualPosition);
 			break;
 
 		case 1:
+			// bymark setpoints会根据加速度限幅和杆量限幅进行调整。
 			error =  _flight_tasks.switchTask(FlightTaskIndex::ManualPositionSmooth);
 			break;
 
 		case 2:
+			// bymark 与case0下面的position_control相似，但是速度限幅为MPC_XY_VEL_MAX(12m/s auto模式下的)
 			error =  _flight_tasks.switchTask(FlightTaskIndex::Sport);
 			break;
 
@@ -906,8 +940,9 @@ MulticopterPositionControl::start_flight_task()
 	}
 
 	// manual altitude control
+	// bymark navigation状态为altitude_control(定高),或者前面进行飞行任务切换时失败
 	if (_vehicle_status.nav_state == vehicle_status_s::NAVIGATION_STATE_ALTCTL || task_failure) {
-		int error = _flight_tasks.switchTask(FlightTaskIndex::ManualAltitude);
+		int error = _flight_tasks.switchTask(FlightTaskIndex::ManualAltitude);	// bymark 将飞行任务切换为定高
 
 		if (error != 0) {
 			if (prev_failure_count == 0) {
@@ -923,9 +958,10 @@ MulticopterPositionControl::start_flight_task()
 	}
 
 	// manual stabilized control
+	// bymark navigation状态为manual或者自稳，或者前面进行飞行任务切换时失败
 	if (_vehicle_status.nav_state == vehicle_status_s::NAVIGATION_STATE_MANUAL
 	    ||  _vehicle_status.nav_state == vehicle_status_s::NAVIGATION_STATE_STAB || task_failure) {
-		int error = _flight_tasks.switchTask(FlightTaskIndex::ManualStabilized);
+		int error = _flight_tasks.switchTask(FlightTaskIndex::ManualStabilized); // bymark 将飞行任务切换为stabilize
 
 		if (error != 0) {
 			if (prev_failure_count == 0) {
@@ -941,11 +977,12 @@ MulticopterPositionControl::start_flight_task()
 	}
 
 	// check task failure
+	// bymark 如果所有的飞行任务切换都失败
 	if (task_failure) {
 
 		// for some reason no flighttask was able to start.
-		// go into failsafe flighttask
-		int error = _flight_tasks.switchTask(FlightTaskIndex::Failsafe);
+		// go into failsafe flighttask 
+		int error = _flight_tasks.switchTask(FlightTaskIndex::Failsafe); // bymark 向失效保护飞行任务切换
 
 		if (error != 0) {
 			// No task was activated.
@@ -968,11 +1005,15 @@ MulticopterPositionControl::check_for_smooth_takeoff(const float &z_sp, const fl
 				     0.2f;
 
 		// takeoff was initiated through velocity setpoint
-		_smooth_velocity_takeoff = PX4_ISFINITE(vz_sp) && vz_sp < math::min(-_tko_speed.get(), -0.6f);
+	     	// bymark 通过vel(2)_sp来初始化takeoff, 注意vz_sp是一个负数; 也可以通过pos(2)_sp来初始化takeoff, pos(2)_sp也是一个负数
+		_smooth_velocity_takeoff = PX4_ISFINITE(vz_sp) && vz_sp < -0.6; // math::min(-_tko_speed.get(), -0.6f); // bymark _tko_speed.get()是1.5m/s
 
+		// mavlink_log_info(&mavlink_log_pub, "_smooth_velocity_takeoff = %d\n", _smooth_velocity_takeoff); // bymark 
+		// bymark 在自稳模式下不会进入下面的if语句
 		if ((PX4_ISFINITE(z_sp) && z_sp < _states.position(2) - min_altitude) ||  _smooth_velocity_takeoff) {
 			// There is a position setpoint above current position or velocity setpoint larger than
 			// takeoff speed. Enable smooth takeoff.
+			mavlink_log_info(&mavlink_log_pub, "_in_smooth_takeoff = %d\n", _in_smooth_takeoff); // bymark 
 			_in_smooth_takeoff = true;
 			_takeoff_speed = -0.5f;
 			_takeoff_reference_z = _states.position(2);
@@ -988,26 +1029,28 @@ void
 MulticopterPositionControl::update_smooth_takeoff(const float &z_sp, const float &vz_sp)
 {
 	// If in smooth takeoff, adjust setpoints based on what is valid:
-	// 1. position setpoint is valid -> go with takeoffspeed to specific altitude
-	// 2. position setpoint not valid but velocity setpoint valid: ramp up velocity
+	// 1. position setpoint is valid -> go with takeoffspeed to specific altitude 有可用的位置sp --> 控爬升位置
+	// 2. position setpoint not valid but velocity setpoint valid: ramp up velocity 无可用的位置sp,但有可用的速度sp --> 控爬升速度
 	if (_in_smooth_takeoff) {
-		float desired_tko_speed = -vz_sp;
+		float desired_tko_speed = -vz_sp; // bymark vz_sp带符号，所以取负
 
 		// If there is a valid position setpoint, then set the desired speed to the takeoff speed.
+		// bymark 位置sp可用
 		if (!_smooth_velocity_takeoff) {
-			desired_tko_speed = _tko_speed.get();
+			desired_tko_speed = _tko_speed.get();  // bymark 该起飞速度desired_tko_speed不带符号
 		}
 
 		// Ramp up takeoff speed.
+		// bymark 逐步增加起飞速度，并进行限幅, _takeoff_speed不带符号
 		_takeoff_speed += desired_tko_speed * _dt / _takeoff_ramp_time.get();
 		_takeoff_speed = math::min(_takeoff_speed, desired_tko_speed);
 
 		// Smooth takeoff is achieved once desired altitude/velocity setpoint is reached.
-		if (!_smooth_velocity_takeoff) {
+		if (!_smooth_velocity_takeoff) {   // bymark 由位置sp触发takeoff
 			_in_smooth_takeoff = _states.position(2) - 0.2f > math::max(z_sp, _takeoff_reference_z - MPC_LAND_ALT2.get());
 
-		} else  {
-			_in_smooth_takeoff = _takeoff_speed < -vz_sp;
+		} else  { // bymark 由速度sp触发takeoff
+			_in_smooth_takeoff = _takeoff_speed < -vz_sp; // bymark 起飞速度没达到vz_sp
 		}
 
 	} else {
