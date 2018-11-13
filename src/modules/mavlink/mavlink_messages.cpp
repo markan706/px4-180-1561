@@ -3935,17 +3935,109 @@ protected:
 	}
 };
 
+//  bymark
+// class MavlinkStreamDistanceSensor : public MavlinkStream
+// {
+// public:
+// 	const char *get_name() const
+// 	{
+// 		return MavlinkStreamDistanceSensor::get_name_static();
+// 	}
+
+// 	static const char *get_name_static()
+// 	{
+// 		return "DISTANCE_SENSOR";
+// 	}
+
+// 	static uint16_t get_id_static()
+// 	{
+// 		return MAVLINK_MSG_ID_DISTANCE_SENSOR;
+// 	}
+
+// 	uint16_t get_id()
+// 	{
+// 		return get_id_static();
+// 	}
+
+// 	static MavlinkStream *new_instance(Mavlink *mavlink)
+// 	{
+// 		return new MavlinkStreamDistanceSensor(mavlink);
+// 	}
+
+// 	unsigned get_size()
+// 	{
+// 		return _distance_sensor_sub->is_published() ? (MAVLINK_MSG_ID_DISTANCE_SENSOR_LEN + MAVLINK_NUM_NON_PAYLOAD_BYTES) : 0;
+// 	}
+
+// private:
+// 	MavlinkOrbSubscription *_distance_sensor_sub;
+// 	uint64_t _dist_sensor_time;
+
+// 	/* do not allow top copying this class */
+// 	MavlinkStreamDistanceSensor(MavlinkStreamDistanceSensor &) = delete;
+// 	MavlinkStreamDistanceSensor &operator = (const MavlinkStreamDistanceSensor &) = delete;
+
+// protected:
+// 	explicit MavlinkStreamDistanceSensor(Mavlink *mavlink) : MavlinkStream(mavlink),
+// 		_distance_sensor_sub(_mavlink->add_orb_subscription(ORB_ID(distance_sensor))),
+// 		_dist_sensor_time(0)
+// 	{}
+
+// 	bool send(const hrt_abstime t)
+// 	{
+// 		distance_sensor_s dist_sensor;
+
+// 		if (_distance_sensor_sub->update(&_dist_sensor_time, &dist_sensor)) {
+
+// 			mavlink_distance_sensor_t msg = {};
+
+// 			msg.time_boot_ms = dist_sensor.timestamp / 1000; /* us to ms */
+
+// 			/* TODO: use correct ID here */
+// 			msg.id = 0;
+
+// 			switch (dist_sensor.type) {
+// 			case MAV_DISTANCE_SENSOR_ULTRASOUND:
+// 				msg.type = MAV_DISTANCE_SENSOR_ULTRASOUND;
+// 				msg.id = dist_sensor.id; //bymark
+// 				break;
+
+// 			case MAV_DISTANCE_SENSOR_LASER:
+// 				msg.type = MAV_DISTANCE_SENSOR_LASER;
+// 				break;
+
+// 			case MAV_DISTANCE_SENSOR_INFRARED:
+// 				msg.type = MAV_DISTANCE_SENSOR_INFRARED;
+// 				break;
+
+// 			default:
+// 				msg.type = MAV_DISTANCE_SENSOR_LASER;
+// 				break;
+// 			}
+
+// 			msg.orientation = dist_sensor.orientation;
+// 			msg.min_distance = dist_sensor.min_distance * 100.0f; /* m to cm */
+// 			msg.max_distance = dist_sensor.max_distance * 100.0f; /* m to cm */
+// 			msg.current_distance = dist_sensor.current_distance * 100.0f; /* m to cm */
+// 			msg.covariance = dist_sensor.covariance;
+
+// 			mavlink_msg_distance_sensor_send_struct(_mavlink->get_channel(), &msg);
+
+// 			return true;
+// 		}
+
+// 		return false;
+// 	}
+// };
+
+// bymark  通过mavlink传输超声数据
+template <int N>
 class MavlinkStreamDistanceSensor : public MavlinkStream
 {
 public:
 	const char *get_name() const
 	{
-		return MavlinkStreamDistanceSensor::get_name_static();
-	}
-
-	static const char *get_name_static()
-	{
-		return "DISTANCE_SENSOR";
+		return MavlinkStreamDistanceSensor<N>::get_name_static();
 	}
 
 	static uint16_t get_id_static()
@@ -3958,9 +4050,23 @@ public:
 		return get_id_static();
 	}
 
+	static const char *get_name_static()
+	{
+		switch (N) {
+		case 0:
+			return "DISTANCE_SENSOR_0";
+
+		case 1:
+			return "DISTANCE_SENSOR_1";
+
+		case 2:
+			return "DISTANCE_SENSOR_2";
+		}
+	}
+
 	static MavlinkStream *new_instance(Mavlink *mavlink)
 	{
-		return new MavlinkStreamDistanceSensor(mavlink);
+		return new MavlinkStreamDistanceSensor<N>(mavlink);
 	}
 
 	unsigned get_size()
@@ -3978,9 +4084,9 @@ private:
 
 protected:
 	explicit MavlinkStreamDistanceSensor(Mavlink *mavlink) : MavlinkStream(mavlink),
-		_distance_sensor_sub(_mavlink->add_orb_subscription(ORB_ID(distance_sensor))),
+		_distance_sensor_sub(_mavlink->add_orb_subscription(ORB_ID(distance_sensor), N)),
 		_dist_sensor_time(0)
-	{}
+	{}	
 
 	bool send(const hrt_abstime t)
 	{
@@ -3998,7 +4104,7 @@ protected:
 			switch (dist_sensor.type) {
 			case MAV_DISTANCE_SENSOR_ULTRASOUND:
 				msg.type = MAV_DISTANCE_SENSOR_ULTRASOUND;
-				msg.id = dist_sensor.id; //bymark
+				if (N == dist_sensor.id) msg.id = N; //bymark
 				break;
 
 			case MAV_DISTANCE_SENSOR_LASER:
@@ -4026,8 +4132,9 @@ protected:
 		}
 
 		return false;
-	}
+	}	
 };
+// ==== bymark end======
 
 class MavlinkStreamExtendedSysState : public MavlinkStream
 {
@@ -4626,7 +4733,10 @@ static const StreamListItem streams_list[] = {
 	StreamListItem(&MavlinkStreamCameraCapture::new_instance, &MavlinkStreamCameraCapture::get_name_static, &MavlinkStreamCameraCapture::get_id_static),
 	StreamListItem(&MavlinkStreamCameraTrigger::new_instance, &MavlinkStreamCameraTrigger::get_name_static, &MavlinkStreamCameraTrigger::get_id_static),
 	StreamListItem(&MavlinkStreamCameraImageCaptured::new_instance, &MavlinkStreamCameraImageCaptured::get_name_static, &MavlinkStreamCameraImageCaptured::get_id_static),
-	StreamListItem(&MavlinkStreamDistanceSensor::new_instance, &MavlinkStreamDistanceSensor::get_name_static, &MavlinkStreamDistanceSensor::get_id_static),
+	/*StreamListItem(&MavlinkStreamDistanceSensor::new_instance, &MavlinkStreamDistanceSensor::get_name_static, &MavlinkStreamDistanceSensor::get_id_static), // bymark */
+	StreamListItem(&MavlinkStreamDistanceSensor<0>::new_instance, &MavlinkStreamDistanceSensor<0>::get_name_static, &MavlinkStreamDistanceSensor<0>::get_id_static), // bymark
+	StreamListItem(&MavlinkStreamDistanceSensor<1>::new_instance, &MavlinkStreamDistanceSensor<1>::get_name_static, &MavlinkStreamDistanceSensor<1>::get_id_static),  // bymark
+	StreamListItem(&MavlinkStreamDistanceSensor<2>::new_instance, &MavlinkStreamDistanceSensor<2>::get_name_static, &MavlinkStreamDistanceSensor<2>::get_id_static),  // bymark
 	StreamListItem(&MavlinkStreamExtendedSysState::new_instance, &MavlinkStreamExtendedSysState::get_name_static, &MavlinkStreamExtendedSysState::get_id_static),
 	StreamListItem(&MavlinkStreamAltitude::new_instance, &MavlinkStreamAltitude::get_name_static, &MavlinkStreamAltitude::get_id_static),
 	StreamListItem(&MavlinkStreamADSBVehicle::new_instance, &MavlinkStreamADSBVehicle::get_name_static, &MavlinkStreamADSBVehicle::get_id_static),
