@@ -92,14 +92,14 @@ public:
 
 	/**
 	 * Switch to the next task in the available list (for testing)
-	 * @return 1 on success, <0 on error
+	 * @return 0 on success, <0 on error   bymrak 返回0才表示成功/没变   1 -> 0
 	 */
 	int switchTask() { return switchTask(static_cast<int>(_current_task.index) + 1); }
 
 	/**
 	 * Switch to a specific task (for normal usage)
 	 * @param task index to switch to
-	 * @return 1 on success, 0 on no change, <0 on error
+	 * @return 0 on success, 0 on no change, <0 on error   bymrak 返回0才表示成功/没变   1 -> 0
 	 */
 	int switchTask(FlightTaskIndex new_task_index);
 	int switchTask(int new_task_index);

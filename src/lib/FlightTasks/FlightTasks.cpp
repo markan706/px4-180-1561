@@ -65,21 +65,25 @@ const vehicle_trajectory_waypoint_s &FlightTasks::getEmptyAvoidanceWaypoint()
 int FlightTasks::switchTask(FlightTaskIndex new_task_index)
 {
 	// switch to the running task, nothing to do
+	// bymark 如果所选择的飞行任务，为当前正在执行的任务，直接return 0， 否则初始化新的飞行任务
 	if (new_task_index == _current_task.index) {
 		return 0;
 	}
 
-	if (_initTask(new_task_index)) {
+	if (_initTask(new_task_index)) {	// bymark 飞行任务初始化_initTask()这个函数的实现是脚本文件generate_flight_tasks.py生成的？？ 
 		// invalid task
+		// bymark _initTask()对_current_task.task(相应飞行任务的类对象指针)和_current_task.index(相应飞行任务的索引)进行赋值
 		return -1;
 	}
 
-	if (!_current_task.task) {
+	if (!_current_task.task) { // bymark _current_task是一个结构体变量(一个FlightTask指针task和一个FlightTaskIndex索引index)
 		// no task running
+		// bymark 没有飞行任务要执行，也是返回0
 		return 0;
 	}
 
 	// subscription failed
+	// bymark 使用数组来初始化uORB订阅
 	if (!_current_task.task->initializeSubscriptions(_subscription_array)) {
 		_current_task.task->~FlightTask();
 		_current_task.task = nullptr;
@@ -90,6 +94,8 @@ int FlightTasks::switchTask(FlightTaskIndex new_task_index)
 	_subscription_array.forcedUpdate(); // make sure data is available for all new subscriptions
 
 	// activation failed
+	// bymark updateInitialize()在activate()或者update()之前调用，用于初始化时间和输入数据
+	// bymark activate()重置setpoint，设置速度，倾斜角等constraints
 	if (!_current_task.task->updateInitialize() || !_current_task.task->activate()) {
 		_current_task.task->~FlightTask();
 		_current_task.task = nullptr;

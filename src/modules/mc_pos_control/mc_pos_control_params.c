@@ -44,13 +44,13 @@
  * It's recommended to set it > 0 to avoid free fall with zero thrust.
  *
  * @unit norm
- * @min 0.05
+ * @min 0.05 
  * @max 1.0
  * @decimal 2
  * @increment 0.01
  * @group Multicopter Position Control
  */
-PARAM_DEFINE_FLOAT(MPC_THR_MIN, 0.12f);
+PARAM_DEFINE_FLOAT(MPC_THR_MIN, 0.05f);  // bymark 0.12 -> 0  min 0.05 -> 0
 
 /**
  * Hover thrust
@@ -122,7 +122,7 @@ PARAM_DEFINE_FLOAT(MPC_THR_MAX, 1.0f);
  * @increment 0.01
  * @group Multicopter Position Control
  */
-PARAM_DEFINE_FLOAT(MPC_MANTHR_MIN, 0.08f);
+PARAM_DEFINE_FLOAT(MPC_MANTHR_MIN, 0.0f);  // bymark 0.08 -> 0.0
 
 /**
  * Proportional gain for vertical position error
@@ -277,7 +277,7 @@ PARAM_DEFINE_FLOAT(MPC_CRUISE_90, 3.0f);
  * @decimal 2
  * @group Multicopter Position Control
  */
-PARAM_DEFINE_FLOAT(MPC_VEL_MANUAL, 10.0f);
+PARAM_DEFINE_FLOAT(MPC_VEL_MANUAL, 5.0f);      // bymark 10 --> 5
 
 /**
  * Maximum horizontal velocity
@@ -292,7 +292,7 @@ PARAM_DEFINE_FLOAT(MPC_VEL_MANUAL, 10.0f);
  * @decimal 2
  * @group Multicopter Position Control
  */
-PARAM_DEFINE_FLOAT(MPC_XY_VEL_MAX, 12.0f);
+PARAM_DEFINE_FLOAT(MPC_XY_VEL_MAX, 6.0f);	// bymark 12 --> 6
 
 /**
  * Maximum tilt angle in air
@@ -305,7 +305,7 @@ PARAM_DEFINE_FLOAT(MPC_XY_VEL_MAX, 12.0f);
  * @decimal 1
  * @group Multicopter Position Control
  */
-PARAM_DEFINE_FLOAT(MPC_TILTMAX_AIR, 45.0f);
+PARAM_DEFINE_FLOAT(MPC_TILTMAX_AIR, 25.0f);	// bymark 45 --> 25
 
 /**
  * Maximum tilt during landing
@@ -350,7 +350,7 @@ PARAM_DEFINE_FLOAT(MPC_TKO_SPEED, 1.5f);
  * @decimal 1
  * @group Multicopter Position Control
  */
-PARAM_DEFINE_FLOAT(MPC_MAN_TILT_MAX, 35.0f);
+PARAM_DEFINE_FLOAT(MPC_MAN_TILT_MAX, 25.0f);
 
 /**
  * Max manual yaw rate

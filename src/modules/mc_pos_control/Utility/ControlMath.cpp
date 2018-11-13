@@ -88,6 +88,7 @@ vehicle_attitude_setpoint_s thrustToAttitude(const Vector3f &thr_sp, const float
 	Dcmf R_sp;
 
 	// fill rotation matrix
+	// bymark 旋转矩阵R_sp = [body_x, body_y, body_z], 即body_x, body_y, body_z够成R_sp的列向量
 	for (int i = 0; i < 3; i++) {
 		R_sp(i, 0) = body_x(i);
 		R_sp(i, 1) = body_y(i);

@@ -131,7 +131,9 @@
 #define ADC_BUFFER_SIZE 10000  // 10000->20000 -> 30000 bymark
 
 // #define ADC_LOG 1  //recording adc value log 
-// #define MULTI_ADC 1 // using ADC2 and ADC3
+#if NUM_OF_ULTRASOUND > 2
+#define MULTI_ADC 1 // using ADC2 and ADC3
+#endif
 
 #ifdef MULTI_ADC
 

@@ -131,7 +131,7 @@ void MulticopterLandDetector::_update_params()
 
 bool MulticopterLandDetector::_get_freefall_state()
 {
-	if (_params.freefall_acc_threshold < 0.1f
+	if (_params.freefall_acc_threshold < 0.1f    // bymark _params.freefall_acc_threshold默认值为2 m/s^2
 	    || _params.freefall_acc_threshold > 10.0f) {	//if parameter is set to zero or invalid, disable free-fall detection.
 		return false;
 	}
@@ -156,18 +156,21 @@ bool MulticopterLandDetector::_get_ground_contact_state()
 		return true;
 	}
 
-	// land speed threshold
-	float land_speed_threshold = 0.9f * math::max(_params.landSpeed, 0.1f);
+	// land speed threshold 着陆速度阈值
+	float land_speed_threshold = 0.9f * math::max(_params.landSpeed, 0.1f); // bymark _params.landSpeed 默认值是0.7m/s
 
 	// Check if we are moving vertically - this might see a spike after arming due to
 	// throttle-up vibration. If accelerating fast the throttle thresholds will still give
 	// an accurate in-air indication.
+
+	// bymark 检查是否存在垂直运动，注意在解锁后由于油门向上的抖动可能会引起垂直运动
 	bool verticalMovement;
 
 	if (hrt_elapsed_time(&_landed_time) < LAND_DETECTOR_LAND_PHASE_TIME_US) {
 
 		// Widen acceptance thresholds for landed state right after arming
 		// so that motor spool-up and other effects do not trigger false negatives.
+		// bymark 对于解锁后立马出现的landed状态，要放宽可接受的着陆速度阈值
 		verticalMovement = fabsf(_vehicleLocalPosition.vz) > _params.maxClimbRate  * 2.5f;
 
 	} else {
@@ -179,13 +182,15 @@ bool MulticopterLandDetector::_get_ground_contact_state()
 	}
 
 	// Check if we are moving horizontally.
+	// bymark 检查是否存在水平运动
 	bool horizontalMovement = sqrtf(_vehicleLocalPosition.vx * _vehicleLocalPosition.vx
 					+ _vehicleLocalPosition.vy * _vehicleLocalPosition.vy) > _params.maxVelocity;
 
 	// if we have a valid velocity setpoint and the vehicle is demanded to go down but no vertical movement present,
 	// we then can assume that the vehicle hit ground
+	// bymark 如果vel_sp有效并且是要求飞机向下运动，但是目前飞机并不存在垂直运动，那么就假设飞机碰撞到了地面
 	bool in_descend = _is_climb_rate_enabled()
-			  && (_vehicleLocalPositionSetpoint.vz >= land_speed_threshold);
+			  && (_vehicleLocalPositionSetpoint.vz >= land_speed_threshold);   // bymark 要控爬升速度，并且pos_sp.vz大于着陆速度阈值
 	bool hit_ground = in_descend && !verticalMovement;
 
 	// TODO: we need an accelerometer based check for vertical movement for flying without GPS
@@ -224,14 +229,15 @@ bool MulticopterLandDetector::_get_maybe_landed_state()
 	}
 
 	// Next look if all rotation angles are not moving.
-	float maxRotationScaled = _params.maxRotation_rad_s * landThresholdFactor;
+	// bymark 检查是否存在旋转运动
+	float maxRotationScaled = _params.maxRotation_rad_s * landThresholdFactor;   // bymark _params.maxRotation_rad_s的默认值是20deg/s
 
 	bool rotating = (fabsf(_vehicleAttitude.rollspeed)  > maxRotationScaled) ||
 			(fabsf(_vehicleAttitude.pitchspeed) > maxRotationScaled) ||
 			(fabsf(_vehicleAttitude.yawspeed) > maxRotationScaled);
 
 	// Return status based on armed state and throttle if no position lock is available.
-	if (!_has_altitude_lock() && !rotating) {
+	if (!_has_altitude_lock() && !rotating) { // bymark 不存在旋转运动，并且高度没锁定
 		// The system has minimum trust set (manual or in failsafe)
 		// if this persists for 8 seconds AND the drone is not
 		// falling consider it to be landed. This should even sustain
@@ -269,6 +275,7 @@ bool MulticopterLandDetector::_get_landed_state()
 float MulticopterLandDetector::_get_max_altitude()
 {
 	/* ToDo: add a meaningful altitude */
+	// bymark 根据电池的电量情况来设置有效的最大高度
 	float valid_altitude_max = _params.altitude_max;
 
 	if (_battery.warning == battery_status_s::BATTERY_WARNING_LOW) {

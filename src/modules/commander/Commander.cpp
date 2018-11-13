@@ -151,7 +151,7 @@ static systemlib::Hysteresis auto_disarm_hysteresis(false);
 
 static float min_stick_change = 0.25f;
 
-static struct vehicle_status_s status = {};
+static struct vehicle_status_s status = {};  // bymark 本文件的全局变量
 static struct actuator_armed_s armed = {};
 static struct safety_s safety = {};
 static struct vehicle_control_mode_s control_mode = {};
@@ -297,7 +297,7 @@ int commander_main(int argc, char *argv[])
 
 		thread_should_exit = false;
 
-		Commander::main(argc, argv);
+		Commander::main(argc, argv);  // bymark 该main()由Commander的父类ModuleBase实现, 在父类的成员函数与子类函数之间来回折腾后，最后调用子类函数Commander::run()
 
 		unsigned constexpr max_wait_us = 1000000;
 		unsigned constexpr max_wait_steps = 2000;
@@ -380,14 +380,14 @@ int commander_main(int argc, char *argv[])
 		return 0;
 	}
 
-	if (!strcmp(argv[1], "arm")) {
+	if (!strcmp(argv[1], "arm")) { // bymark 切换到arm解锁状态， arm_disarm()是一个公用接口
 		if (TRANSITION_CHANGED != arm_disarm(true, &mavlink_log_pub, "command line")) {
 			PX4_ERR("arming failed");
 		}
 		return 0;
 	}
 
-	if (!strcmp(argv[1], "disarm")) {
+	if (!strcmp(argv[1], "disarm")) { // bymark 切换到disarm上锁状态， arm_disarm()是一个公用接口
 		if (TRANSITION_DENIED == arm_disarm(false, &mavlink_log_pub, "command line")) {
 			PX4_ERR("rejected disarm");
 		}
@@ -399,10 +399,10 @@ int commander_main(int argc, char *argv[])
 		bool ret = false;
 
 		/* see if we got a home position */
-		if (status_flags.condition_local_position_valid) {
+		if (status_flags.condition_local_position_valid) { // bymark 先要能获取当前位置作为home位置
 
-			if (TRANSITION_DENIED != arm_disarm(true, &mavlink_log_pub, "command line")) {
-				ret = send_vehicle_command(vehicle_command_s::VEHICLE_CMD_NAV_TAKEOFF);
+			if (TRANSITION_DENIED != arm_disarm(true, &mavlink_log_pub, "command line")) { // bymark 成功切换到解锁状态，不能被拒绝
+				ret = send_vehicle_command(vehicle_command_s::VEHICLE_CMD_NAV_TAKEOFF); // bymark send_vehicle_command()是一个static函数
 
 			} else {
 				PX4_ERR("arming failed");
@@ -461,7 +461,7 @@ int commander_main(int argc, char *argv[])
 			} else {
 				PX4_ERR("argument %s unsupported.", argv[2]);
 			}
-
+			// bymark main_state_transition()是一个公共接口，该函数只是简单测试能否切换到所指定的main_state
 			if (TRANSITION_DENIED == main_state_transition(status, new_main_state, status_flags, &internal_state)) {
 				PX4_ERR("mode change failed");
 			}
@@ -519,6 +519,7 @@ transition_result_t arm_disarm(bool arm, orb_advert_t *mavlink_log_pub_local, co
 
 	// Transition the armed state. By passing mavlink_log_pub to arming_state_transition it will
 	// output appropriate error messages if the state cannot transition.
+	// bymark arm状态的切换，当切换失败时，相应的error信息会通过mavlink_log打印出来
 	arming_res = arming_state_transition(&status,
 					     safety,
 					     arm ? vehicle_status_s::ARMING_STATE_ARMED : vehicle_status_s::ARMING_STATE_STANDBY,
@@ -1156,6 +1157,7 @@ Commander::run()
 	pthread_t commander_low_prio_thread;
 
 	/* initialize */
+	// bymark led和蜂鸣器的初始化
 	if (led_init() != OK) {
 		PX4_WARN("LED init failed");
 	}
@@ -1180,9 +1182,10 @@ Commander::run()
 	}
 
 	// We want to accept RC inputs as default
-	status_flags.rc_input_blocked = false;
-	status.rc_input_mode = vehicle_status_s::RC_IN_MODE_DEFAULT;
-	internal_state.main_state = commander_state_s::MAIN_STATE_MANUAL;
+	// bymark 默认情况下，接收RC输入
+	status_flags.rc_input_blocked = false;  // bymark status_flags是一个仅限于本文件的全局变量
+	status.rc_input_mode = vehicle_status_s::RC_IN_MODE_DEFAULT; // bymark status是一个仅限于本文件的全局变量
+	internal_state.main_state = commander_state_s::MAIN_STATE_MANUAL; // bymark internal_state是一个仅限于本文件的全局变量
 	internal_state.timestamp = hrt_absolute_time();
 	status.nav_state = vehicle_status_s::NAVIGATION_STATE_MANUAL;
 	status.arming_state = vehicle_status_s::ARMING_STATE_INIT;
@@ -1190,10 +1193,12 @@ Commander::run()
 	status.failsafe = false;
 
 	/* neither manual nor offboard control commands have been received */
+	// bymark 既没有收到手动控制指令也没有收到offboard控制指令 初始化设置
 	status_flags.offboard_control_signal_found_once = false;
 	status_flags.rc_signal_found_once = false;
 
 	/* mark all signals lost as long as they haven't been found */
+	// bymark 信号丢失， rc信号，offboard信号，data_link信息 
 	status.rc_signal_lost = true;
 	status_flags.offboard_control_signal_lost = true;
 	status.data_link_lost = true;
@@ -1208,11 +1213,12 @@ Commander::run()
 	status_flags.rc_calibration_valid = true;
 
 	// CIRCUIT BREAKERS
+	// bymark 断路器check 初始化
 	status_flags.circuit_breaker_engaged_power_check = false;
 	status_flags.circuit_breaker_engaged_airspd_check = false;
 	status_flags.circuit_breaker_engaged_enginefailure_check = false;
 	status_flags.circuit_breaker_engaged_gpsfailure_check = false;
-	get_circuit_breaker_params();
+	get_circuit_breaker_params(); // bymark 断路器更新
 
 	/* Set position and velocity validty to false */
 	status_flags.condition_global_position_valid = false;
@@ -1249,6 +1255,7 @@ Commander::run()
 	orb_advert_t vehicle_status_flags_pub = nullptr;
 
 	/* init mission state, do it here to allow navigator to use stored mission even if mavlink failed to start */
+	// bymark 任务状态初始化
 	mission_init();
 
 	/* Start monitoring loop */
@@ -1409,6 +1416,7 @@ Commander::run()
 		transition_result_t arming_ret = TRANSITION_NOT_CHANGED;
 
 		/* update parameters */
+		// bymark 更新参数
 		bool params_updated = false;
 		orb_check(param_changed_sub, &params_updated);
 
@@ -1503,6 +1511,7 @@ Commander::run()
 		}
 
 		/* handle power button state */
+		// bymark 订阅copy power_button的状态， 检查是否要shutdown
 		orb_check(power_button_state_sub, &updated);
 
 		if (updated) {
@@ -1523,31 +1532,35 @@ Commander::run()
 		orb_check(offboard_control_mode_sub, &updated);
 
 		if (updated) {
-			orb_copy(ORB_ID(offboard_control_mode), offboard_control_mode_sub, &offboard_control_mode);
+			orb_copy(ORB_ID(offboard_control_mode), offboard_control_mode_sub, &offboard_control_mode); 
 		}
 
+		// bymark 检查在offboard控制模式下，信号是否丢失，是否超时
 		if (offboard_control_mode.timestamp != 0 &&
-		    offboard_control_mode.timestamp + OFFBOARD_TIMEOUT > hrt_absolute_time()) {
-			if (status_flags.offboard_control_signal_lost) {
+		    offboard_control_mode.timestamp + OFFBOARD_TIMEOUT > hrt_absolute_time()) { // bymark 信号没有超时
+			if (status_flags.offboard_control_signal_lost) { // bymark 如之前的信号状态为丢失状态，则现在需要修改状态
 				status_flags.offboard_control_signal_lost = false;
 				status_flags.offboard_control_loss_timeout = false;
 				status_changed = true;
 			}
 
-		} else {
-			if (!status_flags.offboard_control_signal_lost) {
+		} else {	// bymark 信号超时
+			if (!status_flags.offboard_control_signal_lost) {	// bymark 如之前的信号状态为非丢失状态，则现在需要修改状态
 				status_flags.offboard_control_signal_lost = true;
 				status_changed = true;
 			}
 
 			/* check timer if offboard was there but now lost */
+			// bymark 如之前的状态为超时非丢失状态，而现在是信号超时
 			if (!status_flags.offboard_control_loss_timeout && offboard_control_mode.timestamp != 0) {
 				if (offboard_loss_timeout < FLT_EPSILON) {
 					/* execute loss action immediately */
+					// bymark 如果没有设置offboard_loss_timeout（0）参数，则立即把状态修改为丢失超时
 					status_flags.offboard_control_loss_timeout = true;
 
 				} else {
 					/* wait for timeout if set */
+					// bymark 如果设置了offboard_loss_timeout（!=0）参数,则需要将其考虑进去， OFFBOARD_TIMEOUT(500ms)
 					status_flags.offboard_control_loss_timeout = offboard_control_mode.timestamp +
 							OFFBOARD_TIMEOUT + offboard_loss_timeout * 1e6f < hrt_absolute_time();
 				}
@@ -1559,18 +1572,20 @@ Commander::run()
 		}
 
 		// poll the telemetry status
+		// bymark 处理遥测状态
 		poll_telemetry_status();
 
+		// bymark 处理power的连接情况
 		orb_check(system_power_sub, &updated);
 
 		if (updated) {
 			system_power_s system_power = {};
-			orb_copy(ORB_ID(system_power), system_power_sub, &system_power);
+			orb_copy(ORB_ID(system_power), system_power_sub, &system_power);  // bymark adc.cpp中会发布ORB_ID(system_power)
 
-			if (hrt_elapsed_time(&system_power.timestamp) < 200_ms) {
+			if (hrt_elapsed_time(&system_power.timestamp) < 200_ms) { // bymark 读取system_power信息的时间间隔不能超过200ms
 				if (system_power.servo_valid &&
 				    !system_power.brick_valid &&
-				    !system_power.usb_connected) {
+				    !system_power.usb_connected) { // bymark 没有连接USB, 没有brick, 这里的brick是啥意思？
 					/* flying only on servo rail, this is unsafe */
 					status_flags.condition_power_input_valid = false;
 
@@ -1579,6 +1594,7 @@ Commander::run()
 				}
 
 				/* if the USB hardware connection went away, reboot */
+				// bymark 之前的状态显示usb是连接上的，现在所获取的system_power信息显示usb未连接， 则执行reboot
 				if (status_flags.usb_connected && !system_power.usb_connected) {
 					/*
 					 * apparently the USB cable went away but we are still powered,
@@ -1592,6 +1608,7 @@ Commander::run()
 		}
 
 		/* update safety topic */
+		// bymark 处理安全开关的连接情况
 		orb_check(safety_sub, &updated);
 
 		if (updated) {
@@ -1600,6 +1617,7 @@ Commander::run()
 			if (orb_copy(ORB_ID(safety), safety_sub, &safety) == PX4_OK) {
 
 				/* disarm if safety is now on and still armed */
+				// bymark 在解锁状态下，硬件在环仿真没有使用，安全开关已连接比打开，则有arm切换到disarm
 				if (armed.armed && (status.hil_state == vehicle_status_s::HIL_STATE_OFF)
 				    && safety.safety_switch_available && !safety.safety_off) {
 
@@ -1612,6 +1630,7 @@ Commander::run()
 				}
 
 				// Notify the user if the status of the safety switch changes
+				// bymark 通过蜂鸣器告知用户安全开关的状态发生变化
 				if (safety.safety_switch_available && previous_safety_off != safety.safety_off) {
 
 					if (safety.safety_off) {
@@ -1665,21 +1684,23 @@ Commander::run()
 			}
 		}
 
+		// bymark 检查估计器
 		estimator_check(&status_changed);
 
 		/* Update land detector */
+		// bymark 更新着陆检测器检测情况
 		orb_check(land_detector_sub, &updated);
 
 		if (updated) {
 			orb_copy(ORB_ID(vehicle_land_detected), land_detector_sub, &land_detector);
 
 			// Only take actions if armed
-			if (armed.armed) {
-				if (was_landed != land_detector.landed) {
-					if (land_detector.landed) {
+			if (armed.armed) { // bymark 在解锁状态下
+				if (was_landed != land_detector.landed) { // bymark 前后两次着陆检测的情况不一致
+					if (land_detector.landed) { // bymark 当前的检测结果是着陆，则说明正在着陆或已经着陆
 						mavlink_and_console_log_info(&mavlink_log_pub, "Landing detected");
 
-					} else {
+					} else { // bymark 反之，则说明已经开始起飞了
 						mavlink_and_console_log_info(&mavlink_log_pub, "Takeoff detected");
 						have_taken_off_since_arming = true;
 
@@ -1704,7 +1725,8 @@ Commander::run()
 		}
 
 		// Auto disarm when landed
-		if (!have_taken_off_since_arming) {
+		// bymark 处理自动上锁的情况：在已着陆，且已解锁的情况下
+		if (!have_taken_off_since_arming) { // bymark 在解锁后10s没有起飞则上锁
 			// pilot has ten seconds time to take off
 			auto_disarm_hysteresis.set_hysteresis_time_from(false, 10_s);
 		} else {
@@ -1712,6 +1734,7 @@ Commander::run()
 		}
 
 		// Check for auto-disarm
+		// bymark 检测是否需要启动自动上锁功能。在已着陆状态下，已经解锁，同时_disarm_when_landed_timeout(-1)非负 --> 启用自动上锁功能
 		if (armed.armed && land_detector.landed && _disarm_when_landed_timeout.get() > FLT_EPSILON) {
 			auto_disarm_hysteresis.set_state_and_update(true);
 
@@ -1719,7 +1742,7 @@ Commander::run()
 			auto_disarm_hysteresis.set_state_and_update(false);
 		}
 
-		if (auto_disarm_hysteresis.get_state()) {
+		if (auto_disarm_hysteresis.get_state()) { // bymark 执行自动上锁
 			arm_disarm(false, &mavlink_log_pub, "auto disarm on land");
 		}
 
@@ -1741,9 +1764,11 @@ Commander::run()
 			orb_copy(ORB_ID(cpuload), cpuload_sub, &cpuload);
 		}
 
+		// bymark 检测电池状态
 		battery_status_check();
 
 		/* update subsystem info which arrives from outside of commander*/
+		// bymark 根据外部指令来更新子系统信息 这个subsystem不理解？？
 		do {
 			orb_check(subsys_sub, &updated);
 			if (updated) {
@@ -1754,6 +1779,7 @@ Commander::run()
 		} while(updated);
 
 		/* If in INIT state, try to proceed to STANDBY state */
+		// bymark arm处于初始化状态，并且传感器标定没完成？？ 则进入standby状态，感觉与disarm没什么区别。 disarm -- standby -- arm
 		if (!status_flags.condition_calibration_enabled && status.arming_state == vehicle_status_s::ARMING_STATE_INIT) {
 
 			arming_ret = arming_state_transition(&status, safety, vehicle_status_s::ARMING_STATE_STANDBY, &armed,
@@ -1767,12 +1793,14 @@ Commander::run()
 		}
 
 		/* start mission result check */
+		// bymark 检测mission_result
 		const auto prev_mission_instance_count = _mission_result_sub.get().instance_count;
 
 		if (_mission_result_sub.update()) {
 			const mission_result_s &mission_result = _mission_result_sub.get();
 
 			// if mission_result is valid for the current mission
+			// bymark 对于当前任务mission,mission_result是否有效
 			const bool mission_result_ok = (mission_result.timestamp > commander_boot_timestamp) && (mission_result.instance_count > 0);
 
 			status_flags.condition_auto_mission_available = mission_result_ok && mission_result.valid;
@@ -1789,6 +1817,7 @@ Commander::run()
 				}
 
 				/* Only evaluate mission state if home is set */
+				// byamrk 只用当home点被设置好了，才评估并提示mission的状态
 				if (status_flags.condition_home_position_valid &&
 				    (prev_mission_instance_count != mission_result.instance_count)) {
 
@@ -1809,6 +1838,7 @@ Commander::run()
 		}
 
 		/* start geofence result check */
+		// bymark 检测地理栅栏的result的情况
 		orb_check(geofence_result_sub, &updated);
 
 		if (updated) {
@@ -1881,6 +1911,7 @@ Commander::run()
 
 		// revert geofence failsafe transition if sticks are moved and we were previously in a manual mode
 		// but only if not in a low battery handling action
+		// bymark 从地理栅栏失效切换中退出的条件：操作杆在动，并且之前的模式是手动控制模式，同时电池电压不能是低压紧急警告
 		if (rc_override != 0 && (_battery_warning < battery_status_s::BATTERY_WARNING_CRITICAL) && (warning_action_on &&
 				(main_state_before_rtl == commander_state_s::MAIN_STATE_MANUAL ||
 				 main_state_before_rtl == commander_state_s::MAIN_STATE_ALTCTL ||
@@ -1890,6 +1921,7 @@ Commander::run()
 				 main_state_before_rtl == commander_state_s::MAIN_STATE_STAB))) {
 
 			// transition to previous state if sticks are touched
+			// bymark 杆量有一定的变化
 			if ((_last_sp_man.timestamp != sp_man.timestamp) &&
 			    ((fabsf(sp_man.x - _last_sp_man.x) > min_stick_change) ||
 			     (fabsf(sp_man.y - _last_sp_man.y) > min_stick_change) ||
@@ -1897,6 +1929,7 @@ Commander::run()
 			     (fabsf(sp_man.r - _last_sp_man.r) > min_stick_change))) {
 
 				// revert to position control in any case
+				// bymark 退回到定点模式 
 				main_state_transition(status, commander_state_s::MAIN_STATE_POSCTL, status_flags, &internal_state);
 				mavlink_log_critical(&mavlink_log_pub, "Autopilot off, returned control to pilot");
 			}
@@ -1904,6 +1937,7 @@ Commander::run()
 
 		// abort landing or auto or loiter if sticks are moved significantly
 		// but only if not in a low battery handling action
+		// bymark 自动飞行、盘旋和着陆操作的中止条件：操作杆变化较大，同时同时电池电压不能是低压紧急警告
 		if (rc_override != 0 && (_battery_warning < battery_status_s::BATTERY_WARNING_CRITICAL) &&
 		    (internal_state.main_state == commander_state_s::MAIN_STATE_AUTO_LAND ||
 		     internal_state.main_state == commander_state_s::MAIN_STATE_AUTO_MISSION ||
@@ -1917,6 +1951,7 @@ Commander::run()
 			     (fabsf(sp_man.r - _last_sp_man.r) > min_stick_change))) {
 
 				// revert to position control in any case
+				// bymark 退回到定点模式
 				main_state_transition(status, commander_state_s::MAIN_STATE_POSCTL, status_flags, &internal_state);
 				mavlink_log_critical(&mavlink_log_pub, "Autopilot off, returned control to pilot");
 			}
@@ -1924,6 +1959,7 @@ Commander::run()
 
 
 		/* Check for mission flight termination */
+		// bymark 检查任务飞行是否中止。满足条件：已解锁，并且订阅的mission_result信息中flight_termination为true，且flight_termination的断路器已经enable
 		if (armed.armed && _mission_result_sub.get().flight_termination &&
 		    !status_flags.circuit_breaker_flight_termination_disabled) {
 
@@ -1942,17 +1978,19 @@ Commander::run()
 		}
 
 		/* RC input check */
+		// bymark 检查RC输入（含有arm与disarm的切换）
 		if (!status_flags.rc_input_blocked && sp_man.timestamp != 0 &&
-		    (hrt_elapsed_time(&sp_man.timestamp) < (rc_loss_timeout * 1_s))) {
+		    (hrt_elapsed_time(&sp_man.timestamp) < (rc_loss_timeout * 1_s))) { // bymark RC输入没有上锁，并且前后两次收到的RC信息（manual_sp）没有超时
 
 			/* handle the case where RC signal was regained */
-			if (!status_flags.rc_signal_found_once) {
+			// bymark 处理RC信号复得的情况
+			if (!status_flags.rc_signal_found_once) { // bymark 之前是没有收到RC信号的
 				status_flags.rc_signal_found_once = true;
 				set_health_flags(subsystem_info_s::SUBSYSTEM_TYPE_RCRECEIVER, true, true, true && status_flags.rc_calibration_valid, status);
 				status_changed = true;
 
-			} else {
-				if (status.rc_signal_lost) {
+			} else { // bymark 之前是收到RC信号的
+				if (status.rc_signal_lost) { // bymark 处理RC信号丢失的情况
 					mavlink_log_info(&mavlink_log_pub, "MANUAL CONTROL REGAINED after %llums", hrt_elapsed_time(&rc_signal_lost_timestamp) / 1000);
 					set_health_flags(subsystem_info_s::SUBSYSTEM_TYPE_RCRECEIVER, true, true, true && status_flags.rc_calibration_valid, status);
 					status_changed = true;
@@ -1962,7 +2000,7 @@ Commander::run()
 			status.rc_signal_lost = false;
 
 			const bool in_armed_state = (status.arming_state == vehicle_status_s::ARMING_STATE_ARMED);
-			const bool arm_switch_or_button_mapped = sp_man.arm_switch != manual_control_setpoint_s::SWITCH_POS_NONE;
+			const bool arm_switch_or_button_mapped = sp_man.arm_switch != manual_control_setpoint_s::SWITCH_POS_NONE; // bymark 是否映射了arm开关/按键
 			const bool arm_button_pressed = arm_switch_is_button == 1
 							&& sp_man.arm_switch == manual_control_setpoint_s::SWITCH_POS_ON;
 
@@ -1971,11 +2009,13 @@ Commander::run()
 			 * and we are in MANUAL, Rattitude, or AUTO_READY mode or (ASSIST mode and landed)
 			 * do it only for rotary wings in manual mode or fixed wing if landed.
 			 * Disable stick-disarming if arming switch or button is mapped */
+			// bymark 有三种情况可以完成上锁：左边的操纵杆位于左下角；按一下arm按键； arm开关从arm拨到disarm
+			// bymark 如果映射了arm开关/按键，则操纵杆上锁的功能就失效
 			const bool stick_in_lower_left = sp_man.r < -STICK_ON_OFF_LIMIT && sp_man.z < 0.1f
-					&& !arm_switch_or_button_mapped;
+					;// && !arm_switch_or_button_mapped;
 			const bool arm_switch_to_disarm_transition =  arm_switch_is_button == 0 &&
 					_last_sp_man_arm_switch == manual_control_setpoint_s::SWITCH_POS_ON &&
-					sp_man.arm_switch == manual_control_setpoint_s::SWITCH_POS_OFF;
+					sp_man.arm_switch == manual_control_setpoint_s::SWITCH_POS_OFF; // bymark arm/disarm切换使用的是switch而不是button
 
 			if (in_armed_state &&
 			    status.rc_input_mode != vehicle_status_s::RC_IN_MODE_OFF &&
@@ -1986,7 +2026,7 @@ Commander::run()
 				    internal_state.main_state != commander_state_s::MAIN_STATE_ACRO &&
 				    internal_state.main_state != commander_state_s::MAIN_STATE_STAB &&
 				    internal_state.main_state != commander_state_s::MAIN_STATE_RATTITUDE &&
-				    !land_detector.landed) {
+				    !land_detector.landed && !arm_switch_or_button_mapped /*&& !stick_in_lower_left && !arm_switch_to_disarm_transition*/) {
 					print_reject_arm("NOT DISARMING: Not in manual mode or landed yet.");
 
 				} else if ((stick_off_counter == rc_arm_hyst && stick_on_counter < rc_arm_hyst) || arm_switch_to_disarm_transition) {
@@ -2006,15 +2046,17 @@ Commander::run()
 			 * check if left stick is in lower right position or arm button is pushed or arm switch has transition from disarm to arm
 			 * and we're in MANUAL mode.
 			 * Disable stick-arming if arming switch or button is mapped */
+			// bymark 在manual模式下有三种情况可以完成解锁：左边的操纵杆位于右下角；按一下arm按键； arm开关从disarm拨到arm
+			// bymark 如果映射了arm开关/按键，则操纵杆解锁的功能就失效
 			const bool stick_in_lower_right = sp_man.r > STICK_ON_OFF_LIMIT && sp_man.z < 0.1f
-					&& !arm_switch_or_button_mapped;
+					;//&& !arm_switch_or_button_mapped;
 			/* allow a grace period for re-arming: preflight checks don't need to pass during that time,
 			 * for example for accidential in-air disarming */
 			const bool in_arming_grace_period = last_disarmed_timestamp != 0 && hrt_elapsed_time(&last_disarmed_timestamp) < 5_s;
 			const bool arm_switch_to_arm_transition = arm_switch_is_button == 0 &&
 					_last_sp_man_arm_switch == manual_control_setpoint_s::SWITCH_POS_OFF &&
 					sp_man.arm_switch == manual_control_setpoint_s::SWITCH_POS_ON &&
-					(sp_man.z < 0.1f || in_arming_grace_period);
+					(sp_man.z < 0.1f || in_arming_grace_period); // bymark 解锁跟油门杆量有关，油门杆量要很小
 
 			if (!in_armed_state &&
 			    status.rc_input_mode != vehicle_status_s::RC_IN_MODE_OFF &&
@@ -2060,17 +2102,19 @@ Commander::run()
 
 			_last_sp_man_arm_switch = sp_man.arm_switch;
 
-			if (arming_ret == TRANSITION_DENIED) {
+			if (arming_ret == TRANSITION_DENIED) {  // bymark arming的状态切换失败，被拒绝
 				/*
 				 * the arming transition can be denied to a number of reasons:
 				 *  - pre-flight check failed (sensors not ok or not calibrated)
 				 *  - safety not disabled
 				 *  - system not in manual mode
 				 */
+				// bymark 拒绝arming切换的原因：1）起飞前检查失败（传感器不工作或者校正失败）；2）安全开关没有disable；3）系统不处于manual模式下
 				tune_negative(true);
 			}
 
 			/* evaluate the main state machine according to mode switches */
+			// bymark 根据模式切换(RC输入)设置主状态机
 			bool first_rc_eval = (_last_sp_man.timestamp == 0) && (sp_man.timestamp > 0);
 			transition_result_t main_res = set_main_state(status, &status_changed);
 
@@ -2078,6 +2122,7 @@ Commander::run()
 			_last_condition_global_position_valid = status_flags.condition_global_position_valid;
 
 			/* play tune on mode change only if armed, blink LED always */
+			// bymark 在解锁状态下用蜂鸣器提示主状态机发生改变，并且led总是闪烁
 			if (main_res == TRANSITION_CHANGED || first_rc_eval) {
 				tune_positive(armed.armed);
 				main_state_changed = true;
@@ -2088,6 +2133,7 @@ Commander::run()
 			}
 
 			/* check throttle kill switch */
+			// bymark 检查油门的kill开关
 			if (sp_man.kill_switch == manual_control_setpoint_s::SWITCH_POS_ON) {
 				/* set lockdown flag */
 				if (!armed.manual_lockdown) {
@@ -2106,21 +2152,23 @@ Commander::run()
 
 			/* no else case: do not change lockdown flag in unconfigured case */
 
-		} else {
-			if (!status_flags.rc_input_blocked && !status.rc_signal_lost) {
+		} else {	// bymark RC输入已上锁，或者前后两次收到的RC信息（manual_sp）已超时
+			if (!status_flags.rc_input_blocked && !status.rc_signal_lost) { // bymark 在改变status.rc_signal_lost的bool值之前，要先判断它
 				mavlink_log_critical(&mavlink_log_pub, "MANUAL CONTROL LOST (at t=%llums)", hrt_absolute_time() / 1000);
 				status.rc_signal_lost = true;
 				rc_signal_lost_timestamp = sp_man.timestamp;
 				set_health_flags(subsystem_info_s::SUBSYSTEM_TYPE_RCRECEIVER, true, true, false, status);
 				status_changed = true;
 			}
-		}
+		} // bymark RC input check end
 
 		// data link checks which update the status
+		// bymark 数据链路检查
 		data_link_checks(highlatencydatalink_loss_timeout, highlatencydatalink_regain_timeout, datalink_loss_timeout, datalink_regain_timeout, &status_changed);
 
 		// engine failure detection
 		// TODO: move out of commander
+		// bymark 发动机（动力）失效检测，目前只支持固定翼
 		orb_check(actuator_controls_sub, &updated);
 
 		if (updated) {
@@ -2168,6 +2216,7 @@ Commander::run()
 		 * Sometimes, the mission result topic is outdated and the mission is still signaled
 		 * as finished even though we only just started with the takeoff. Therefore, we also
 		 * check the timestamp of the mission_result topic. */
+		// bymark 在takeoff完成后重置主状态为loiter或者auto-mission
 		if (internal_state.main_state == commander_state_s::MAIN_STATE_AUTO_TAKEOFF
 		    && (_mission_result_sub.get().timestamp > internal_state.timestamp)
 		    && _mission_result_sub.get().finished) {
@@ -2198,6 +2247,7 @@ Commander::run()
 		}
 
 		/* handle commands last, as the system needs to be updated to handle them */
+		// bymark 更新系统处理最近的指令
 		orb_check(cmd_sub, &updated);
 
 		if (updated) {
@@ -2213,11 +2263,13 @@ Commander::run()
 		}
 
 		/* Check for failure combinations which lead to flight termination */
+		// bymark 失效检查，弄清是什么导致飞行中止
 		if (armed.armed &&
 		    !status_flags.circuit_breaker_flight_termination_disabled) {
 			/* At this point the data link and the gps system have been checked
 			 * If we are not in a manual (RC stick controlled mode)
 			 * and both failed we want to terminate the flight */
+			// bymark 已经check了data_link和gps, 如果不在manual模式下，且check失败，则中止飞行
 			if (internal_state.main_state != commander_state_s::MAIN_STATE_MANUAL &&
 			    internal_state.main_state != commander_state_s::MAIN_STATE_ACRO &&
 			    internal_state.main_state != commander_state_s::MAIN_STATE_RATTITUDE &&
@@ -2243,6 +2295,7 @@ Commander::run()
 			/* At this point the rc signal and the gps system have been checked
 			 * If we are in manual (controlled with RC):
 			 * if both failed we want to terminate the flight */
+			// bymark 已经check了rc和gps, 如果在manual模式下，且check失败，则中止飞行
 			if ((internal_state.main_state == commander_state_s::MAIN_STATE_ACRO ||
 			     internal_state.main_state == commander_state_s::MAIN_STATE_RATTITUDE ||
 			     internal_state.main_state == commander_state_s::MAIN_STATE_MANUAL ||
@@ -2268,6 +2321,7 @@ Commander::run()
 
 
 		/* Check for failure detector status */
+		// bymark 检查失效监测器的状态
 		if (armed.armed) {
 
 			if (_failure_detector.update()) {
@@ -2296,10 +2350,11 @@ Commander::run()
 		const hrt_abstime now = hrt_absolute_time();
 
 		// automatically set or update home position
+		// bymark 自动设置或更新home位置
 		if (!_home.manual_home) {
 			const vehicle_local_position_s &local_position = _local_position_sub.get();
 
-			if (armed.armed) {
+			if (armed.armed) { // bymark 解锁状态下
 				if ((!was_armed || (was_landed && !land_detector.landed)) &&
 				    (hrt_elapsed_time(&commander_boot_timestamp) > INAIR_RESTART_HOLDOFF_INTERVAL)) {
 
@@ -2307,7 +2362,7 @@ Commander::run()
 					set_home_position(home_pub, _home, false);
 				}
 
-			} else {
+			} else {  // bymark 上锁状态下
 				if (status_flags.condition_home_position_valid) {
 					if (land_detector.landed && local_position.xy_valid && local_position.z_valid) {
 						/* distance from home */
@@ -2326,6 +2381,7 @@ Commander::run()
 
 				} else {
 					/* First time home position update - but only if disarmed */
+					// bymark 在上锁状态下第一次设置并更新home位置
 					set_home_position(home_pub, _home, false);
 				}
 			}
@@ -2333,6 +2389,7 @@ Commander::run()
 			/* Set home position altitude to EKF origin height if home is not set and the EKF has a global origin.
 			 * This allows home altitude to be used in the calculation of height above takeoff location when GPS
 			 * use has commenced after takeoff. */
+			// bymark 如果没有设置home点并且ekf有全局原点，则设置home高度为ekf原点高度。这就使得在起飞高度的计算中可以使用home高度
 			if (!_home.valid_alt && local_position.z_global) {
 				set_home_position(home_pub, _home, true);
 
@@ -2340,6 +2397,7 @@ Commander::run()
 		}
 
 		// check for arming state change
+		// bymark 检查arming状态的变化
 		if (was_armed != armed.armed) {
 			status_changed = true;
 
@@ -2354,6 +2412,7 @@ Commander::run()
 		was_armed = armed.armed;
 
 		/* now set navigation state according to failsafe and main state */
+		// bymark 根据失效保护和主状态设置导航状态
 		bool nav_state_changed = set_nav_state(&status,
 						       &armed,
 						       &internal_state,
@@ -2388,9 +2447,10 @@ Commander::run()
 		}
 
 		/* publish states (armed, control_mode, vehicle_status, commander_state, vehicle_status_flags) at 1 Hz or immediately when changed */
+		// bymark 信息的发布
 		if (hrt_elapsed_time(&status.timestamp) >= 1_s || status_changed) {
 
-			set_control_mode();
+			set_control_mode(); // bymark 根据nav_state设置控制模式
 			control_mode.timestamp = now;
 			orb_publish(ORB_ID(vehicle_control_mode), control_mode_pub, &control_mode);
 
@@ -2400,12 +2460,13 @@ Commander::run()
 			armed.timestamp = now;
 
 			/* set prearmed state if safety is off, or safety is not present and 5 seconds passed */
-			if (safety.safety_switch_available) {
+			// bymark 如果安全开关已关闭，或者没有使用，就设置为预解锁状态
+			if (safety.safety_switch_available) {	// bymark 如果安全开关已关闭，就设置为预解锁状态
 
 				/* safety is off, go into prearmed */
 				armed.prearmed = safety.safety_off;
 
-			} else {
+			} else { // bymark 如果安全开关没有使用的情况
 				/* safety is not present, go into prearmed
 				 * (all output drivers should be started / unlocked last in the boot process
 				 * when the rest of the system is fully initialized)
@@ -2416,6 +2477,7 @@ Commander::run()
 			orb_publish(ORB_ID(actuator_armed), armed_pub, &armed);
 
 			/* publish internal state for logging purposes */
+			// bymark internal_state只是用于logging
 			if (commander_state_pub != nullptr) {
 				orb_publish(ORB_ID(commander_state), commander_state_pub, &internal_state);
 
@@ -2435,6 +2497,7 @@ Commander::run()
 		}
 
 		/* play arming and battery warning tunes */
+		// bymark 用蜂鸣器提示arming操作以及低电预警
 		if (!arm_tune_played && armed.armed && (!safety.safety_switch_available || (safety.safety_switch_available
 							&& safety.safety_off))) {
 			/* play tune when armed */

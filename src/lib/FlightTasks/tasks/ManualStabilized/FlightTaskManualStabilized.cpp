@@ -62,8 +62,8 @@ void FlightTaskManualStabilized::_scaleSticks()
 {
 	/* Scale sticks to yaw and thrust using
 	 * linear scale for yaw and piecewise linear map for thrust. */
-	_yawspeed_setpoint = _sticks_expo(3) * math::radians(_yaw_rate_scaling.get());
-	_throttle = _throttleCurve();
+	_yawspeed_setpoint = _sticks_expo(3) * math::radians(_yaw_rate_scaling.get()); // bymark 偏航角速度sp = 调整后的偏航杆量 × MPC_MAN_Y_MAX(200deg/s)
+	_throttle = _throttleCurve(); // bymark 油门映射
 }
 
 void FlightTaskManualStabilized::_updateHeadingSetpoints()
@@ -71,13 +71,13 @@ void FlightTaskManualStabilized::_updateHeadingSetpoints()
 	/* Yaw-lock depends on stick input. If not locked,
 	 * yaw_sp is set to NAN.
 	 * TODO: add yawspeed to get threshold.*/
-	if (fabsf(_yawspeed_setpoint) > FLT_EPSILON) {
+	if (fabsf(_yawspeed_setpoint) > FLT_EPSILON) { // bymark 有yaw杆量产生了偏航角速度sp
 		// no fixed heading when rotating around yaw by stick
 		_yaw_setpoint = NAN;
 
 	} else {
 		// hold the current heading when no more rotation commanded
-		if (!PX4_ISFINITE(_yaw_setpoint)) {
+		if (!PX4_ISFINITE(_yaw_setpoint)) { // bymark 当对yaw不再打杆时，放弃对yaw_speed的控制
 			_yaw_setpoint = _yaw;
 
 		} else {
@@ -90,6 +90,7 @@ void FlightTaskManualStabilized::_updateHeadingSetpoints()
 	}
 
 	// check if an external yaw handler is active and if yes, let it compute the yaw setpoints
+	// bymark 外部yaw handler 与weathervane (风标控制器)有关
 	if (_ext_yaw_handler != nullptr && _ext_yaw_handler->is_active()) {
 		_yaw_setpoint = NAN;
 		_yawspeed_setpoint += _ext_yaw_handler->get_weathervane_yawrate();
@@ -101,6 +102,8 @@ void FlightTaskManualStabilized::_updateThrustSetpoints()
 	/* Rotate setpoint into local frame. */
 	Vector2f sp(&_sticks(0));
 	_rotateIntoHeadingFrame(sp);
+
+	// bymark xy杆量直接映射为roll_sp, pitch_sp的缩放因子(将滚转和俯仰合成倾斜角)
 
 	/* Ensure that maximum tilt is in [0.001, Pi] */
 	float tilt_max = math::constrain(_constraints.tilt, 0.001f, M_PI_F);
@@ -139,8 +142,8 @@ void FlightTaskManualStabilized::_rotateIntoHeadingFrame(Vector2f &v)
 
 void FlightTaskManualStabilized::_updateSetpoints()
 {
-	_updateHeadingSetpoints();
-	_updateThrustSetpoints();
+	_updateHeadingSetpoints(); // bymark 在考虑yawspeed_sp的情况下更新yaw_sp
+	_updateThrustSetpoints();  // bymark 结合xy杆量，将油门thr转换成thr_sp
 }
 
 float FlightTaskManualStabilized::_throttleCurve()
@@ -165,8 +168,8 @@ float FlightTaskManualStabilized::_throttleCurve()
 
 bool FlightTaskManualStabilized::update()
 {
-	_scaleSticks();
-	_updateSetpoints();
+	_scaleSticks(); // bymark  处理油门和偏航杆量，更新油门thr和yawspeed_sp（自稳飞行任务）
+	_updateSetpoints();// bymark 更新yaw_sp和thr_sp（自稳飞行任务）
 
 	return true;
 }
