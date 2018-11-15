@@ -589,7 +589,7 @@ MulticopterAttitudeControl::run()
 	_motor_limits_sub = orb_subscribe(ORB_ID(multirotor_motor_limits));
 	_battery_status_sub = orb_subscribe(ORB_ID(battery_status));
 
-	_gyro_count = math::min(orb_group_count(ORB_ID(sensor_gyro)), MAX_GYRO_COUNT);
+	_gyro_count = math::min(orb_group_count(ORB_ID(sensor_gyro)), MAX_GYRO_COUNT);  // bymark 陀螺仪位于imu中，所以就是imu的个数
 
 	if (_gyro_count == 0) {
 		_gyro_count = 1;
@@ -635,12 +635,14 @@ MulticopterAttitudeControl::run()
 		perf_begin(_loop_perf);
 
 		/* run controller on gyro changes */
+		// bymark 当陀螺仪数据有变化时才去执行姿态控制器
 		if (poll_fds.revents & POLLIN) {
 			const hrt_abstime now = hrt_absolute_time();
 			float dt = (now - last_run) / 1e6f;
 			last_run = now;
 
 			/* guard against too small (< 2ms) and too large (> 20ms) dt's */
+			// bymark 最快更新频率为500Hz, 最低更新频率为50Hz
 			if (dt < 0.002f) {
 				dt = 0.002f;
 
