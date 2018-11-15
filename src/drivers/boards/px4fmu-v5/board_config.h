@@ -436,7 +436,7 @@
 #define UI_LED_TIM5_CH2OUT /* PH11  T5C2  GREEN */ GPIO_TIM5_CH2OUT_2
 #define UI_LED_TIM5_CH3OUT /* PH12  T5C3  BLUE  */ GPIO_TIM5_CH3OUT_2
 
-#define NUM_OF_ULTRASOUND 2  // bymark		
+#define NUM_OF_ULTRASOUND 3  // bymark		
 
 
 /* User GPIOs

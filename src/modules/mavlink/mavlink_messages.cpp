@@ -4126,6 +4126,8 @@ protected:
 			msg.current_distance = dist_sensor.current_distance * 100.0f; /* m to cm */
 			msg.covariance = dist_sensor.covariance;
 
+			// printf("[mavlink_messages.cpp][send()]ultr_msg_id = %d, distance_sensor_id = %d\n", N, dist_sensor.id); // bymark 
+
 			mavlink_msg_distance_sensor_send_struct(_mavlink->get_channel(), &msg);
 
 			return true;
