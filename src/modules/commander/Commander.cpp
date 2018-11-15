@@ -1154,11 +1154,11 @@ Commander::run()
 	param_t _param_posctl_nav_loss_act = param_find("COM_POSCTL_NAVL");
 
 	/* pthread for slow low prio thread */
-	pthread_t commander_low_prio_thread;
+	pthread_t commander_low_prio_thread; // bymark 低优先级的线程对象
 
 	/* initialize */
 	// bymark led和蜂鸣器的初始化
-	if (led_init() != OK) {
+	if (led_init() != OK) {  // bymark 完成led的引脚配置
 		PX4_WARN("LED init failed");
 	}
 
@@ -1392,7 +1392,7 @@ Commander::run()
 	bool have_taken_off_since_arming = false;
 
 	/* initialize low priority thread */
-	pthread_attr_t commander_low_prio_attr;
+	pthread_attr_t commander_low_prio_attr;  // bymark 用commander_low_prio_attr来初始化低优先级线程的属性
 	pthread_attr_init(&commander_low_prio_attr);
 	pthread_attr_setstacksize(&commander_low_prio_attr, PX4_STACK_ADJUSTED(3000));
 
@@ -1407,9 +1407,15 @@ Commander::run()
 #endif
 
 	pthread_create(&commander_low_prio_thread, &commander_low_prio_attr, commander_low_prio_loop, nullptr);
-	pthread_attr_destroy(&commander_low_prio_attr);
+	pthread_attr_destroy(&commander_low_prio_attr); // bymark destroy描述低优先级线程属性的commander_low_prio_attr结构体
 
 	arm_auth_init(&mavlink_log_pub, &status.system_id);
+
+	// bymark 测试指令是否能够reboot到bootloader====
+	// usleep(100000);
+	// /* reboot to bootloader */
+	// px4_shutdown_request(true, true);
+	// ========================================
 
 	while (!should_exit()) {
 
@@ -3530,7 +3536,7 @@ void *commander_low_prio_loop(void *arg)
 	fds[0].fd = cmd_sub;
 	fds[0].events = POLLIN;
 
-	while (!thread_should_exit) {
+	while (!thread_should_exit) { // bymark thread_should_exit是一个static的全局变量
 		/* wait for up to 1000ms for data */
 		int pret = px4_poll(&fds[0], (sizeof(fds) / sizeof(fds[0])), 1000);
 
@@ -3543,7 +3549,7 @@ void *commander_low_prio_loop(void *arg)
 			struct vehicle_command_s cmd;
 
 			/* if we reach here, we have a valid command */
-			orb_copy(ORB_ID(vehicle_command), cmd_sub, &cmd);
+			orb_copy(ORB_ID(vehicle_command), cmd_sub, &cmd); // bymark 订阅了vehicle_command topic的信息。可以全局搜索ORB_ID(vehicle_command)，查看什么地方会publish它
 
 			/* ignore commands the high-prio loop or the navigator handles */
 			if (cmd.command == vehicle_command_s::VEHICLE_CMD_DO_SET_MODE ||

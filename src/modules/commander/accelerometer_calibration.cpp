@@ -177,6 +177,8 @@ int do_accel_calibration(orb_advert_t *mavlink_log_pub)
 
 	calibration_log_info(mavlink_log_pub, CAL_QGC_STARTED_MSG, sensor_name);
 
+	printf("[accelerometer_calibration.cpp][do_accel_calibration()]......\n"); // bymark
+
 	struct accel_calibration_s accel_scale;
 	accel_scale.x_offset = 0.0f;
 	accel_scale.x_scale = 1.0f;
@@ -748,6 +750,8 @@ int do_level_calibration(orb_advert_t *mavlink_log_pub) {
 	memset(&att, 0, sizeof(att));
 
 	calibration_log_info(mavlink_log_pub, CAL_QGC_STARTED_MSG, "level");
+
+	printf("[accelerometer_calibration.cpp][do_level_calibration()]......\n"); //bymark
 
 	param_t roll_offset_handle = param_find("SENS_BOARD_X_OFF");
 	param_t pitch_offset_handle = param_find("SENS_BOARD_Y_OFF");

@@ -100,6 +100,8 @@ int do_mag_calibration(orb_advert_t *mavlink_log_pub)
 {
 	calibration_log_info(mavlink_log_pub, CAL_QGC_STARTED_MSG, sensor_name);
 
+	printf("[mag_calibration.cpp][do_mag_calibration()]......\n"); // bymark 
+
 	struct mag_calibration_s mscale_null;
 	mscale_null.x_offset = 0.0f;
 	mscale_null.x_scale = 1.0f;

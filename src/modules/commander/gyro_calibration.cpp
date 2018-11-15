@@ -212,6 +212,8 @@ int do_gyro_calibration(orb_advert_t *mavlink_log_pub)
 
 	calibration_log_info(mavlink_log_pub, CAL_QGC_STARTED_MSG, sensor_name);
 
+	printf("[gyro_calibration.cpp][do_gyro_calibration()]......\n"); // bymark
+
 	worker_data.mavlink_log_pub = mavlink_log_pub;
 
 	struct gyro_calibration_s gyro_scale_zero;
