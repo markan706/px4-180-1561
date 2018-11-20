@@ -252,6 +252,7 @@ main_state_transition(const vehicle_status_s &status, const main_state_t new_mai
 	transition_result_t ret = TRANSITION_DENIED;
 
 	/* transition may be denied even if the same state is requested because conditions may have changed */
+	// bymark 即使是相同的main_state请求切换，都有可能被拒绝，因为条件发生变化了
 	switch (new_main_state) {
 	case commander_state_s::MAIN_STATE_MANUAL:
 	case commander_state_s::MAIN_STATE_STAB:
@@ -389,7 +390,7 @@ bool set_nav_state(vehicle_status_s *status, actuator_armed_s *armed, commander_
 		   const link_loss_actions_t rc_loss_act, const int offb_loss_act, const int offb_loss_rc_act,
 		   const int posctl_nav_loss_act)
 {
-	navigation_state_t nav_state_old = status->nav_state;
+	navigation_state_t nav_state_old = status->nav_state; // bymark 记录当前的nav_state，便于后续更新nav_state
 
 	const bool data_link_loss_act_configured = data_link_loss_act > link_loss_actions_t::DISABLED;
 	const bool rc_loss_act_configured = rc_loss_act > link_loss_actions_t::DISABLED;
@@ -404,6 +405,7 @@ bool set_nav_state(vehicle_status_s *status, actuator_armed_s *armed, commander_
 	reset_link_loss_globals(armed, old_failsafe, data_link_loss_act);
 
 	/* evaluate main state to decide in normal (non-failsafe) mode */
+	// bymark 根据internal_state的main_state来更新nav_state
 	switch (internal_state->main_state) {
 	case commander_state_s::MAIN_STATE_ACRO:
 	case commander_state_s::MAIN_STATE_MANUAL:
@@ -448,7 +450,7 @@ bool set_nav_state(vehicle_status_s *status, actuator_armed_s *armed, commander_
 
 		break;
 
-	case commander_state_s::MAIN_STATE_POSCTL: {
+	case commander_state_s::MAIN_STATE_POSCTL: { // bymark internal_state的main_state是POSCTL，更新nav_state为POSCTL
 
 			if (rc_lost && is_armed) {
 				enable_failsafe(status, old_failsafe, mavlink_log_pub, reason_no_rc);
@@ -582,7 +584,7 @@ bool set_nav_state(vehicle_status_s *status, actuator_armed_s *armed, commander_
 
 		break;
 
-	case commander_state_s::MAIN_STATE_AUTO_TAKEOFF:
+	case commander_state_s::MAIN_STATE_AUTO_TAKEOFF:	// bymark internal_state的main_state是auto_takeoff，更新nav_state为auto_takeoff
 
 		/* require local position */
 
@@ -598,7 +600,7 @@ bool set_nav_state(vehicle_status_s *status, actuator_armed_s *armed, commander_
 
 		break;
 
-	case commander_state_s::MAIN_STATE_AUTO_LAND:
+	case commander_state_s::MAIN_STATE_AUTO_LAND:	// bymark internal_state的main_state是auto_land，更新nav_state为auto_land
 
 		/* require local position */
 

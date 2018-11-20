@@ -842,8 +842,9 @@ MulticopterPositionControl::start_flight_task()
 	int prev_failure_count = _task_failure_count;
 
 	// offboard 
-	// bymark navigation状态为offboard, 且控制模式是定高、定点、控垂直速度、控水平速度、控加速度
+	// bymark navigation状态为offboard, 且控制模式是定高、定点、控垂直速度、控水平速度、控加速度  
 	// bymark offboard模式下，setpoint不来自飞控的mcu,而是来自外部
+	// bymark nav_state 和 control_mode 来决定 flight_task
 	if (_vehicle_status.nav_state == vehicle_status_s::NAVIGATION_STATE_OFFBOARD
 	    && (_control_mode.flag_control_altitude_enabled ||
 		_control_mode.flag_control_position_enabled ||

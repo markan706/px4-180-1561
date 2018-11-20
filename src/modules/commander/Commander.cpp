@@ -552,6 +552,7 @@ Commander::handle_command(vehicle_status_s *status_local, const vehicle_command_
 		    home_position_s *home, orb_advert_t *home_pub, orb_advert_t *command_ack_pub, bool *changed)
 {
 	/* only handle commands that are meant to be handled by this system and component */
+	// bymark system_id和component_id能够对上
 	if (cmd.target_system != status_local->system_id || ((cmd.target_component != status_local->component_id)
 			&& (cmd.target_component != 0))) { // component_id 0: valid for all components
 		return false;
@@ -570,7 +571,9 @@ Commander::handle_command(vehicle_status_s *status_local, const vehicle_command_
 		// the data at the exact same time.
 
 		// Check if a mode switch had been requested
+		// bymark 检查是否进行模式切换
 		if ((((uint32_t)cmd.param2) & 1) > 0) {
+			// bymark 将internal_state中的main_state切换成auto_loiter
 			transition_result_t main_ret = main_state_transition(*status_local, commander_state_s::MAIN_STATE_AUTO_LOITER, status_flags, &internal_state);
 
 			if ((main_ret != TRANSITION_DENIED)) {
@@ -585,7 +588,7 @@ Commander::handle_command(vehicle_status_s *status_local, const vehicle_command_
 		}
 	}
 	break;
-	case vehicle_command_s::VEHICLE_CMD_DO_SET_MODE: {
+	case vehicle_command_s::VEHICLE_CMD_DO_SET_MODE: {  // bymark 模式设置
 			uint8_t base_mode = (uint8_t)cmd.param1;
 			uint8_t custom_main_mode = (uint8_t)cmd.param2;
 			uint8_t custom_sub_mode = (uint8_t)cmd.param3;
@@ -597,24 +600,24 @@ Commander::handle_command(vehicle_status_s *status_local, const vehicle_command_
 			// We ignore base_mode & VEHICLE_MODE_FLAG_SAFETY_ARMED because
 			// the command VEHICLE_CMD_COMPONENT_ARM_DISARM should be used
 			// instead according to the latest mavlink spec.
-
-			if (base_mode & VEHICLE_MODE_FLAG_CUSTOM_MODE_ENABLED) {
+			// bymark 忽略base_mode是safety_armed的情况
+			if (base_mode & VEHICLE_MODE_FLAG_CUSTOM_MODE_ENABLED) {   // bymark 处理base_mode是custom_mode_enable的情况
 				/* use autopilot-specific mode */
 				if (custom_main_mode == PX4_CUSTOM_MAIN_MODE_MANUAL) {
-					/* MANUAL */
+					/* 将internal_state中的main_state切换成MANUAL */
 					main_ret = main_state_transition(*status_local, commander_state_s::MAIN_STATE_MANUAL, status_flags, &internal_state);
 
 				} else if (custom_main_mode == PX4_CUSTOM_MAIN_MODE_ALTCTL) {
-					/* ALTCTL */
+					/* 将internal_state中的main_state切换成ALTCTL */
 					main_ret = main_state_transition(*status_local, commander_state_s::MAIN_STATE_ALTCTL, status_flags, &internal_state);
 
 				} else if (custom_main_mode == PX4_CUSTOM_MAIN_MODE_POSCTL) {
-					/* POSCTL */
+					/* 将internal_state中的main_state切换成POSCTL */
 					reset_posvel_validity(changed);
 					main_ret = main_state_transition(*status_local, commander_state_s::MAIN_STATE_POSCTL, status_flags, &internal_state);
 
 				} else if (custom_main_mode == PX4_CUSTOM_MAIN_MODE_AUTO) {
-					/* AUTO */
+					/* 将internal_state中的main_state切换成AUTO */
 					if (custom_sub_mode > 0) {
 						reset_posvel_validity(changed);
 						switch(custom_sub_mode) {
@@ -662,30 +665,30 @@ Commander::handle_command(vehicle_status_s *status_local, const vehicle_command_
 					}
 
 				} else if (custom_main_mode == PX4_CUSTOM_MAIN_MODE_ACRO) {
-					/* ACRO */
+					/* 将internal_state中的main_state切换成ACRO */
 					main_ret = main_state_transition(*status_local, commander_state_s::MAIN_STATE_ACRO, status_flags, &internal_state);
 
 				} else if (custom_main_mode == PX4_CUSTOM_MAIN_MODE_RATTITUDE) {
-					/* RATTITUDE */
+					/* 将internal_state中的main_state切换成RATTITUDE */
 					main_ret = main_state_transition(*status_local, commander_state_s::MAIN_STATE_RATTITUDE, status_flags, &internal_state);
 
 				} else if (custom_main_mode == PX4_CUSTOM_MAIN_MODE_STABILIZED) {
-					/* STABILIZED */
+					/* 将internal_state中的main_state切换成STABILIZED */
 					main_ret = main_state_transition(*status_local, commander_state_s::MAIN_STATE_STAB, status_flags, &internal_state);
 
 				} else if (custom_main_mode == PX4_CUSTOM_MAIN_MODE_OFFBOARD) {
 					reset_posvel_validity(changed);
-					/* OFFBOARD */
+					/* 将internal_state中的main_state切换成OFFBOARD */
 					main_ret = main_state_transition(*status_local, commander_state_s::MAIN_STATE_OFFBOARD, status_flags, &internal_state);
 				}
 
 			} else {
 				/* use base mode */
-				if (base_mode & VEHICLE_MODE_FLAG_AUTO_ENABLED) {
-					/* AUTO */
+				if (base_mode & VEHICLE_MODE_FLAG_AUTO_ENABLED) { // bymark base_mode是auto_enable
+					/* 将internal_state中的main_state切换成AUTO */
 					main_ret = main_state_transition(*status_local, commander_state_s::MAIN_STATE_AUTO_MISSION, status_flags, &internal_state);
 
-				} else if (base_mode & VEHICLE_MODE_FLAG_MANUAL_INPUT_ENABLED) {
+				} else if (base_mode & VEHICLE_MODE_FLAG_MANUAL_INPUT_ENABLED) { // bymark base_mode是manual_input_enable
 					if (base_mode & VEHICLE_MODE_FLAG_GUIDED_ENABLED) {
 						/* POSCTL */
 						main_ret = main_state_transition(*status_local, commander_state_s::MAIN_STATE_POSCTL, status_flags, &internal_state);
@@ -714,7 +717,7 @@ Commander::handle_command(vehicle_status_s *status_local, const vehicle_command_
 		}
 		break;
 
-	case vehicle_command_s::VEHICLE_CMD_COMPONENT_ARM_DISARM: {
+	case vehicle_command_s::VEHICLE_CMD_COMPONENT_ARM_DISARM: { // bymark 处理arm/disarm指令
 
 			// Adhere to MAVLink specs, but base on knowledge that these fundamentally encode ints
 			// for logic state parameters
@@ -723,14 +726,16 @@ Commander::handle_command(vehicle_status_s *status_local, const vehicle_command_
 
 			} else {
 
-				bool cmd_arms = (static_cast<int>(cmd.param1 + 0.5f) == 1);
+				bool cmd_arms = (static_cast<int>(cmd.param1 + 0.5f) == 1); // bymark 根据参数判别是否为arm指令
 
-				// Flick to inair restore first if this comes from an onboard system
+				// Flick to in_air restore first if this comes from an onboard system
+				// bymark 如果指令来源与板载系统自身，则arming_state设置为in_air_restore
 				if (cmd.source_system == status_local->system_id && cmd.source_component == status_local->component_id) {
 					status.arming_state = vehicle_status_s::ARMING_STATE_IN_AIR_RESTORE;
 
 				} else {
 					// Refuse to arm if preflight checks have failed
+					// bymark 如果飞行前检查失败，则拒绝执行arm指令
 					if ((!status_local->hil_state) != vehicle_status_s::HIL_STATE_ON && !status_flags.condition_system_sensors_initialized) {
 						mavlink_log_critical(&mavlink_log_pub, "Arming DENIED. Preflight checks have failed.");
 						cmd_result = vehicle_command_s::VEHICLE_CMD_RESULT_DENIED;
@@ -738,6 +743,7 @@ Commander::handle_command(vehicle_status_s *status_local, const vehicle_command_
 					}
 
 					// Refuse to arm if in manual with non-zero throttle
+					// bymark 如果在手动模式下油门杆量非零，则拒绝执行arm指令
 					if (cmd_arms
 					    && (status_local->nav_state == vehicle_status_s::NAVIGATION_STATE_MANUAL
 						|| status_local->nav_state == vehicle_status_s::NAVIGATION_STATE_ACRO
@@ -750,7 +756,7 @@ Commander::handle_command(vehicle_status_s *status_local, const vehicle_command_
 						break;
 					}
 				}
-
+				// bymark 执行arm指令， 切换到arm状态
 				transition_result_t arming_res = arm_disarm(cmd_arms, &mavlink_log_pub, "arm/disarm component command");
 
 				if (arming_res == TRANSITION_DENIED) {
@@ -771,8 +777,8 @@ Commander::handle_command(vehicle_status_s *status_local, const vehicle_command_
 		}
 		break;
 
-	case vehicle_command_s::VEHICLE_CMD_DO_FLIGHTTERMINATION: {
-			if (cmd.param1 > 1.5f) {
+	case vehicle_command_s::VEHICLE_CMD_DO_FLIGHTTERMINATION: {  // bymark 处理中断飞行的指令
+			if (cmd.param1 > 1.5f) { // bymark 当参数值大于1.5才激活中断飞行
 				armed_local->lockdown = true;
 				warnx("forcing lockdown (motors off)");
 
@@ -796,8 +802,8 @@ Commander::handle_command(vehicle_status_s *status_local, const vehicle_command_
 		}
 		break;
 
-	case vehicle_command_s::VEHICLE_CMD_DO_SET_HOME: {
-			bool use_current = cmd.param1 > 0.5f;
+	case vehicle_command_s::VEHICLE_CMD_DO_SET_HOME: { // bymark 处理SET_HOME指令
+			bool use_current = cmd.param1 > 0.5f;  // bymark param1 = 1 ---> 使用当前位置作为home; param1 = 0 ---> 使用指定位置作为home
 
 			if (use_current) {
 				/* use current position */
@@ -858,15 +864,15 @@ Commander::handle_command(vehicle_status_s *status_local, const vehicle_command_
 		}
 		break;
 
-	case vehicle_command_s::VEHICLE_CMD_NAV_GUIDED_ENABLE: {
+	case vehicle_command_s::VEHICLE_CMD_NAV_GUIDED_ENABLE: { // bymark 处理NAV_GUIDED_ENABLE指令,实现offboard的main_state的切换
 			transition_result_t res = TRANSITION_DENIED;
-			static main_state_t main_state_pre_offboard = commander_state_s::MAIN_STATE_MANUAL;
+			static main_state_t main_state_pre_offboard = commander_state_s::MAIN_STATE_MANUAL; // bymark 初始化pre_offboard的main_state为manual
 
 			if (internal_state.main_state != commander_state_s::MAIN_STATE_OFFBOARD) {
 				main_state_pre_offboard = internal_state.main_state;
 			}
 
-			if (cmd.param1 > 0.5f) {
+			if (cmd.param1 > 0.5f) { // bymark 在参数param1 > 0.5时，将internal_state的main_state切换到offboard， 相当于enable offboard
 				res = main_state_transition(*status_local, commander_state_s::MAIN_STATE_OFFBOARD, status_flags, &internal_state);
 
 				if (res == TRANSITION_DENIED) {
@@ -878,7 +884,7 @@ Commander::handle_command(vehicle_status_s *status_local, const vehicle_command_
 					status_flags.offboard_control_set_by_command = true;
 				}
 
-			} else {
+			} else {  // bymark 在参数param1 <= 0.5时，将internal_state的main_state切换到pre_offboard， 相当于disable offboard
 				/* If the mavlink command is used to enable or disable offboard control:
 				 * switch back to previous mode when disabling */
 				res = main_state_transition(*status_local, main_state_pre_offboard, status_flags, &internal_state);
@@ -894,8 +900,9 @@ Commander::handle_command(vehicle_status_s *status_local, const vehicle_command_
 		}
 		break;
 
-	case vehicle_command_s::VEHICLE_CMD_NAV_RETURN_TO_LAUNCH: {
+	case vehicle_command_s::VEHICLE_CMD_NAV_RETURN_TO_LAUNCH: {  // bymark 处理NAV_RTL指令,实现返航操作, 不带参数
 			/* switch to RTL which ends the mission */
+			// bymark 将internal_state中的main_state切换到auto_RTL
 			if (TRANSITION_CHANGED == main_state_transition(*status_local, commander_state_s::MAIN_STATE_AUTO_RTL, status_flags, &internal_state)) {
 				mavlink_and_console_log_info(&mavlink_log_pub, "Returning to launch");
 				cmd_result = vehicle_command_s::VEHICLE_CMD_RESULT_ACCEPTED;
@@ -907,13 +914,15 @@ Commander::handle_command(vehicle_status_s *status_local, const vehicle_command_
 		}
 		break;
 
-	case vehicle_command_s::VEHICLE_CMD_NAV_TAKEOFF: {
+	case vehicle_command_s::VEHICLE_CMD_NAV_TAKEOFF: { // bymark 处理NAV_TAKEOFF指令,实现起飞操作, 有5个参数可用
 			/* ok, home set, use it to take off */
+			// bymark 将internal_state中的main_state切换到auto_takeoff
 			if (TRANSITION_CHANGED == main_state_transition(*status_local, commander_state_s::MAIN_STATE_AUTO_TAKEOFF, status_flags, &internal_state)) {
 				cmd_result = vehicle_command_s::VEHICLE_CMD_RESULT_ACCEPTED;
 
 			} else if (internal_state.main_state == commander_state_s::MAIN_STATE_AUTO_TAKEOFF) {
 				cmd_result = vehicle_command_s::VEHICLE_CMD_RESULT_ACCEPTED;
+				// bymark 此处需要添加起飞高度alt = cmd.param7 ???
 
 			} else {
 				mavlink_log_critical(&mavlink_log_pub, "Takeoff denied, disarm and re-try");
@@ -922,7 +931,7 @@ Commander::handle_command(vehicle_status_s *status_local, const vehicle_command_
 		}
 		break;
 
-	case vehicle_command_s::VEHICLE_CMD_NAV_LAND: {
+	case vehicle_command_s::VEHICLE_CMD_NAV_LAND: { // bymark 处理NAV_LAND指令,实现着陆操作
 			if (TRANSITION_CHANGED == main_state_transition(*status_local, commander_state_s::MAIN_STATE_AUTO_LAND, status_flags, &internal_state)) {
 				mavlink_and_console_log_info(&mavlink_log_pub, "Landing at current position");
 				cmd_result = vehicle_command_s::VEHICLE_CMD_RESULT_ACCEPTED;
@@ -934,7 +943,7 @@ Commander::handle_command(vehicle_status_s *status_local, const vehicle_command_
 		}
 		break;
 
-	case vehicle_command_s::VEHICLE_CMD_NAV_PRECLAND: {
+	case vehicle_command_s::VEHICLE_CMD_NAV_PRECLAND: { // bymark 处理NAV_PRELAND指令,实现精确着陆操作
 			if (TRANSITION_CHANGED == main_state_transition(*status_local, commander_state_s::MAIN_STATE_AUTO_PRECLAND, status_flags, &internal_state)) {
 				mavlink_and_console_log_info(&mavlink_log_pub, "Precision landing");
 				cmd_result = vehicle_command_s::VEHICLE_CMD_RESULT_ACCEPTED;
@@ -946,7 +955,7 @@ Commander::handle_command(vehicle_status_s *status_local, const vehicle_command_
 		}
 		break;
 
-	case vehicle_command_s::VEHICLE_CMD_MISSION_START: {
+	case vehicle_command_s::VEHICLE_CMD_MISSION_START: {   // bymark 处理MISSION_START指令,启动mission
 
 		cmd_result = vehicle_command_s::VEHICLE_CMD_RESULT_DENIED;
 
@@ -1177,6 +1186,7 @@ Commander::run()
 		orb_copy(ORB_ID(power_button_state), power_button_state_sub, &button_state);
 	}
 
+	// bymark 注册power_button_state
 	if (board_register_power_state_notification_cb(power_button_state_notification_cb) != 0) {
 		PX4_ERR("Failed to register power notification callback");
 	}
@@ -1518,6 +1528,7 @@ Commander::run()
 
 		/* handle power button state */
 		// bymark 订阅copy power_button的状态， 检查是否要shutdown
+		// bymark power_button_state对应的topic,是在commander.cpp中publish出来的，但进一步的数据来源还没有确定
 		orb_check(power_button_state_sub, &updated);
 
 		if (updated) {
@@ -1525,20 +1536,20 @@ Commander::run()
 			orb_copy(ORB_ID(power_button_state), power_button_state_sub, &button_state);
 
 			if (button_state.event == power_button_state_s::PWR_BUTTON_STATE_REQUEST_SHUTDOWN) {
-				px4_shutdown_request(false, false);
+				px4_shutdown_request(false, false); // bymark 第一个参数是reboot, 第二个参数是reboot to bootloader
 			}
 		}
 
 		orb_check(sp_man_sub, &updated);
 
 		if (updated) {
-			orb_copy(ORB_ID(manual_control_setpoint), sp_man_sub, &sp_man);
+			orb_copy(ORB_ID(manual_control_setpoint), sp_man_sub, &sp_man); // bymark 从rc_update.cpp或者mavlink_receiver.cpp中publish
 		}
 
 		orb_check(offboard_control_mode_sub, &updated);
 
 		if (updated) {
-			orb_copy(ORB_ID(offboard_control_mode), offboard_control_mode_sub, &offboard_control_mode); 
+			orb_copy(ORB_ID(offboard_control_mode), offboard_control_mode_sub, &offboard_control_mode); // bymark 从mavlink_receiver.cpp中publish
 		}
 
 		// bymark 检查在offboard控制模式下，信号是否丢失，是否超时
@@ -1578,8 +1589,8 @@ Commander::run()
 		}
 
 		// poll the telemetry status
-		// bymark 处理遥测状态
-		poll_telemetry_status();
+		// bymark 处理遥测状态, 走mavlink协议的通信链路检测
+		poll_telemetry_status();  /// bymark 还会执行起飞前的检测
 
 		// bymark 处理power的连接情况
 		orb_check(system_power_sub, &updated);
@@ -1620,10 +1631,10 @@ Commander::run()
 		if (updated) {
 			bool previous_safety_off = safety.safety_off;
 
-			if (orb_copy(ORB_ID(safety), safety_sub, &safety) == PX4_OK) {
+			if (orb_copy(ORB_ID(safety), safety_sub, &safety) == PX4_OK) { // bymark 在fmu.cpp中会publish对应的safety topic 
 
 				/* disarm if safety is now on and still armed */
-				// bymark 在解锁状态下，硬件在环仿真没有使用，安全开关已连接比打开，则有arm切换到disarm
+				// bymark 在解锁状态下，硬件在环仿真没有使用，安全开关已连接且打开，则有arm切换到disarm
 				if (armed.armed && (status.hil_state == vehicle_status_s::HIL_STATE_OFF)
 				    && safety.safety_switch_available && !safety.safety_off) {
 
@@ -1690,7 +1701,7 @@ Commander::run()
 			}
 		}
 
-		// bymark 检查估计器
+		// bymark 检查估计器 起飞后短时间内偏航角估计是有效性；position估计的有效性
 		estimator_check(&status_changed);
 
 		/* Update land detector */
@@ -1957,7 +1968,7 @@ Commander::run()
 			     (fabsf(sp_man.r - _last_sp_man.r) > min_stick_change))) {
 
 				// revert to position control in any case
-				// bymark 退回到定点模式
+				// bymark 退回到定点模式  切换internal_state的main_state
 				main_state_transition(status, commander_state_s::MAIN_STATE_POSCTL, status_flags, &internal_state);
 				mavlink_log_critical(&mavlink_log_pub, "Autopilot off, returned control to pilot");
 			}
@@ -2122,7 +2133,7 @@ Commander::run()
 			/* evaluate the main state machine according to mode switches */
 			// bymark 根据模式切换(RC输入)设置主状态机
 			bool first_rc_eval = (_last_sp_man.timestamp == 0) && (sp_man.timestamp > 0);
-			transition_result_t main_res = set_main_state(status, &status_changed);
+			transition_result_t main_res = set_main_state(status, &status_changed); // bymark 设置internal_state的main_state
 
 			/* store last position lock state */
 			_last_condition_global_position_valid = status_flags.condition_global_position_valid;
@@ -2260,10 +2271,11 @@ Commander::run()
 			struct vehicle_command_s cmd;
 
 			/* got command */
-			orb_copy(ORB_ID(vehicle_command), cmd_sub, &cmd);
+			orb_copy(ORB_ID(vehicle_command), cmd_sub, &cmd); // bymark 从navigator_main.cpp，mc_pos_control_main.cpp，mavlink_receiver.cpp中publish出
 
 			/* handle it */
-			if (handle_command(&status, cmd, &armed, &_home, &home_pub, &command_ack_pub, &status_changed)) {
+			// bymark 处理command, 这些指令可以通过mavlink协议解析，然后转换成vehicle_command
+			if (handle_command(&status, cmd, &armed, &_home, &home_pub, &command_ack_pub, &status_changed)) { 
 				status_changed = true;
 			}
 		}
@@ -2418,7 +2430,7 @@ Commander::run()
 		was_armed = armed.armed;
 
 		/* now set navigation state according to failsafe and main state */
-		// bymark 根据失效保护和主状态设置导航状态
+		// bymark 根据失效保护和internal_state的main_state设置导航状态nav_state
 		bool nav_state_changed = set_nav_state(&status,
 						       &armed,
 						       &internal_state,
@@ -2456,7 +2468,7 @@ Commander::run()
 		// bymark 信息的发布
 		if (hrt_elapsed_time(&status.timestamp) >= 1_s || status_changed) {
 
-			set_control_mode(); // bymark 根据nav_state设置控制模式
+			set_control_mode(); // bymark 根据nav_state设置控制模式control_mode
 			control_mode.timestamp = now;
 			orb_publish(ORB_ID(vehicle_control_mode), control_mode_pub, &control_mode);
 
@@ -3880,7 +3892,7 @@ void Commander::poll_telemetry_status()
 	for (int i = 0; i < ORB_MULTI_MAX_INSTANCES; i++) {
 
 		if (_telemetry[i].subscriber < 0) {
-			_telemetry[i].subscriber = orb_subscribe_multi(ORB_ID(telemetry_status), i);
+			_telemetry[i].subscriber = orb_subscribe_multi(ORB_ID(telemetry_status), i); // bymark 从mavlink_main.cpp中publish出来
 		}
 
 		orb_check(_telemetry[i].subscriber, &updated);
@@ -3890,6 +3902,7 @@ void Commander::poll_telemetry_status()
 			orb_copy(ORB_ID(telemetry_status), _telemetry[i].subscriber, &telemetry);
 
 			/* perform system checks when new telemetry link connected */
+			// bymark 当新的通信链路连接上后，check系统
 			if (/* we first connect a link or re-connect a link after loosing it or haven't yet reported anything */
 				(_telemetry[i].last_heartbeat == 0 || (hrt_elapsed_time(&_telemetry[i].last_heartbeat) > 3_s)
 				 || !_telemetry[i].preflight_checks_reported) &&
@@ -3903,7 +3916,7 @@ void Commander::poll_telemetry_status()
 				/* flag the checks as reported for this link when we actually report them */
 				_telemetry[i].preflight_checks_reported = status_flags.condition_system_hotplug_timeout;
 
-				preflight_check(true);
+				preflight_check(true); // bymark 执行起飞前的检测
 
 				// Provide feedback on mission state
 				const mission_result_s &mission_result = _mission_result_sub.get();
@@ -4083,7 +4096,7 @@ void Commander::battery_status_check()
 	if (updated) {
 
 		battery_status_s battery = {};
-		if (orb_copy(ORB_ID(battery_status), _battery_sub, &battery) == PX4_OK) {
+		if (orb_copy(ORB_ID(battery_status), _battery_sub, &battery) == PX4_OK) {  // bymark 从mavlink_receiver.cpp和sensors.cpp中publish出来
 
 			if ((hrt_elapsed_time(&battery.timestamp) < 5_s)
 				&& battery.connected
@@ -4130,7 +4143,7 @@ void Commander::battery_status_check()
 void Commander::estimator_check(bool *status_changed)
 {
 	// Check if quality checking of position accuracy and consistency is to be performed
-	const bool run_quality_checks = !status_flags.circuit_breaker_engaged_posfailure_check;
+	const bool run_quality_checks = !status_flags.circuit_breaker_engaged_posfailure_check; // bymark 位置失效检测的短路器被disable
 
 	_local_position_sub.update();
 	_global_position_sub.update();
@@ -4162,6 +4175,7 @@ void Commander::estimator_check(bool *status_changed)
 		 * for a short time interval after takeoff. Fixed wing vehicles can recover using GPS heading,
 		 * but rotary wing vehicles cannot so the position and velocity validity needs to be latched
 		 * to false after failure to prevent flyaway crashes */
+		// bymark 对于旋翼而言，在起飞后较短的时间间隔内要检测估计器的状态，因为偏航角估计值为bad yaw的话可能会导致起飞后的导航失效
 		if (run_quality_checks && status.is_rotary_wing) {
 
 			if (status.arming_state == vehicle_status_s::ARMING_STATE_STANDBY) {
