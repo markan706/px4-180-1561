@@ -356,11 +356,9 @@ private:
 #endif    
 };
 
-// const MA40H1S::GPIOConfig MA40H1S::_gpio_tab = {
-//     GPIO_DR_A,
-//     GPIO_DR_B
-// };
 
+// bymark 超声（两路互补PWM + 一路ADC采样）的配置说明：
+// bymark 6,5表示PWM6和PWM5； 1表示timer_index为1，对应TIM4，用于控制PWM生成，在timer_config.c对应其配置; 14表示ADC通道
 const MA40H1S::dev_config MA40H1S::_ultrasound_config[NUM_OF_ULTRASOUND] = {
     {MA40H1S_ID_DOWN,  6, 5, 1, 14}  // 6, 5, 1, 14->3(testing: good); ->2(testing: good)
 #if NUM_OF_ULTRASOUND > 1
@@ -385,7 +383,6 @@ uint8_t MA40H1S::_ultrasound_n = 0;
 extern "C" __EXPORT int ma40h1s_main(int argc, char *argv[]);
 // static int sonar_isr(int irq, void *context);
 
-//uint32_t MA40H1S::dma_buffer[2] = {0x04000010,0x00100400};
 uint16_t MA40H1S::adc_buffer[ADC_BUFFER_SIZE] = {};
 bool MA40H1S::_adc2_end = false;
 #ifdef MULTI_ADC
@@ -559,7 +556,7 @@ int MA40H1S::init()
     _ultrasound_id[0] = _ultrasound_config[0].id;
 
 #ifndef MULTI_ADC
-    uint16_t channel_mask = (1<<(_ultrasound_config[0].pwm1_ch-1) | 1<<(_ultrasound_config[0].pwm2_ch-1)); // 0b00110000 <==> pwm6 and pwm5  
+    uint16_t channel_mask = (1<<(_ultrasound_config[0].pwm1_ch-1) | 1<<(_ultrasound_config[0].pwm2_ch-1)); //bymark 0b00110000 <==> pwm6 and pwm5  
 #endif 
 #ifdef MULTI_ADC
     _ultrasound_id[1] = _ultrasound_config[1].id;  
@@ -577,10 +574,10 @@ int MA40H1S::init()
 			channel_mask &= ~(1 << channel);
 		}
 	}
-    // io_timer_channel_init(_ultrasound_config[0].pwm2_ch, IOTimerChanMode_PWMOut, NULL, NULL); // init PWM CH7/CH5
-	io_timer_set_ccr(_ultrasound_config[0].pwm1_ch-1, 12);
+   
+	io_timer_set_ccr(_ultrasound_config[0].pwm1_ch-1, 12); // bymark 需要PWM频率是40KHz,驱动超声，timer的时钟是1MHz，所以ARR为24，取CCR为12，这样PWM的占空比为50%
 	io_timer_set_ccr(_ultrasound_config[0].pwm2_ch-1, 12);
-    io_timer_set_rate(_ultrasound_config[0].timer_index, 40000); //timer_index 1: TIM4   timer_index 2: TIM12
+    io_timer_set_rate(_ultrasound_config[0].timer_index, 40000); // bymark 设置PWM频率为40KHz;timer_index 1: TIM4   timer_index 2: TIM12
     // io_timer_set_ccr(_ultrasound_config[0].pwm2_ch, 12);
     // io_timer_trigger();
 
@@ -620,7 +617,7 @@ int MA40H1S::init()
     // //STM32_TIM_SETCOMPARE(_tim8,2,5);
     // usleep(200000);
 
-    _tim13 = stm32_tim_init(13);
+    _tim13 = stm32_tim_init(13); // bymark 初始化TIM13，该定时器用于控制超声发波，接收等时序
     if(_tim13 == NULL){
         PX4_WARN("Timer13 init failed");
         return ret;
@@ -635,25 +632,18 @@ int MA40H1S::init()
 #ifndef ADC_LOG
     // enum MA40H1S_ID * pdev_id = _ultrasound_id;
     // STM32_TIM_SETISR(_tim13, MA40H1S::timer13_interrupt, _ultrasound_id, 0);
-    STM32_TIM_SETISR(_tim13, MA40H1S::timer13_interrupt, NULL, 0);
+    STM32_TIM_SETISR(_tim13, MA40H1S::timer13_interrupt, NULL, 0); // bymark 设置TIM13的中断服务函数
 #endif
-    putreg16(0x0001,STM32_TIM13_DIER);//  putreg16(0x0101,0x40000c0c);  //STM32_TIM5_BASE:0x40000c00  STM32_GTIM_DIER_OFFSET:0x000c
-    STM32_TIM_SETPERIOD(_tim13, 4);
-    STM32_TIM_SETCLOCK(_tim13,1000000);
-    STM32_TIM_SETMODE(_tim13,STM32_TIM_MODE_UP);
-    // printf("CNT:%d\n",getreg16(0x40000c24));
+    putreg16(0x0001,STM32_TIM13_DIER);// bymark 设置TIM13中断使能寄存器 putreg16(0x0101,0x40000c0c);  //STM32_TIM5_BASE:0x40000c00  STM32_GTIM_DIER_OFFSET:0x000c
+    STM32_TIM_SETPERIOD(_tim13, 4);     // bymark 设置TIM13的ARR
+    STM32_TIM_SETCLOCK(_tim13,1000000); // bymark 设置TIM13的时钟为1MHz
+    STM32_TIM_SETMODE(_tim13,STM32_TIM_MODE_UP); // bymark 设置TIM13的计数模式
     // STM32_TIM_SETCOMPARE();
     printf("[@ma40h1s.cpp][init()] timere13 config successfully \n");   //bymark
     _cycling_rate = MA40H1S_CONVERSION_INTERVAL;
 
-    /* init gpio ports */
-	// stm32_gpiowrite(_dr_a_port,false);
-    // stm32_gpiowrite(_dr_b_port,false);
-	//stm32_gpiowrite(_gpio_tab.sw_a_port,false);
-	//stm32_gpiowrite(_gpio_tab.sw_b_port,true);
-	// stm32_gpiosetevent(_gpio_tab.adc_port, true, false, false, sonar_isr);
 
-    _adc_dma = stm32_dmachannel(DMAMAP_ADC2_1);
+    _adc_dma = stm32_dmachannel(DMAMAP_ADC2_1); // bymark 设置ADC2的DMA流和通道
     if(_adc_dma == nullptr || _adc_dma == NULL){
         printf("[@ma40h1s.cpp][init()] adc dma init failed\n");
         return ret;
@@ -695,7 +685,7 @@ int MA40H1S::init()
     stm32_dmastart(_adc_dma_1, _dma_callback_1, this, false);
 
     // r_SMPR1 = 0b00000000000000000101000000000000; //  set sample time of adc3_ch14 to 010 (28T) 100(84T) 101(112T)
-    r_SMPR1 = 0;
+    r_SMPR1 = 0; // bymark ADC的默认时钟是54MHz
     r_SMPR2 = 0b00000000000000000000101101000000; // set sample time of adc3_ch2 to 101(112T)   adc3_ch3(testing)
 
     r_CR1 = ADC_CR1_RES_12BIT; //Resolution

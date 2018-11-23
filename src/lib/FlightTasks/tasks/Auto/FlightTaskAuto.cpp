@@ -48,7 +48,7 @@ bool FlightTaskAuto::initializeSubscriptions(SubscriptionArray &subscription_arr
 		return false;
 	}
 
-	if (!subscription_array.get(ORB_ID(position_setpoint_triplet), _sub_triplet_setpoint)) {
+	if (!subscription_array.get(ORB_ID(position_setpoint_triplet), _sub_triplet_setpoint)) { // bymark 从mavlink_receiver.cpp或者navigator_main.cpp中publish
 		return false;
 	}
 

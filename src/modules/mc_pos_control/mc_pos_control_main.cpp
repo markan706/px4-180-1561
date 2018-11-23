@@ -842,7 +842,7 @@ MulticopterPositionControl::start_flight_task()
 	int prev_failure_count = _task_failure_count;
 
 	// offboard 
-	// bymark navigation状态为offboard, 且控制模式是定高、定点、控垂直速度、控水平速度、控加速度  
+	// bymark navigation状态为offboard, 且控制模式是定高、定点、控垂直速度、控水平速度、控加速度, 都是由offboard_control_mode_topic消息决定的  
 	// bymark offboard模式下，setpoint不来自飞控的mcu,而是来自外部
 	// bymark nav_state 和 control_mode 来决定 flight_task
 	if (_vehicle_status.nav_state == vehicle_status_s::NAVIGATION_STATE_OFFBOARD
@@ -883,7 +883,7 @@ MulticopterPositionControl::start_flight_task()
 			_task_failure_count = 0;
 		}
 
-	} else if (_control_mode.flag_control_auto_enabled) { // bymark 控制模式是auto
+	} else if (_control_mode.flag_control_auto_enabled) { // bymark 控制模式是auto 包括auto_takeoff, auto_land
 		// Auto relate maneuvers
 		int error = _flight_tasks.switchTask(FlightTaskIndex::AutoLine);	// bymark 根据控制模式切换flight_task为auto_line
 

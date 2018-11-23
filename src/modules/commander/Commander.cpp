@@ -917,6 +917,8 @@ Commander::handle_command(vehicle_status_s *status_local, const vehicle_command_
 	case vehicle_command_s::VEHICLE_CMD_NAV_TAKEOFF: { // bymark 处理NAV_TAKEOFF指令,实现起飞操作, 有5个参数可用
 			/* ok, home set, use it to take off */
 			// bymark 将internal_state中的main_state切换到auto_takeoff
+			// bymark 要切换到auto_takeof或者auto_land，前提条件是local_position有效
+			// bymark Note: local_position有效性检测也断路器circuit_breaker_engaged_posfailure_check有关
 			if (TRANSITION_CHANGED == main_state_transition(*status_local, commander_state_s::MAIN_STATE_AUTO_TAKEOFF, status_flags, &internal_state)) {
 				cmd_result = vehicle_command_s::VEHICLE_CMD_RESULT_ACCEPTED;
 
@@ -928,6 +930,9 @@ Commander::handle_command(vehicle_status_s *status_local, const vehicle_command_
 				mavlink_log_critical(&mavlink_log_pub, "Takeoff denied, disarm and re-try");
 				cmd_result = vehicle_command_s::VEHICLE_CMD_RESULT_TEMPORARILY_REJECTED;
 			}
+
+			// bymark 
+			mavlink_log_critical(&mavlink_log_pub, "local_position_valid ?: %d",status_flags.condition_local_position_valid);
 		}
 		break;
 
@@ -3185,6 +3190,9 @@ Commander::reset_posvel_validity(bool *changed)
 	}
 	check_posvel_validity(local_position.xy_valid, local_position.eph, _eph_threshold_adj, local_position.timestamp, &_last_lpos_fail_time_us, &_lpos_probation_time_us, &status_flags.condition_local_position_valid, changed);
 	check_posvel_validity(local_position.v_xy_valid, local_position.evh, _evh_threshold.get(), local_position.timestamp, &_last_lvel_fail_time_us, &_lvel_probation_time_us, &status_flags.condition_local_velocity_valid, changed);
+
+	// bymark 
+	// status_flags.condition_local_position_valid = true;
 }
 
 bool
@@ -3342,7 +3350,7 @@ set_control_mode()
 		control_mode.flag_control_rattitude_enabled = false;
 		control_mode.flag_control_altitude_enabled = true;
 		control_mode.flag_control_climb_rate_enabled = true;
-		control_mode.flag_control_position_enabled = !status.in_transition_mode;
+		control_mode.flag_control_position_enabled = !status.in_transition_mode;  // bymark in_trasition_mode表示垂直起降旋翼机是否处于过渡模式
 		control_mode.flag_control_velocity_enabled = !status.in_transition_mode;
 		control_mode.flag_control_acceleration_enabled = false;
 		control_mode.flag_control_termination_enabled = false;
@@ -3415,6 +3423,7 @@ set_control_mode()
 		 * The control flags depend on what is ignored according to the offboard control mode topic
 		 * Inner loop flags (e.g. attitude) also depend on outer loop ignore flags (e.g. position)
 		 */
+		// bymark 在offboard模式下，control_flags取决于offboard_control_mode_topic消息，内环flags取决于外环的flags
 		control_mode.flag_control_rates_enabled = !offboard_control_mode.ignore_bodyrate ||
 				!offboard_control_mode.ignore_attitude ||
 				!offboard_control_mode.ignore_position ||
@@ -4245,4 +4254,7 @@ void Commander::estimator_check(bool *status_changed)
 	}
 
 	check_valid(lpos.timestamp, _failsafe_pos_delay.get() * 1_s, lpos.z_valid, &(status_flags.condition_local_altitude_valid), status_changed);
+
+	// bymark 
+	// status_flags.condition_local_position_valid = true;
 }

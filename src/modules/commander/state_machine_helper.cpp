@@ -326,7 +326,7 @@ main_state_transition(const vehicle_status_s &status, const main_state_t new_mai
 		if (status_flags.condition_local_position_valid) {
 			ret = TRANSITION_CHANGED;
 		}
-
+		
 		break;
 
 	case commander_state_s::MAIN_STATE_AUTO_PRECLAND:

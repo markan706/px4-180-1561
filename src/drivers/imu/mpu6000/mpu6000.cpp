@@ -2271,6 +2271,8 @@ start(enum MPU6000_BUS busid, enum Rotation rotation, int range, int device_type
 			continue;
 		}
 
+		// bymark 
+		printf("[@mpu6000.cpp][start()] bus_options.busid = %d, bus_options.device_type = %d\n", bus_options[i].busid, bus_options[i].device_type);
 		started |= start_bus(bus_options[i], rotation, range, device_type);
 	}
 
