@@ -79,7 +79,7 @@ bool FlightTaskManualAltitude::activate()
 void FlightTaskManualAltitude::_scaleSticks()
 {
 	// reuse same scaling as for stabilized
-	FlightTaskManualStabilized::_scaleSticks();
+	FlightTaskManualStabilized::_scaleSticks(); // bymark 获取yawspeed_sp和油门指令大小throttle
 
 	// scale horizontal velocity with expo curve stick input
 	const float vel_max_z = (_sticks(2) > 0.0f) ? _constraints.speed_down : _constraints.speed_up;
@@ -94,7 +94,7 @@ void FlightTaskManualAltitude::_updateAltitudeLock()
 	// bymark position是否锁定取决于杆量输入和速度
 
 	// Check if user wants to break
-	// bymark 当杆量sticks(2)很小时，要进行刹车
+	// bymark 当杆量sticks(2)油门指令值很小时，要进行刹车
 	const bool apply_brake = fabsf(_sticks_expo(2)) <= FLT_EPSILON;
 
 	// Check if vehicle has stopped
@@ -102,6 +102,11 @@ void FlightTaskManualAltitude::_updateAltitudeLock()
 	const bool stopped = (MPC_HOLD_MAX_Z.get() < FLT_EPSILON || fabsf(_velocity(2)) < MPC_HOLD_MAX_Z.get());
 
 	// Manage transition between use of distance to ground and distance to local origin 
+	// bymark 到逻辑原点的距离与到地面的距离之间的转换
+	// bymark 高度控制有三种模式：
+	// 	模式1：Altitude following（0）所控高度是相对于地面坐标系原点
+	//	模式2：Terrain following（1）所控高度是相对地面的估计距离
+	//	模式3：Terrain hold（2）所控高度是相对于地面的
 	// bymark 距离的两种表示：以地面为参考点（离地距离）；以起飞点/逻辑原点为参考的(逻辑距离)。例如在某个平台上起飞，平台离地面是有一定距离的
 	// when terrain hold behaviour has been selected. 地形保持
 	if (MPC_ALT_MODE.get() == 2) {
@@ -113,7 +118,7 @@ void FlightTaskManualAltitude::_updateAltitudeLock()
 		bool stick_input = stick_xy > 0.001f;
 
 		if (_terrain_hold) {
-			bool too_fast = spd_xy > MPC_HOLD_MAX_XY.get();   // spd_xy > 0.8
+			bool too_fast = spd_xy > MPC_HOLD_MAX_XY.get();   // spd_xy > 0.8 bymark 水平速度过快
 
 			if (stick_input || too_fast || !PX4_ISFINITE(_dist_to_bottom)) {
 				// Stop using distance to ground
@@ -122,6 +127,7 @@ void FlightTaskManualAltitude::_updateAltitudeLock()
 				_terrain_follow = false;
 
 				// Adjust the setpoint to maintain the same height error to reduce control transients
+				// bymark 调整高度sp以维持相同高度差来削弱控制突变
 				if (PX4_ISFINITE(_dist_to_ground_lock) && PX4_ISFINITE(_dist_to_bottom)) {
 					_position_setpoint(2) = _position(2) + (_dist_to_ground_lock - _dist_to_bottom);
 
@@ -131,16 +137,17 @@ void FlightTaskManualAltitude::_updateAltitudeLock()
 			}
 
 		} else {
-			bool not_moving = spd_xy < 0.5f * MPC_HOLD_MAX_XY.get();
+			bool not_moving = spd_xy < 0.5f * MPC_HOLD_MAX_XY.get(); // bymark 水平速度比较小，近似无水平运动
 
-			if (!stick_input && not_moving && PX4_ISFINITE(_dist_to_bottom)) {
+			if (!stick_input && not_moving && PX4_ISFINITE(_dist_to_bottom)) { // bymark 无XY杆量输入并且无水平运动并且离地距离有效
 				// Start using distance to ground
 				// bymark 使用离地距离_dist_to_bottom
-				_terrain_hold = true;
-				_terrain_follow = true;
+				_terrain_hold = true; // bymark 地形保持
+				_terrain_follow = true; // bymark 地形跟随
 
 				// Adjust the setpoint to maintain the same height error to reduce control transients
-				if (PX4_ISFINITE(_position_setpoint(2))) {
+				// bymark 更新里离地面距离的锁定值（在地形跟随模式下会使用该值）
+				if (PX4_ISFINITE(_position_setpoint(2))) { 
 					_dist_to_ground_lock = _dist_to_bottom + (_position_setpoint(2) - _position(2));
 				}
 			}

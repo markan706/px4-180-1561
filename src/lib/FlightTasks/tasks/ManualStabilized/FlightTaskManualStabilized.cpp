@@ -63,7 +63,7 @@ void FlightTaskManualStabilized::_scaleSticks()
 	/* Scale sticks to yaw and thrust using
 	 * linear scale for yaw and piecewise linear map for thrust. */
 	_yawspeed_setpoint = _sticks_expo(3) * math::radians(_yaw_rate_scaling.get()); // bymark 偏航角速度sp = 调整后的偏航杆量 × MPC_MAN_Y_MAX(200deg/s)
-	_throttle = _throttleCurve(); // bymark 油门映射
+	_throttle = _throttleCurve(); // bymark 油门映射，获取油门指令大小 [0，1]
 }
 
 void FlightTaskManualStabilized::_updateHeadingSetpoints()
@@ -129,6 +129,7 @@ void FlightTaskManualStabilized::_updateThrustSetpoints()
 	 * Make sure that the attitude can be controlled even at 0 throttle.
 	 */
 	Quatf q_sp = AxisAnglef(v(0), v(1), 0.0f);
+	// bymark 用单位四元素q_sp对机体坐标系下的期望推力矢量（0，0，-_throttle）进行旋转
 	_thrust_setpoint = q_sp.conjugate(Vector3f(0.0f, 0.0f, -1.0f)) * math::max(_throttle, 0.0001f);
 }
 
@@ -143,13 +144,13 @@ void FlightTaskManualStabilized::_rotateIntoHeadingFrame(Vector2f &v)
 void FlightTaskManualStabilized::_updateSetpoints()
 {
 	_updateHeadingSetpoints(); // bymark 在考虑yawspeed_sp的情况下更新yaw_sp
-	_updateThrustSetpoints();  // bymark 结合xy杆量，将油门thr转换成thr_sp
+	_updateThrustSetpoints();  // bymark 结合xy杆量（期望推力矢量的水平方向），将油门指令大小thr转换成推力矢量thr_sp
 }
 
 float FlightTaskManualStabilized::_throttleCurve()
 {
 	// Scale stick z from [-1,1] to [min thrust, max thrust]
-	float throttle = -((_sticks(2) - 1.0f) * 0.5f);
+	float throttle = -((_sticks(2) - 1.0f) * 0.5f);  // bymark 把油门杆量从[-1，1]缩放到[0，1]
 
 	switch (_throttle_curve.get()) {
 	case 1: // no rescaling

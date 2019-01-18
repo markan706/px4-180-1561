@@ -50,10 +50,10 @@ vehicle_attitude_setpoint_s thrustToAttitude(const Vector3f &thr_sp, const float
 	att_sp.yaw_body = yaw_sp;
 
 	// desired body_z axis = -normalize(thrust_vector)
-	Vector3f body_x, body_y, body_z;
+	Vector3f body_x, body_y, body_z;  // bymark 是NED/地面/惯性坐标系下的单位向量（是机体坐标系在惯性坐标系下的表示）
 
 	if (thr_sp.length() > 0.00001f) {
-		body_z = -thr_sp.normalized();
+		body_z = -thr_sp.normalized();  //bymark 用期望的推力矢量(在NED坐标系下表示的)方向表示期望坐标系的z轴方向
 
 	} else {
 		// no thrust, set Z axis to safe value
@@ -62,11 +62,12 @@ vehicle_attitude_setpoint_s thrustToAttitude(const Vector3f &thr_sp, const float
 	}
 
 	// vector of desired yaw direction in XY plane, rotated by PI/2
+	// bymark 计算XY平面内期望偏航角矢量方向，再逆时针旋转90度，得到y_C， 之所以旋转90度，是因为y_C与body_x正交
 	Vector3f y_C(-sinf(att_sp.yaw_body), cosf(att_sp.yaw_body), 0.0f);
 
 	if (fabsf(body_z(2)) > 0.000001f) {
 		// desired body_x axis, orthogonal to body_z
-		body_x = y_C % body_z;
+		body_x = y_C % body_z; // bymark 用叉乘求body_x
 
 		// keep nose to front while inverted upside down
 		if (body_z(2) < 0.0f) {

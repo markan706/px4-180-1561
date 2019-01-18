@@ -362,6 +362,7 @@ int do_gyro_calibration(orb_advert_t *mavlink_log_pub)
 
 	do {
 		// Calibrate gyro and ensure user didn't move
+		// bymark 校准陀螺仪是不能移动无人机，确保它是静止的
 		calibrate_return cal_return = gyro_calibration_worker(cancel_sub, &worker_data);
 
 		if (cal_return == calibrate_return_cancelled) {

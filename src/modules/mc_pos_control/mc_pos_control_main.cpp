@@ -757,7 +757,7 @@ MulticopterPositionControl::run()
 			// bymark 计算期望的推力和偏航角
 			_control.generateThrustYawSetpoint(_dt); // bymark 通过/不通过控制器给出thr_sp
 
-			matrix::Vector3f thr_sp = _control.getThrustSetpoint();
+			matrix::Vector3f thr_sp = _control.getThrustSetpoint();  // mbymark 期望的推力矢量thr_sp是在NED坐标系下表示的
 
 			// Adjust thrust setpoint based on landdetector only if the
 			// vehicle is NOT in pure Manual mode and NOT in smooth takeoff

@@ -39,7 +39,7 @@
  * Transform acceleration vector to true orientation, scale and offset
  *
  * ===== Model =====
- * accel_corr = accel_T * (accel_raw - accel_offs)
+ * accel_corr = accel_T * (accel_raw - accel_offs)  // bymark 该模型与磁力计的误差模型一致，accel_raw 是传感器测量值
  *
  * accel_corr[3] - fully corrected acceleration vector in body frame
  * accel_T[3][3] - accelerometers transform matrix, rotation and scaling transform
@@ -48,14 +48,14 @@
  *
  * ===== Calibration =====
  *
- * Reference vectors
+ * Reference vectors  // bymark 已知的 known
  * accel_corr_ref[6][3] = [  g  0  0 ]     // nose up
  *                        | -g  0  0 |     // nose down
  *                        |  0  g  0 |     // left side down
  *                        |  0 -g  0 |     // right side down
  *                        |  0  0  g |     // on back
  *                        [  0  0 -g ]     // level
- * accel_raw_ref[6][3]
+ * accel_raw_ref[6][3]  // bymark 测量值
  *
  * accel_corr_ref[i] = accel_T * (accel_raw_ref[i] - accel_offs), i = 0...5
  *
@@ -64,16 +64,16 @@
  *
  * Find accel_offs
  *
- * accel_offs[i] = (accel_raw_ref[i*2][i] + accel_raw_ref[i*2+1][i]) / 2
+ * accel_offs[i] = (accel_raw_ref[i*2][i] + accel_raw_ref[i*2+1][i]) / 2   // bymark i = 0,1,2 [样本编号][维数]
  *
  * Find accel_T
  *
  * 9 unknown constants
- * need 9 equations -> use 3 of 6 measurements -> 3 * 3 = 9 equations
+ * need 9 equations -> use 3 of 6 measurements -> 3 * 3 = 9 equations  // bymark 有六个面取其中三个面
  *
- * accel_corr_ref[i*2] = accel_T * (accel_raw_ref[i*2] - accel_offs), i = 0...2
+ * accel_corr_ref[i*2] = accel_T * (accel_raw_ref[i*2] - accel_offs), i = 0...2  
  *
- * Solve separate system for each row of accel_T:
+ * Solve separate system for each row of accel_T: // bymark 对accel_T按行划分
  *
  * accel_corr_ref[j*2][i] = accel_T[i] * (accel_raw_ref[j*2] - accel_offs), j = 0...2
  *
@@ -81,11 +81,11 @@
  *
  * x = [ accel_T[0][i] ]
  *     | accel_T[1][i] |
- *     [ accel_T[2][i] ]
+ *     [ accel_T[2][i] ]  // bymark  x是一个3x3的矩阵
  *
  * b = [ accel_corr_ref[0][i] ]	// One measurement per side is enough
  *     | accel_corr_ref[2][i] |
- *     [ accel_corr_ref[4][i] ]
+ *     [ accel_corr_ref[4][i] ] // bymark b是一个g*E（E是一个3x3的单位阵）
  *
  * a[i][j] = accel_raw_ref[i][j] - accel_offs[j], i = 0;2;4, j = 0...2
  *
